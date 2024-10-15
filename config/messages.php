@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'messages' => [
+        'Sono interessato al tuo appartamento, potresti darmi maggiori informazioni?',
+        'L’appartamento è ancora disponibile? Vorrei fissare una visita.',
+        'Mi puoi dire se la zona è ben servita dai mezzi pubblici?',
+        'Sto cercando un appartamento per un periodo di tre mesi, è possibile affittarlo a lungo termine?',
+        'Vorrei sapere se ci sono negozi o supermercati nelle vicinanze.',
+        'È inclusa la connessione internet nell’affitto?',
+        'Ci sono spese extra da considerare oltre l’affitto?',
+        'L’appartamento ha il riscaldamento autonomo o centralizzato?',
+        'C’è un parcheggio incluso o disponibile nelle vicinanze?',
+        'L’edificio ha l’ascensore? Non è specificato nell’annuncio.',
+        'Accettate animali domestici? Ho un gatto.',
+        'Accettate animali domestici? Ho un cane.',
+        'Vorrei sapere se l’appartamento è predisposto per i bambini piccoli.',
+        'Quanto dista l’appartamento dal centro città?',
+        'È possibile fare una visita virtuale dell’appartamento?',
+        'Ci sono parchi giochi nelle vicinanze? Ho una famiglia con bambini.',
+        'C’è una cauzione da pagare al momento del contratto?',
+        'La zona è tranquilla di notte? È una cosa importante per me.',
+        'C’è un sistema di allarme o altre misure di sicurezza nell’appartamento?',
+        'Vorrei sapere se posso portare con me un animale. È possibile?',
+        'È possibile concordare un prezzo per il mese di Giugno?',
+        'È possibile concordare un prezzo per il mese di Maggio?',
+        'È possibile concordare un prezzo per il mese di Luglio?',
+        'È possibile concordare un prezzo per il mese di Agosto?',
+        'È possibile concordare un prezzo per il mese di Dicembre?',
+        'Salve sarei interessato alla prenotazione come funziona?',
+    ],
+];
