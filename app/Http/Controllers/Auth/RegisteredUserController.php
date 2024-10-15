@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['nullable', 'string', 'max:50'],
             'surname' => ['nullable', 'string', 'max:50'],
-            'date_of_birth' => ['nullable'],
+            'date_of_birth' => ['nullable', 'date_format: d-m-Y'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
