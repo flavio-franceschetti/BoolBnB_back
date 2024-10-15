@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\Sponsorship;
+use App\Functions\Helper;
 
 class SponsorshipSeeder extends Seeder
 {
@@ -13,29 +15,17 @@ class SponsorshipSeeder extends Seeder
      */
     public function run(): void
     {
-        // Dati per la tabella sponsorships
-        $sponsorships = [
-            [
-                'name' => 'Bronze Package',
-                'slug' => Str::slug('Bronze Package'),
-                'price' => 2.99,
-                'duration' => 24, // in ore
-            ],
-            [
-                'name' => 'Silver Package',
-                'slug' => Str::slug('Silver Package'),
-                'price' => 5.99,
-                'duration' => 72, // in ore
-            ],
-            [
-                'name' => 'Gold Package',
-                'slug' => Str::slug('Gold Package'),
-                'price' => 9.99,
-                'duration' => 144, // in ore
-            ],
-        ];
+        $sponsorships = config('sponsorships.sponsorships');
 
-        // Inserimento dei dati nella tabella
-        DB::table('sponsorships')->insert($sponsorships);
+        foreach ($sponsorships as $sponsorship) {
+            $new_sponsorship = new Sponsorship();
+            $new_sponsorship->name = $sponsorship['name'];
+            $new_sponsorship->slug = Helper::generateSlug($sponsorship['name'], Sponsorship::class);
+            $new_sponsorship->price = $sponsorship['price'];
+            $new_sponsorship->duration = $sponsorship['duration'];
+
+            // Salva il nuovo pacchetto di sponsorizzazione nel database
+            $new_sponsorship->save();
+        }
     }
 }
