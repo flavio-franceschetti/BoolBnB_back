@@ -30,5 +30,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    // tom tom apikey
+
+    'tomtom' => [
+        'key' => env('TOMTOM_API_KEY'),
+        'base_url' => 'https://api.tomtom.com/',
+    ],
 
 ];
