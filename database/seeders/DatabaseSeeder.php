@@ -13,7 +13,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            // seeder for sponsors upgrate packages
+            SponsorshipSeeder::class,
+            // seeder for view
+            ViewSeeder::class,
+            // seeder for services
+            ServiceSeeder::class,
+            // seeder messages
+            MessageSeeder::class,
+            // seeder Apartment
             ApartmentSeeder::class,
+
         ]);
     }
 }
