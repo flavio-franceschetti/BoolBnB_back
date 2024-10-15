@@ -25,7 +25,9 @@
           <td>{{$apartment->bathroom}}</td>
           <td>{{$apartment->mq}}</td>
           <td>{{$apartment->address}}</td>
-          <td>Azioni</td>
+          <td>
+            azioni
+          </td>
       
         </tr>
         @endforeach
