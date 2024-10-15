@@ -32,7 +32,7 @@
 
                             <div class="col-md-6">
                                 <input id="surname" type="text"
-                                    class="form-control @error('surname') is-invalid @enderror" surname="surname"
+                                    class="form-control @error('surname') is-invalid @enderror" name="surname"
                                     value="{{ old('surname') }}" autocomplete="surname" autofocus>
 
                                 @error('surname')
