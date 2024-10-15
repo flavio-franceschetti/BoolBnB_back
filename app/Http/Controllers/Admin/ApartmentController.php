@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Apartment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ApartmentController extends Controller
 {
@@ -12,7 +13,7 @@ class ApartmentController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.apartments.index');
     }
 
     /**

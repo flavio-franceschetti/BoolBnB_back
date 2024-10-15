@@ -1,0 +1,46 @@
+header,
+aside {
+    a {
+        color: white;
+        text-decoration: none;
+    }
+}
+
+ul {
+    list-style: none;
+}
+
+button {
+    background: none;
+    color: white;
+    border: none;
+}
+
+aside {
+    min-width: 200px;
+    height: 100%;
+}
+
+.wrapper {
+    height: calc(100vh - 74px);
+    overflow: hidden;
+}
+
+.aside-nav {
+    padding: 0;
+}
+
+.main-content {
+    overflow: auto;
+    width: calc(100% - 200px);
+}
+
+.new-type-input {
+    max-width: 400px;
+}
+
+.thumb-img,
+#thumb-img {
+    max-width: 100px;
+    aspect-ratio: 2/1;
+}
