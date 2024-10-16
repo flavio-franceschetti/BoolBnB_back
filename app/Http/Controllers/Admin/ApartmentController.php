@@ -6,6 +6,8 @@ use App\Functions\Helper;
 use App\Models\Apartment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ApartmentService;
+use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +32,8 @@ class ApartmentController extends Controller
      */
     public function create()
     {
-        return view('admin.apartments.create');
+        $services = Service::all();
+        return view('admin.apartments.create', compact('services'));
     }
 
     /**
@@ -66,11 +69,16 @@ class ApartmentController extends Controller
         $apiKey = env('TOMTOM_API_KEY');
         // utilizzo le funzioni create nell'helper per prendermi la latitudine e la longitudine dall'api di tomtom
         $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
-        $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
+        $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon'); 
         
         // creo un nuovo appartamento
         $new_apartment = Apartment::create($data);
         
+        //gestisco i servizi
+        if(array_key_exists('services', $data)){
+            $new_apartment->services()->attach($data['services']);
+        }
+
         return redirect()->route('admin.apartments.index');
     }
 
