@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Questo è l'index degli appartamenti</h1>
+<h1>Questi sono i tuoi appartamenti</h1>
 <table class="table">
     <thead>
         <tr>
