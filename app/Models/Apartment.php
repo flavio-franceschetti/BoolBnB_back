@@ -32,7 +32,7 @@ class Apartment extends Model
     // relazione con sponsorships
     public function sponsorships()
     {
-        return $this->hasMany(Sponsorship::class);
+        return $this->belongsToMany(Sponsorship::class);
     }
 
     // relazione con messages
