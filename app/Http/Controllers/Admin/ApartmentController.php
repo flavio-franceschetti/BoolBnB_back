@@ -91,7 +91,6 @@ class ApartmentController extends Controller
      */
     public function show(Apartment $apartment)
     {
-
         // condizione per far vedere all'utente solo i propri appartamenti
 
         // if($apartment->user_id !== Auth::id()){
@@ -106,7 +105,13 @@ class ApartmentController extends Controller
      */
     public function edit(Apartment $apartment)
     {
-        //
+         // if($apartment->user_id !== Auth::id()){
+        //     return abort('404');
+        // }
+        
+        $services = Service::all();
+        $sponsorships = Sponsorship::all();
+        return view('admin.apartments.edit', compact('sponsorships', 'services'));
     }
 
     /**

@@ -2,6 +2,8 @@
 
 @section('content')
 
+
+
 <div class="mb-3 d-flex gap-3">
     @foreach ($sponsorships as $sponsorship)
     <div class="card" style="width: 18rem;">
