@@ -41,25 +41,26 @@
 
                     {{-- INIZIO CARD PER I DETTAGLI --}}
 
-                    <div class="card-body">
-                        <h3 class="card-title"></h3>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <p><strong>Stanze:</strong> {{ $apartment->room }}</p>
-                                <p><strong>Letti:</strong> {{ $apartment->beds }}</p>
-                                <p><strong>Bagni:</strong> {{ $apartment->bathroom }}</p>
-                                <p><strong>Metri quadrati:</strong> {{ $apartment->mq }} m²</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>Città:</strong> {{ $apartment->city }} </p>
-                                <p><strong>Indirizzo:</strong> {{ $apartment->address }}, numero
-                                    civico {{ $apartment->civic_number }},
-                                    codice postale {{ $apartment->postal_code }}</p>
-                                <p><strong>Latitudine:</strong> {{ $apartment->latitude }}</p>
-                                <p><strong>Longitudine:</strong> {{ $apartment->longitude }}</p>
-                                <p><strong>Visibile:</strong> {{ $apartment->is_visible ? 'SI' : 'NO' }}</p>
-                            </div>
+
+                <div class="card-body">
+                    <h3 class="card-title"></h3>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Stanze: </strong>{{ $apartment->room }}</p>
+                            <p><strong>Letti: </strong>{{ $apartment->beds }}</p>
+                            <p><strong>Bagni: </strong>{{ $apartment->bathroom }}</p>
+                            <p><strong>Metri quadrati: </strong>{{ $apartment->mq }} m²</p>
                         </div>
+                        <div class="col-md-6">
+                            <p><strong>Città: </strong>{{ $apartment->city }}</p>
+                            <p><strong>Indirizzo: </strong> {{$apartment->address}} {{$apartment->civic_number}}</p>
+                            <p><strong>Visibile:</strong> {{ $apartment->is_visible ? 'Si' : 'No' }} </p>
+
+                        </div>
+
+
+            
+          
 
                         {{-- Sezione Servizi --}}
                         <div class="mb-3">
@@ -78,6 +79,9 @@
                         </div>
                     </div>
                 </div>
+                  {{-- prova mappa --}}
+                  <div id="map" class="mb-3"></div>
+
 
 
                 {{-- Sezione Sponsorships --}}
@@ -106,6 +110,31 @@
                     <a href="{{ route('admin.apartments.index') }}" class="btn btn-primary">Torna all'elenco</a>
                 </div>
             </div>
+
+
+
         </div>
     </div>
+</div>
+
+            {{-- script per far funzionare la mappa di tom tom --}}
+            <script>
+                // creo una constante dove inserisco la apiKey che prendo dal file config
+                const apiKey = "{{ config('app.tomtomApiKey') }}";
+                const latitude = "{{ $apartment->latitude }}"
+                const longitude = "{{ $apartment->longitude }}"
+                // Inizializza la mappa con tt.map che sono comandi della libreria tomtom
+                var map = tt.map({
+                    key: apiKey, // Sostituisci con la tua chiave API
+                    container: 'map', // l'id del contenitore html in cui deve essere inserita la mappa
+                    center: [longitude, latitude], // Coordinate iniziali del centro della visualizzazione della mappa
+                    zoom: 15 // livello di zoom iniziale della mappa, più è alto più è zoommato
+                });
+
+                // Aggiungi un marker sulla mappa con tt.maker
+                var marker = new tt.Marker()
+                    .setLngLat([longitude, latitude]) // Passo le coordinate della posizione del maker
+                    .addTo(map); // comando per aggiungere il maker alla mappa
+            </script>
 @endsection
+

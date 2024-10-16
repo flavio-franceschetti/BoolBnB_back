@@ -91,7 +91,6 @@ class ApartmentController extends Controller
      */
     public function show(Apartment $apartment)
     {
-
         // condizione per far vedere all'utente solo i propri appartamenti
 
         // if($apartment->user_id !== Auth::id()){
@@ -106,7 +105,13 @@ class ApartmentController extends Controller
      */
     public function edit(Apartment $apartment)
     {
-        //
+         // if($apartment->user_id !== Auth::id()){
+        //     return abort('404');
+        // }
+        
+        $services = Service::all();
+        $sponsorships = Sponsorship::all();
+        return view('admin.apartments.edit', compact('sponsorships', 'services'));
     }
 
     /**
@@ -122,6 +127,20 @@ class ApartmentController extends Controller
      */
     public function destroy(Apartment $apartment)
     {
-        //
+       // Verifica se ci sono immagini collegate
+    if ($apartment->img) {
+        // Estrai il nome dell'immagine e rimuovi eventuali spazi
+        $images = explode(',', $apartment->img);
+        foreach ($images as $image) {
+            // Rimuovi eventuali spazi extra
+            $image = trim($image);
+            // Elimina l'immagine dal storage
+            Storage::delete($image);
+        }
+
+    }
+        $apartment->delete();
+        
+        return redirect()->route('admin.apartments.index');
     }
 }
