@@ -21,7 +21,6 @@ class Apartment extends Model
         'mq',
         'address',
         'city',
-        'postal_code',
         'civic_number',
         'longitude',
         'latitude',

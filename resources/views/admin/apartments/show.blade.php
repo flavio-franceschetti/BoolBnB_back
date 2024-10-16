@@ -54,10 +54,9 @@
                                 <p><strong>Città:</strong> {{ $apartment->city }} </p>
                                 <p><strong>Indirizzo:</strong> {{ $apartment->address }}, numero
                                     civico {{ $apartment->civic_number }},
-                                    codice postale {{ $apartment->postal_code }}</p>
                                 <p><strong>Latitudine:</strong> {{ $apartment->latitude }}</p>
                                 <p><strong>Longitudine:</strong> {{ $apartment->longitude }}</p>
-                                <p><strong>Visibile:</strong> {{ $apartment->is_visible ? 'SI' : 'NO' }}</p>
+
                             </div>
                         </div>
 
@@ -75,6 +74,7 @@
 
                         <div class="text-muted">
                             <p><strong>Data Pubblicazione:</strong> {{ $apartment->created_at->format('d F Y') }} </p>
+                            <p><strong>Visibile:</strong> {{ $apartment->is_visible ? 'SI' : 'NO' }}</p>
                         </div>
                     </div>
                 </div>
@@ -91,8 +91,6 @@
                                     <p><strong>Prezzo:</strong> €{{ number_format($sponsorship->price, 2) }}</p>
                                     <p><strong>Durata:</strong> {{ $sponsorship->duration }} ore</p>
                                     <p>{{ $sponsorship->pivot->end_date }}</p>
-
-
                                 </div>
                             </div>
                         @endforeach
