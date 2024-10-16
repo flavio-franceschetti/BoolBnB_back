@@ -46,9 +46,9 @@
                         <h3 class="card-title"></h3>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <p><strong>Stanze: </strong>{{ $apartment->room }}</p>
+                                <p><strong>Stanze: </strong>{{ $apartment->rooms }}</p>
                                 <p><strong>Letti: </strong>{{ $apartment->beds }}</p>
-                                <p><strong>Bagni: </strong>{{ $apartment->bathroom }}</p>
+                                <p><strong>Bagni: </strong>{{ $apartment->bathrooms }}</p>
                                 <p><strong>Metri quadrati: </strong>{{ $apartment->mq }} m²</p>
 
                             </div>
