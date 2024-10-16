@@ -20,7 +20,7 @@ class ApartmentController extends Controller
         // totale progetti presenti per utente
         // $apartments = Apartment::orderBy('id', 'desc')->where('user_id', Auth::id())->get();
 
-        $apartments = Apartment::all();
+        $apartments = Apartment::orderBy('id', 'desc')->get();
 
         return view('admin.apartments.index', compact('apartments'));
     }
@@ -61,14 +61,12 @@ class ApartmentController extends Controller
             // sostituiamo l'array originale con quello dei path aggiornati riconvertito in stringa con implode
             $data['img'] = implode(', ', $images_path);
         }
-        
         // Prendo la latitudine e longitudine dall'indirizzo inserito dall'utente
         $address = $data['address'];
         $apiKey = env('TOMTOM_API_KEY');
         // utilizzo le funzioni create nell'helper per prendermi la latitudine e la longitudine dall'api di tomtom
         $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
         $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
-        
         
         // creo un nuovo appartamento
         $new_apartment = Apartment::create($data);
@@ -81,7 +79,11 @@ class ApartmentController extends Controller
      */
     public function show(Apartment $apartment)
     {
-        //
+        // condizione per far vedere all'utente solo i propri appartamenti
+        if($apartment->user_id !== Auth::id()){
+            return abort('404');
+        }
+        return view('admin.apartments.show', compact('apartment'));
     }
 
     /**
