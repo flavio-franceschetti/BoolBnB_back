@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 'name' => $faker->name, // Genera un nome casuale
                 'surname' => $faker->lastName, // Genera un cognome casuale
                 'email' => $faker->unique()->safeEmail, // Genera un'email unica
-                'password' => Hash::make('password123'), // Password fissa per tutti gli utenti
+                'password' => Hash::make('Password123'), // Password fissa per tutti gli utenti
                 'date_of_birth' => $faker->date(), // Genera una data di nascita casuale
             ]);
         }
