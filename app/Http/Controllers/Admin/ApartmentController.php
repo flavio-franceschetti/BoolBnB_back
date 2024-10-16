@@ -67,7 +67,7 @@ class ApartmentController extends Controller
             $data['img'] = implode(', ', $images_path);
         }
         // Prendo la latitudine e longitudine dall'indirizzo inserito dall'utente
-        $address = "{$data['address']} {$data['civic_number']} {$data['city']} {$data['postal_code']}";
+        $address = "{$data['address']} {$data['civic_number']} {$data['city']}";
         $apiKey = env('TOMTOM_API_KEY');
         // utilizzo le funzioni create nell'helper per prendermi la latitudine e la longitudine dall'api di tomtom
         $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
@@ -105,10 +105,10 @@ class ApartmentController extends Controller
      */
     public function edit(Apartment $apartment)
     {
-         // if($apartment->user_id !== Auth::id()){
+        // if($apartment->user_id !== Auth::id()){
         //     return abort('404');
         // }
-        
+
         $services = Service::all();
         $sponsorships = Sponsorship::all();
         return view('admin.apartments.edit', compact('sponsorships', 'services'));
@@ -127,20 +127,19 @@ class ApartmentController extends Controller
      */
     public function destroy(Apartment $apartment)
     {
-       // Verifica se ci sono immagini collegate
-    if ($apartment->img) {
-        // Estrai il nome dell'immagine e rimuovi eventuali spazi
-        $images = explode(',', $apartment->img);
-        foreach ($images as $image) {
-            // Rimuovi eventuali spazi extra
-            $image = trim($image);
-            // Elimina l'immagine dal storage
-            Storage::delete($image);
+        // Verifica se ci sono immagini collegate
+        if ($apartment->img) {
+            // Estrai il nome dell'immagine e rimuovi eventuali spazi
+            $images = explode(',', $apartment->img);
+            foreach ($images as $image) {
+                // Rimuovi eventuali spazi extra
+                $image = trim($image);
+                // Elimina l'immagine dal storage
+                Storage::delete($image);
+            }
         }
-
-    }
         $apartment->delete();
-        
+
         return redirect()->route('admin.apartments.index');
     }
 }

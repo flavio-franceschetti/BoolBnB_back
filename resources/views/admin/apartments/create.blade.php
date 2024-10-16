@@ -5,6 +5,17 @@
 
 <form action="{{ route('admin.apartments.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
+
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <div class="mb-3">
         <label for="title" class="form-label">Titolo annuncio</label>
         <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
@@ -16,10 +27,10 @@
 
     <div class="d-flex gap-3 mb-3">
         <div>
-            <label for="room" class="form-label">N. Camere</label>
-            <input type="number" class="form-control @error('room') is-invalid @enderror" id="room" name="room"
-                value="{{ old('room') }}">
-            @error('room')
+            <label for="rooms" class="form-label">N. Camere</label>
+            <input type="number" class="form-control @error('rooms') is-invalid @enderror" id="rooms" name="rooms"
+                value="{{ old('rooms') }}">
+            @error('rooms')
             <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
@@ -32,10 +43,10 @@
             @enderror
         </div>
         <div>
-            <label for="bathroom" class="form-label">N. Bagni</label>
-            <input type="number" class="form-control @error('bathroom') is-invalid @enderror" id="bathroom"
-                name="bathroom" value="{{ old('bathroom') }}">
-            @error('bathroom')
+            <label for="bathrooms" class="form-label">N. Bagni</label>
+            <input type="number" class="form-control @error('bathrooms') is-invalid @enderror" id="bathrooms"
+                name="bathrooms" value="{{ old('bathrooms') }}">
+            @error('bathrooms')
             <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
