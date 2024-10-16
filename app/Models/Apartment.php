@@ -29,6 +29,8 @@ class Apartment extends Model
         'is_visible',
     ];
 
+
+
     // relazione con sponsorships
     public function sponsorships()
     {
