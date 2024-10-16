@@ -11,7 +11,7 @@
           </div>
         <div class="mb-3">
             <label for="rooms" class="form-label">N. Camere</label>
-            <input type="number" class="form-control" id="rooms" name="rooms">
+            <input type="number" class="form-control" id="rooms" name="room">
           </div>
         <div class="mb-3">
             <label for="beds" class="form-label">N. Letti</label>
