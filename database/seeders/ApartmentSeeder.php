@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Functions\Helper;
 use App\Models\Apartment;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +18,8 @@ class ApartmentSeeder extends Seeder
         $apartments = config('apartment');
         foreach ($apartments as $apartment) {
             $new_apartment = new Apartment();
-            $new_apartment->user_id = $apartment['user_id'];
+            // Assegna un utente casuale
+            $new_apartment->user_id = User::inRandomOrder()->first()->id;
             $new_apartment->title = $apartment['title'];
             $new_apartment->slug = Helper::generateSlug($new_apartment->title, Apartment::class);
             $new_apartment->room = $apartment['room'];
@@ -29,7 +31,6 @@ class ApartmentSeeder extends Seeder
             $new_apartment->latitude = $apartment['latitude'];
             $new_apartment->img = $apartment['img'];
             $new_apartment->is_visible = $apartment['is_visible'];
-
             // Salva il nuovo appartamento nel database
             $new_apartment->save();
         }
