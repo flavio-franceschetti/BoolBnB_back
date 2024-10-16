@@ -62,7 +62,7 @@
                         {{-- Sezione Servizi --}}
                         <div class="mb-3">
                             <h4>Servizi dell'appartamento</h4>
-                            @if ($apartment->services->count() > 0)
+                            @if ($apartment->services)
                                 @foreach ($apartment->services as $service)
                                     <span class="badge bg-warning">{{ $service->name }}</span>
                                 @endforeach
@@ -89,6 +89,7 @@
                                     <h5 class="card-title">{{ $sponsorship->name }}</h5>
                                     <p><strong>Prezzo:</strong> €{{ number_format($sponsorship->price, 2) }}</p>
                                     <p><strong>Durata:</strong> {{ $sponsorship->duration }} ore</p>
+                                    <p>{{ $sponsorship->pivot->end_date }}</p>
 
 
                                 </div>

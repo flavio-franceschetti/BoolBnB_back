@@ -80,7 +80,6 @@ class ApartmentController extends Controller
     public function show(Apartment $apartment)
     {
 
-        $apartment->load('sponsorships');
         // condizione per far vedere all'utente solo i propri appartamenti
         // if($apartment->user_id !== Auth::id()){
         //     return abort('404');

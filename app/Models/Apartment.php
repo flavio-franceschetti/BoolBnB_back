@@ -32,7 +32,8 @@ class Apartment extends Model
     // relazione con sponsorships
     public function sponsorships()
     {
-        return $this->belongsToMany(Sponsorship::class);
+        return $this->belongsToMany(Sponsorship::class)
+            ->withPivot('end_date');
     }
 
     // relazione con messages
