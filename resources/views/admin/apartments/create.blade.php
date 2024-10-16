@@ -31,7 +31,7 @@
           </div>
         <div class="mb-3">
             <label for="img" class="form-label">Immagine</label>
-            <input class="form-control" type="file" id="img" name="img">
+            <input class="form-control" type="file" id="img" name="img[]" multiple>
         </div>
         <div class="is-visible-radios mb-3">
             <div>Visibile</div>
