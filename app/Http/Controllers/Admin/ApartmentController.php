@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ApartmentService;
 use App\Models\Service;
+use App\Models\Sponsorship;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -33,7 +34,8 @@ class ApartmentController extends Controller
     public function create()
     {
         $services = Service::all();
-        return view('admin.apartments.create', compact('services'));
+        $sponsorships = Sponsorship::all();
+        return view('admin.apartments.create', compact('services', 'sponsorships'));
     }
 
     /**

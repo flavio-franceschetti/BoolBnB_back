@@ -74,7 +74,6 @@
               </div>
         </div>
         <div class="mb-3">
-
             <input type="submit" class="btn btn-primary" value="Invia">
             <input type="reset" class="btn btn-danger" value="Annulla">
         </div>
