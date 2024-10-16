@@ -29,6 +29,18 @@
             <label for="address" class="form-label">Indirizzo</label>
             <input type="text" class="form-control" id="address" name="address">
           </div>
+          <div class="mb-3">
+            <label for="civic_number" class="form-label">N. Civico</label>
+            <input type="number" class="form-control" id="civic_number" name="civic_number">
+          </div>
+        <div class="mb-3">
+            <label for="city" class="form-label">Città</label>
+            <input type="text" class="form-control" id="city" name="city">
+          </div>
+        <div class="mb-3">
+            <label for="postal_code" class="form-label">CAP</label>
+            <input type="number" class="form-control" id="postal_code" name="postal_code">
+          </div>
         <div class="mb-3">
             <label for="img" class="form-label">Immagine</label>
             <input class="form-control" type="file" id="img" name="img[]" multiple>

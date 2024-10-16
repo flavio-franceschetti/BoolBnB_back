@@ -26,7 +26,7 @@
           <td>{{$apartment->mq}}</td>
           <td>{{$apartment->address}}</td>
           <td>
-            azioni
+            <a href="{{route('admin.apartments.show', $apartment)}}" class="btn btn-warning">Dettagli</a>
           </td>
       
         </tr>
