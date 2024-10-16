@@ -22,9 +22,9 @@ class ApartmentSeeder extends Seeder
             $new_apartment->user_id = User::inRandomOrder()->first()->id;
             $new_apartment->title = $apartment['title'];
             $new_apartment->slug = Helper::generateSlug($new_apartment->title, Apartment::class);
-            $new_apartment->room = $apartment['room'];
+            $new_apartment->rooms = $apartment['rooms'];
             $new_apartment->beds = $apartment['beds'];
-            $new_apartment->bathroom = $apartment['bathroom'];
+            $new_apartment->bathrooms = $apartment['bathrooms'];
             $new_apartment->mq = $apartment['mq'];
             $new_apartment->city = $apartment['city'];
             $new_apartment->address = $apartment['address'];
