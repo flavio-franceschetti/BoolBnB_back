@@ -123,34 +123,48 @@ class ApartmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(ApartmentRequest $request, Apartment $apartment)
     {
+        // Get the data from the request
         $data = $request->all();
-        $data['slug'] = Helper::generateSlug($data['title'], Apartment::class, $apartment->id);
 
-        // Gestione delle immagini
+        // Generate a new slug if the title has changed
+        if ($data['title'] !== $apartment->title) {
+            $data['slug'] = Helper::generateSlug($data['title'], Apartment::class);
+        }
+
+        // Handle the images
         if ($request->hasFile('img')) {
+            // Check if there are existing images
+            if ($apartment->img) {
+                // Delete existing images from storage
+                $images = explode(',', $apartment->img);
+                foreach ($images as $image) {
+                    $image = trim($image);
+                    Storage::delete($image);
+                }
+            }
+
+            // Create a new array for image paths
             $images_path = [];
             foreach ($request->file('img') as $img) {
                 $img_path = Storage::put('uploads', $img);
-                $images_path[] = $img_path;
+                array_push($images_path, $img_path);
             }
             $data['img'] = implode(', ', $images_path);
-        } else {
-            // Se non ci sono nuove immagini, manteniamo quelle esistenti
-            $data['img'] = $apartment->img;
         }
 
-        // Gestione delle coordinate
-        $address = "{$data['address']} {$data['civic_number']} {$data['city']} {$data['postal_code']}";
+        // Get the updated latitude and longitude based on the address
+        $address = "{$data['address']} {$data['civic_number']} {$data['city']}";
         $apiKey = env('TOMTOM_API_KEY');
         $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
         $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
 
-        // Aggiorna l'appartamento
+        // Update the apartment details
         $apartment->update($data);
 
-        // Gestione dei servizi
+        // Handle services
         if (array_key_exists('services', $data)) {
             $apartment->services()->sync($data['services']);
         }
