@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <h1>Questi sono i tuoi appartamenti</h1>
 <table class="table">
     <thead>
@@ -40,4 +41,5 @@
         @endforeach
     </tbody>
 </table>
+
 @endsection

@@ -105,21 +105,57 @@ class ApartmentController extends Controller
      */
     public function edit(Apartment $apartment)
     {
+
+        // Controllo opzionale per verificare se l'appartamento appartiene all'utente loggato
+
+
         // if($apartment->user_id !== Auth::id()){
         //     return abort('404');
         // }
 
         $services = Service::all();
         $sponsorships = Sponsorship::all();
-        return view('admin.apartments.edit', compact('sponsorships', 'services'));
+
+        // Passa l'appartamento alla view insieme agli altri dati
+        return view('admin.apartments.edit', compact('apartment', 'services', 'sponsorships'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Apartment $apartment)
+    public function update(ApartmentRequest $request, Apartment $apartment)
     {
-        //
+        $data = $request->all();
+        $data['slug'] = Helper::generateSlug($data['title'], Apartment::class, $apartment->id);
+
+        // Gestione delle immagini
+        if ($request->hasFile('img')) {
+            $images_path = [];
+            foreach ($request->file('img') as $img) {
+                $img_path = Storage::put('uploads', $img);
+                $images_path[] = $img_path;
+            }
+            $data['img'] = implode(', ', $images_path);
+        } else {
+            // Se non ci sono nuove immagini, manteniamo quelle esistenti
+            $data['img'] = $apartment->img;
+        }
+
+        // Gestione delle coordinate
+        $address = "{$data['address']} {$data['civic_number']} {$data['city']} {$data['postal_code']}";
+        $apiKey = env('TOMTOM_API_KEY');
+        $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
+        $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
+
+        // Aggiorna l'appartamento
+        $apartment->update($data);
+
+        // Gestione dei servizi
+        if (array_key_exists('services', $data)) {
+            $apartment->services()->sync($data['services']);
+        }
+
+        return redirect()->route('admin.apartments.index')->with('success', 'Appartamento aggiornato con successo!');
     }
 
     /**
