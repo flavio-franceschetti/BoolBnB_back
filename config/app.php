@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'BoolBnB'),
 
     /*
     |--------------------------------------------------------------------------
@@ -212,6 +212,6 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
-    
+
     'tomtomApiKey' => env('TOMTOM_API_KEY'),
 ];

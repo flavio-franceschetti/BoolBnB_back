@@ -22,14 +22,15 @@ class ApartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'        => 'required|string|max:255',
-            'rooms'         => 'required|numeric|min:1',
-            'beds'         => 'required|numeric|min:1',
-            'bathrooms'     => 'required|numeric|min:1',
-            'mq'           => 'required|numeric|min:30',
-            'address'      => 'required|string|max:255',
-            'postal_code' => 'required',
-            'city'         => 'required|string|max:255',
+
+            'title' => 'required|string|max:255',
+            'rooms'  => 'required|numeric|min:1',
+            'beds'  => 'required|numeric|min:1',
+            'bathrooms' => 'required|numeric|min:1',
+            'mq' => 'required|numeric|min:30',
+            'address'  => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+
             'civic_number' => 'required|numeric|min:1',
             'img' => 'required|array',
             'img.*' => 'file|mimes:jpg,jpeg,png,webp|max:10240',

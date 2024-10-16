@@ -3,14 +3,53 @@
 @section('content')
     <h1>Inserisci i dati per il nuovo appartamento</h1>
 
-    <form action="{{ route('admin.apartments.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="mb-3">
-            <label for="title" class="form-label">Titolo annuncio</label>
-            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
-                value="{{ old('title') }}">
-            @error('title')
-                <small class="text-danger">{{ $message }}</small>
+
+<form action="{{ route('admin.apartments.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Titolo annuncio</label>
+        <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
+            value="{{ old('title') }}">
+        @error('title')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+
+    <div class="d-flex gap-3 mb-3">
+        <div>
+            <label for="rooms" class="form-label">N. Camere</label>
+            <input type="number" class="form-control @error('rooms') is-invalid @enderror" id="rooms" name="rooms"
+                value="{{ old('rooms') }}">
+            @error('rooms')
+            <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+        <div>
+            <label for="beds" class="form-label">N. Letti</label>
+            <input type="number" class="form-control @error('beds') is-invalid @enderror" id="beds" name="beds"
+                value="{{ old('beds') }}">
+            @error('beds')
+            <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+        <div>
+            <label for="bathrooms" class="form-label">N. Bagni</label>
+            <input type="number" class="form-control @error('bathrooms') is-invalid @enderror" id="bathrooms"
+                name="bathrooms" value="{{ old('bathrooms') }}">
+            @error('bathrooms')
+            <small class="text-danger">{{ $message }}</small>
+
             @enderror
         </div>
 

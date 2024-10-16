@@ -1,3 +1,11 @@
+header{
+    div {
+        height: 80px;
+        #img-logo{
+            height: 175%;
+        }
+    }
+}
 header,
 aside {
     a {
@@ -18,11 +26,11 @@ button {
 
 aside {
     min-width: 200px;
-    height: 100%;
+
 }
 
 .wrapper {
-    height: calc(100vh - 74px);
+    height: calc(100vh - 80px);
     overflow: hidden;
 }
 
