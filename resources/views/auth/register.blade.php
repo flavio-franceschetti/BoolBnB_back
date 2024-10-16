@@ -86,11 +86,16 @@
                                     class="form-control @error('password') is-invalid @enderror" name="password"
                                     required autocomplete="new-password">
 
-                                @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
+                                {{-- stampa lista di errori della password --}}
+                                @if ($errors->has('password'))
+                                <div class="invalid-feedback" role="alert">
+                                    <ul>
+                                        @foreach ($errors->get('password') as $error)
+                                        <li><strong>{{ $error }}</strong></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif
                             </div>
                         </div>
 
