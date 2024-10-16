@@ -43,4 +43,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Define la relazione con gli appartamenti.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function apartments()
+    {
+        return $this->hasMany(Apartment::class);
+    }
 }
