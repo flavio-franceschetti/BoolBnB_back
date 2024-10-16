@@ -6,6 +6,7 @@ use App\Functions\Helper;
 use App\Models\Apartment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ApartmentRequest;
 use App\Models\ApartmentService;
 use App\Models\Service;
 use App\Models\Sponsorship;
@@ -41,11 +42,10 @@ class ApartmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ApartmentRequest $request)
     {
         // inserisco tutti i dati della richiesta dentro la variabile $data
         $data = $request->all();
-
 
         // genero lo slug prendendo il titolo dell appartamento con l'helper inserito in funcion
         $data['slug'] = Helper::generateSlug($data['title'], Apartment::class);
@@ -72,13 +72,13 @@ class ApartmentController extends Controller
         // utilizzo le funzioni create nell'helper per prendermi la latitudine e la longitudine dall'api di tomtom
         $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
 
-        $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon'); 
-        
+        $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
+
         // creo un nuovo appartamento
         $new_apartment = Apartment::create($data);
-        
+
         //gestisco i servizi
-        if(array_key_exists('services', $data)){
+        if (array_key_exists('services', $data)) {
             $new_apartment->services()->attach($data['services']);
         }
 
