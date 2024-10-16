@@ -31,11 +31,28 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['nullable', 'string', 'max:50'],
-            'surname' => ['nullable', 'string', 'max:50'],
-            'date_of_birth' => ['nullable', 'date'],
+            'name' => ['nullable', 'string', 'max:50', 'min:3'],
+            'surname' => ['nullable', 'string', 'max:50', 'min:3'],
+            'date_of_birth' => ['nullable', 'date', 'before:-18 years'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'name.string' => 'Il nome deve essere una stringa.',
+            'name.max' => 'Il nome non può superare i :max caratteri.',
+            'name.min' => 'Il nome deve avere almeno :min caratteri',
+            'surname.string' => 'Il cognome deve essere una stringa.',
+            'surname.max' => 'Il cognome non può superare i :max caratteri.',
+            'surname.min' => 'Il cognome deve avere almeno :min caratteri',
+            'date_of_birth.date' => 'La data di nascita deve essere una data valida.',
+            'date_of_birth.before' => 'Devi avere almeno 18 anni.',
+            'email.required' => "L'email è obbligatoria.",
+            'email.string' => "L'email deve essere una stringa.",
+            'email.lowercase' => "L'email deve essere in minuscolo.",
+            'email.email' => "Inserisci un indirizzo email valido.",
+            'email.max' => "L'email non può superare i :max caratteri.",
+            'email.unique' => "L'email è già in uso.",
+            'password.required' => 'La password è obbligatoria.',
+            'password.confirmed' => 'Le password non coincidono.',
         ]);
         $user = User::create([
             'name' => $request->name,
