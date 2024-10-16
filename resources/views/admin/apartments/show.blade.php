@@ -42,16 +42,6 @@
                 {{-- INIZIO CARD PER I DETTAGLI --}}
 
 
-
-                    <div class="card-body">
-                        <h3 class="card-title"></h3>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <p><strong>Stanze: </strong>{{ $apartment->rooms }}</p>
-                                <p><strong>Letti: </strong>{{ $apartment->beds }}</p>
-                                <p><strong>Bagni: </strong>{{ $apartment->bathrooms }}</p>
-                                <p><strong>Metri quadrati: </strong>{{ $apartment->mq }} m²</p>
-
                 <div class="card-body">
                     <h3 class="card-title"></h3>
                     <div class="row mb-3">
@@ -66,94 +56,45 @@
                             <p><strong>Indirizzo: </strong> {{$apartment->address}} {{$apartment->civic_number}}</p>
                             <p><strong>Visibile:</strong> {{ $apartment->is_visible ? 'Si' : 'No' }} </p>
 
-
-                          
-
-
-
-
-
-
-
-
-
-                        {{-- Sezione Servizi --}}
-                        <div class="mb-3">
-                            <h4>Servizi dell'appartamento</h4>
-                            @if ($apartment->services)
-                            @foreach ($apartment->services as $service)
-                            <span class="badge bg-warning">{{ $service->name }}</span>
-                            @endforeach
-                            @else
-                            <p>Nessun servizio disponibile</p>
-                            @endif
-                        </div>
-
-                        <div class="text-muted">
-                            <p><strong>Data Pubblicazione:</strong> {{ $apartment->created_at->format('d F Y') }} </p>
-                        </div>
-                    </div>
-                </div>
-                {{-- prova mappa --}}
-                <div id="map" class="mb-3"></div>
-
-
-
-                {{-- Sezione Sponsorships --}}
-                {{-- <div class="mb-3">
-                    <h4>Sponsorizzazioni attive</h4>
-                    @if ($apartment->sponsorships)
-                    @foreach ($apartment->sponsorships as $sponsorship)
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $sponsorship->name }}</h5>
-                            <p><strong>Prezzo:</strong> €{{ number_format($sponsorship->price, 2) }}</p>
-                            <p><strong>Durata:</strong> {{ $sponsorship->duration }} ore</p>
-                            <p>{{ $sponsorship->pivot->end_date }}</p>
-
-
                             {{-- Sezione Servizi --}}
                             <div class="mb-3">
                                 <h4>Servizi dell'appartamento</h4>
                                 @if ($apartment->services)
-                                    @foreach ($apartment->services as $service)
-                                        <span class="badge bg-warning">{{ $service->name }}</span>
-                                    @endforeach
+                                @foreach ($apartment->services as $service)
+                                <span class="badge bg-warning">{{ $service->name }}</span>
+                                @endforeach
                                 @else
-                                    <p>Nessun servizio disponibile</p>
+                                <p>Nessun servizio disponibile</p>
                                 @endif
                             </div>
 
-
                             <div class="text-muted">
-                                <p><strong>Data Pubblicazione:</strong> {{ $apartment->created_at->format('d F Y') }} </p>
-                                <p><strong>Visibile:</strong> {{ $apartment->is_visible ? 'SI' : 'NO' }}</p>
+                                <p><strong>Data Pubblicazione:</strong> {{ $apartment->created_at->format('d F Y') }}
+                                </p>
                             </div>
                         </div>
                     </div>
                     {{-- prova mappa --}}
                     <div id="map" class="mb-3"></div>
 
-
-
                     {{-- Sezione Sponsorships --}}
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <h4>Sponsorizzazioni attive</h4>
                         @if ($apartment->sponsorships)
-                            @foreach ($apartment->sponsorships as $sponsorship)
-                                <div class="card mb-2">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ $sponsorship->name }}</h5>
-                                        <p><strong>Prezzo:</strong> €{{ number_format($sponsorship->price, 2) }}</p>
-                                        <p><strong>Durata:</strong> {{ $sponsorship->duration }} ore</p>
-                                        <p>{{ $sponsorship->pivot->end_date }}</p>
-                                    </div>
-                                </div>
-                            @endforeach
+                        @foreach ($apartment->sponsorships as $sponsorship)
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $sponsorship->name }}</h5>
+                                <p><strong>Prezzo:</strong> €{{ number_format($sponsorship->price, 2) }}</p>
+                                <p><strong>Durata:</strong> {{ $sponsorship->duration }} ore</p>
+                                <p>{{ $sponsorship->pivot->end_date }}</p>
+                            </div>
+                        </div>
+                        @endforeach
                         @else
-                            <p>Nessuna sponsorizzazione attiva</p>
+                        <p>Nessuna sponsorizzazione attiva</p>
                         @endif
-                    </div>
+                    </div> --}}
 
 
                     {{-- BTN PER TORNARE ALL' ELENCO APPARTAMENTI --}}
