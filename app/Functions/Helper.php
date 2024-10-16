@@ -28,11 +28,12 @@ class Helper
     }
 
     // funzione per recuperare la latitudine e la longitudine con l'api di tom tom
-    public static function getLatLon($address, $apiKey, $param){
+    public static function getLatLon($address, $apiKey, $param)
+    {
         // il path base dell'api
         $api_path = 'https://api.tomtom.com/search/2/geocode/';
         // utilizzo la facade Http per poter fare richieste alle api e gli passo il path concatenato con l'indirzzo e la $apiKey generata dal sito tomtom
-        $response = Http::get($api_path . $address . '.json', [
+        $response = Http::withOptions(['verify' => false])->get($api_path . $address . '.json', [
             'key' => $apiKey,
         ])->json();
         // ritorno la latitudine presa dalla risposta dell'api
