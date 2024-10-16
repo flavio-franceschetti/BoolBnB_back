@@ -15,25 +15,23 @@ class ViewSeeder extends Seeder
      */
     public function run(): void
     {
-
         $faker = Faker::create();
 
-        // Ottiengo una lista di apartment_id esistenti
+        // Ottieni una lista di apartment_id esistenti
         $apartmentIds = DB::table('apartments')
-            ->select('id', 'created_at')
-            ->get();
+            ->pluck('id'); // Utilizza pluck per ottenere solo gli ID
 
         // Inserisco un numero di visualizzazioni fittizie
         for ($i = 0; $i < 30; $i++) {
             $new_view = new View();
             // Collegamento con apartment_id esistente
-            $new_view->apartment_id = $faker->randomElement($apartmentIds);
+            $new_view->apartment_id = $faker->randomElement($apartmentIds); // Ora stai selezionando solo gli ID
             // Indirizzo IP fittizio
             $new_view->ip_address = $faker->ipv4;
             $new_view->created_at = now();
             $new_view->updated_at = now();
 
-            // Salva  nel database
+            // Salva nel database
             $new_view->save();
         }
     }
