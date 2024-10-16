@@ -6,6 +6,9 @@ use App\Functions\Helper;
 use App\Models\Apartment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ApartmentService;
+use App\Models\Service;
+use App\Models\Sponsorship;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +33,9 @@ class ApartmentController extends Controller
      */
     public function create()
     {
-        return view('admin.apartments.create');
+        $services = Service::all();
+        $sponsorships = Sponsorship::all();
+        return view('admin.apartments.create', compact('services', 'sponsorships'));
     }
 
     /**
@@ -62,14 +67,21 @@ class ApartmentController extends Controller
             $data['img'] = implode(', ', $images_path);
         }
         // Prendo la latitudine e longitudine dall'indirizzo inserito dall'utente
-        $address = $data['address'];
+        $address = "{$data['address']} {$data['civic_number']} {$data['city']} {$data['postal_code']}";
         $apiKey = env('TOMTOM_API_KEY');
         // utilizzo le funzioni create nell'helper per prendermi la latitudine e la longitudine dall'api di tomtom
         $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
-        $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
 
+        $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon'); 
+        
         // creo un nuovo appartamento
         $new_apartment = Apartment::create($data);
+        
+        //gestisco i servizi
+        if(array_key_exists('services', $data)){
+            $new_apartment->services()->attach($data['services']);
+        }
+
 
         return redirect()->route('admin.apartments.index');
     }
@@ -81,9 +93,11 @@ class ApartmentController extends Controller
     {
 
         // condizione per far vedere all'utente solo i propri appartamenti
+
         // if($apartment->user_id !== Auth::id()){
         //     return abort('404');
         // }
+
         return view('admin.apartments.show', compact('apartment'));
     }
 

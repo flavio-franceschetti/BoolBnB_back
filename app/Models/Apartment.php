@@ -52,7 +52,7 @@ class Apartment extends Model
 
     // relazione con  services
 
-    public function Services()
+    public function services()
     {
         // collegamento con la tabella pivot apartment_service
         return $this->belongsToMany(Service::class, 'apartment_service')
