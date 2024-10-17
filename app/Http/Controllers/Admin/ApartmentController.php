@@ -22,9 +22,9 @@ class ApartmentController extends Controller
     public function index()
     {
         // totale progetti presenti per utente
-        // $apartments = Apartment::orderBy('id', 'desc')->where('user_id', Auth::id())->get();
+        $apartments = Apartment::orderBy('id', 'desc')->where('user_id', Auth::id())->get();
 
-        $apartments = Apartment::orderBy('id', 'desc')->get();
+        // $apartments = Apartment::orderBy('id', 'desc')->get();
 
         return view('admin.apartments.index', compact('apartments'));
     }
@@ -93,9 +93,9 @@ class ApartmentController extends Controller
     {
         // condizione per far vedere all'utente solo i propri appartamenti
 
-        // if($apartment->user_id !== Auth::id()){
-        //     return abort('404');
-        // }
+        if ($apartment->user_id !== Auth::id()) {
+            return abort('404');
+        }
 
         return view('admin.apartments.show', compact('apartment'));
     }
@@ -109,9 +109,9 @@ class ApartmentController extends Controller
         // Controllo opzionale per verificare se l'appartamento appartiene all'utente loggato
 
 
-        // if($apartment->user_id !== Auth::id()){
-        //     return abort('404');
-        // }
+        if ($apartment->user_id !== Auth::id()) {
+            return abort('404');
+        }
 
         $services = Service::all();
         $sponsorships = Sponsorship::all();
@@ -169,7 +169,7 @@ class ApartmentController extends Controller
             $apartment->services()->sync($data['services']);
         }
 
-        return redirect()->route('admin.apartments.index')->with('success', 'Appartamento aggiornato con successo!');
+        return redirect()->route('admin.apartments.show', $apartment)->with('success', 'Appartamento aggiornato con successo!');
     }
 
     /**

@@ -30,7 +30,6 @@ class ApartmentRequest extends FormRequest
             'mq' => 'required|numeric|min:30',
             'address'  => 'required|string|max:255',
             'city' => 'required|string|max:255',
-
             'civic_number' => 'required|numeric|min:1',
             'img' => 'required|array',
             'img.*' => 'file|mimes:jpg,jpeg,png,webp|max:10240',
