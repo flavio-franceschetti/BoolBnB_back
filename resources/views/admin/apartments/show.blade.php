@@ -42,43 +42,70 @@
                     {{-- INIZIO CARD PER I DETTAGLI --}}
 
 
-                <div class="card-body">
-                    <h3 class="card-title"></h3>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <p><strong>Stanze: </strong>{{ $apartment->room }}</p>
-                            <p><strong>Letti: </strong>{{ $apartment->beds }}</p>
-                            <p><strong>Bagni: </strong>{{ $apartment->bathroom }}</p>
-                            <p><strong>Metri quadrati: </strong>{{ $apartment->mq }} m²</p>
+                    <div class="card-body">
+                        <h3 class="card-title"></h3>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p><strong>
+                                        <i class="fas fa-door-open"></i>
+                                        Stanze:
+                                    </strong> {{ $apartment->rooms }}</p>
+                                <p><strong>
+                                        <li class="fas fa-bed"></li>
+                                        Letti:
+                                    </strong> {{ $apartment->beds }}</p>
+                                <p><strong>
+                                        <li class="fas fa-toilet"></li>
+                                        Bagni:
+                                    </strong>{{ $apartment->bathrooms }}</p>
+                                <p><strong>
+                                        Metri quadrati: </strong>{{ $apartment->mq }} <strong>m²</strong></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>
+                                        <i class="fa-solid fa-city"></i>
+                                        Città: </strong> {{ $apartment->city }}</p>
+                                <p><strong>
+                                        <i class="fa-solid fa-street-view"></i>
+                                        Indirizzo: </strong> {{ $apartment->address }} {{ $apartment->civic_number }}</p>
+                                <p><strong>Visibile:</strong>
+                                    @if ($apartment->is_visible)
+                                        <i class="fa-solid fa-eye"></i> Si
+                                    @else
+                                        <i class="fa-solid fa-eye-slash"></i> No
+                                    @endif
+                                </p>
+
+                                {{-- Sezione Servizi --}}
+                                <div class="mb-3">
+                                    <h4>Servizi dell'appartamento</h4>
+                                    @if ($apartment->services)
+                                        @foreach ($apartment->services as $service)
+                                            <span class="badge bg-warning">{{ $service->name }}</span>
+                                        @endforeach
+                                    @else
+                                        <p>Nessun servizio disponibile</p>
+                                    @endif
+                                </div>
+
+                                <div class="text-muted">
+                                    <p><strong>Data Pubblicazione:</strong> {{ $apartment->created_at->format('d F Y') }}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <p><strong>Città: </strong>{{ $apartment->city }}</p>
-                            <p><strong>Indirizzo: </strong> {{$apartment->address}} {{$apartment->civic_number}}</p>
-                            <p><strong>Visibile:</strong> {{ $apartment->is_visible ? 'Si' : 'No' }} </p>
-
-                        </div>
+                        {{-- prova mappa --}}
+                        <div id="map" class="mb-3"></div>
 
 
-            
-          
 
-                        {{-- Sezione Servizi --}}
-                        <div class="mb-3">
-                            <h4>Servizi dell'appartamento</h4>
-                            @if ($apartment->services)
-                                @foreach ($apartment->services as $service)
-                                    <span class="badge bg-warning">{{ $service->name }}</span>
-                                @endforeach
-                            @else
-                                <p>Nessun servizio disponibile</p>
-                            @endif
-                        </div>
-
-                        <div class="text-muted">
-                            <p><strong>Data Pubblicazione:</strong> {{ $apartment->created_at->format('d F Y') }} </p>
+                        {{-- BTN PER TORNARE ALL' ELENCO APPARTAMENTI --}}
+                        <div class="mt-4">
+                            <a href="{{ route('admin.apartments.index') }}" class="btn btn-primary">Torna all'elenco</a>
                         </div>
                     </div>
                 </div>
+
 
                   {{-- prova mappa --}}
                   <div style="width: 100%; height: 500px" id="map"></div>
@@ -108,13 +135,11 @@
                 <div class="mt-4">
                     <a href="{{ route('admin.apartments.index') }}" class="btn btn-primary">Torna all'elenco</a>
                 </div>
+
             </div>
-
-
-
         </div>
     </div>
-</div>
+
 
             {{-- script per far funzionare la mappa di tom tom --}}
             <script>
@@ -137,5 +162,5 @@
                 })
               
             </script>
-@endsection
 
+@endsection

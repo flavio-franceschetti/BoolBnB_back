@@ -16,13 +16,12 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('title');
             $table->string('slug');
-            $table->unsignedInteger('room');
+            $table->unsignedInteger('rooms');
             $table->unsignedInteger('beds');
-            $table->unsignedInteger('bathroom');
+            $table->unsignedInteger('bathrooms');
             $table->smallInteger('mq');
             $table->string('city');
             $table->string('address');
-            $table->smallInteger('postal_code');
             $table->unsignedInteger('civic_number');
             $table->decimal('longitude', 9, 6);
             $table->decimal('latitude', 9, 6);
