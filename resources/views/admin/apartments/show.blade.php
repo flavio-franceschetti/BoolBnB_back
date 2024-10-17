@@ -105,28 +105,62 @@
                         </div>
                     </div>
                 </div>
+
+
+                  {{-- prova mappa --}}
+                  <div style="width: 100%; height: 500px" id="map"></div>
+
+
+
+                {{-- Sezione Sponsorships --}}
+                <div class="mb-3">
+                    <h4>Sponsorizzazioni attive</h4>
+                    @if ($apartment->sponsorships)
+                        @foreach ($apartment->sponsorships as $sponsorship)
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $sponsorship->name }}</h5>
+                                    <p><strong>Prezzo:</strong> €{{ number_format($sponsorship->price, 2) }}</p>
+                                    <p><strong>Durata:</strong> {{ $sponsorship->duration }} ore</p>
+                                    <p>{{ $sponsorship->pivot->end_date }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <p>Nessuna sponsorizzazione attiva</p>
+                    @endif
+                </div>
+
+                {{-- BTN PER TORNARE ALL' ELENCO APPARTAMENTI --}}
+                <div class="mt-4">
+                    <a href="{{ route('admin.apartments.index') }}" class="btn btn-primary">Torna all'elenco</a>
+                </div>
+
             </div>
         </div>
     </div>
 
-    {{-- script per far funzionare la mappa di tom tom --}}
-    <script>
-        // creo una constante dove inserisco la apiKey che prendo dal file config
-        const apiKey = "{{ config('app.tomtomApiKey') }}";
-        const latitude = "{{ $apartment->latitude }}"
-        const longitude = "{{ $apartment->longitude }}"
-        // Inizializza la mappa con tt.map che sono comandi della libreria tomtom
-        var map = tt.map({
-            key: apiKey, // Sostituisci con la tua chiave API
-            container: 'map', // l'id del contenitore html in cui deve essere inserita la mappa
-            center: [longitude, latitude], // Coordinate iniziali del centro della visualizzazione della mappa
-            zoom: 14 // livello di zoom iniziale della mappa, più è alto più è zoommato
-        });
 
-        // Aggiungi un marker sulla mappa con tt.maker
-        var marker = new tt.Marker()
-            .setLngLat([longitude, latitude]) // Passo le coordinate della posizione del maker
-            .addTo(map); // comando per aggiungere il maker alla mappa
-    </script>
+            {{-- script per far funzionare la mappa di tom tom --}}
+            <script>
+                // creo una constante dove inserisco la apiKey che prendo dal file config
+                const apiKey = "{{ config('app.tomtomApiKey') }}";
+                const latitude = "{{ $apartment->latitude }}"
+                const longitude = "{{ $apartment->longitude }}"
+                let center = [longitude, latitude];
+                // Inizializza la mappa con tt.map che sono comandi della libreria tomtom
+                var map = tt.map({
+                    key: apiKey, // Sostituisci con la tua chiave API
+                    container: 'map', // l'id del contenitore html in cui deve essere inserita la mappa
+                    center: center, // Coordinate iniziali del centro della visualizzazione della mappa
+                    zoom: 15, // livello di zoom iniziale della mappa, più è alto più è zoommato
+                });
+
+                map.on('load', () => {
+                    // Aggiungi un marker sulla mappa con tt.maker
+                    new tt.Marker().setLngLat(center).addTo(map); 
+                })
+              
+            </script>
 
 @endsection
