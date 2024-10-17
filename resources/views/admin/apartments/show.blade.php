@@ -79,8 +79,9 @@
                         </div>
                     </div>
                 </div>
+
                   {{-- prova mappa --}}
-                  <div id="map" class="mb-3"></div>
+                  <div style="width: 100%; height: 500px" id="map"></div>
 
 
 
@@ -95,8 +96,6 @@
                                     <p><strong>Prezzo:</strong> €{{ number_format($sponsorship->price, 2) }}</p>
                                     <p><strong>Durata:</strong> {{ $sponsorship->duration }} ore</p>
                                     <p>{{ $sponsorship->pivot->end_date }}</p>
-
-
                                 </div>
                             </div>
                         @endforeach
@@ -123,18 +122,20 @@
                 const apiKey = "{{ config('app.tomtomApiKey') }}";
                 const latitude = "{{ $apartment->latitude }}"
                 const longitude = "{{ $apartment->longitude }}"
+                let center = [longitude, latitude];
                 // Inizializza la mappa con tt.map che sono comandi della libreria tomtom
                 var map = tt.map({
                     key: apiKey, // Sostituisci con la tua chiave API
                     container: 'map', // l'id del contenitore html in cui deve essere inserita la mappa
-                    center: [longitude, latitude], // Coordinate iniziali del centro della visualizzazione della mappa
-                    zoom: 15 // livello di zoom iniziale della mappa, più è alto più è zoommato
+                    center: center, // Coordinate iniziali del centro della visualizzazione della mappa
+                    zoom: 15, // livello di zoom iniziale della mappa, più è alto più è zoommato
                 });
 
-                // Aggiungi un marker sulla mappa con tt.maker
-                var marker = new tt.Marker()
-                    .setLngLat([longitude, latitude]) // Passo le coordinate della posizione del maker
-                    .addTo(map); // comando per aggiungere il maker alla mappa
+                map.on('load', () => {
+                    // Aggiungi un marker sulla mappa con tt.maker
+                    new tt.Marker().setLngLat(center).addTo(map); 
+                })
+              
             </script>
 @endsection
 
