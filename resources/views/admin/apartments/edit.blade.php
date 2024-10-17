@@ -13,7 +13,7 @@
     <div class="mb-3">
         <label for="title" class="form-label">Titolo annuncio</label>
         <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
-            value="{{ old('title', $apartment->title) }}">
+            value="{{ old('title', $apartment->title) }}" required>
         @error('title')
         <small class="text-danger">{{ $message }}</small>
         @enderror
@@ -24,7 +24,7 @@
         <div>
             <label for="rooms" class="form-label">N. Camere</label>
             <input type="number" class="form-control @error('rooms') is-invalid @enderror" id="rooms" name="rooms"
-                value="{{ old('rooms', $apartment->rooms) }}">
+                value="{{ old('rooms', $apartment->rooms) }}" required>
             @error('rooms')
             <small class="text-danger">{{ $message }}</small>
             @enderror
@@ -32,7 +32,7 @@
         <div>
             <label for="beds" class="form-label">N. Letti</label>
             <input type="number" class="form-control @error('beds') is-invalid @enderror" id="beds" name="beds"
-                value="{{ old('beds', $apartment->beds) }}">
+                value="{{ old('beds', $apartment->beds) }}" required>
             @error('beds')
             <small class="text-danger">{{ $message }}</small>
             @enderror
@@ -40,7 +40,7 @@
         <div>
             <label for="bathrooms" class="form-label">N. Bagni</label>
             <input type="number" class="form-control @error('bathrooms') is-invalid @enderror" id="bathrooms"
-                name="bathrooms" value="{{ old('bathrooms', $apartment->bathrooms) }}">
+                name="bathrooms" value="{{ old('bathrooms', $apartment->bathrooms) }}" required>
             @error('bathrooms')
             <small class="text-danger">{{ $message }}</small>
             @enderror
@@ -49,7 +49,7 @@
         <div>
             <label for="mq" class="form-label">Metri Quadri</label>
             <input type="number" class="form-control @error('mq') is-invalid @enderror" id="mq" name="mq"
-                value="{{ old('mq', $apartment->mq) }}">
+                value="{{ old('mq', $apartment->mq) }}" required>
             @error('mq')
             <small class="text-danger">{{ $message }}</small>
             @enderror
@@ -61,7 +61,7 @@
         <div>
             <label for="address" class="form-label">Indirizzo</label>
             <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address"
-                value="{{ old('address', $apartment->address) }}">
+                value="{{ old('address', $apartment->address) }}" required>
             @error('address')
             <small class="text-danger">{{ $message }}</small>
             @enderror
@@ -70,7 +70,7 @@
         <div>
             <label for="civic_number" class="form-label">N. Civico</label>
             <input type="number" class="form-control @error('civic_number') is-invalid @enderror" id="civic_number"
-                name="civic_number" value="{{ old('civic_number', $apartment->civic_number) }}">
+                name="civic_number" value="{{ old('civic_number', $apartment->civic_number) }}" required>
             @error('civic_number')
             <small class="text-danger">{{ $message }}</small>
             @enderror
@@ -79,7 +79,7 @@
         <div>
             <label for="city" class="form-label">Città</label>
             <input type="text" class="form-control @error('city') is-invalid @enderror" id="city" name="city"
-                value="{{ old('city', $apartment->city) }}">
+                value="{{ old('city', $apartment->city) }}" required>
             @error('city')
             <small class="text-danger">{{ $message }}</small>
             @enderror
@@ -103,7 +103,7 @@
     <div class="mb-3">
         <label for="img" class="form-label">Immagine</label>
         <input class="form-control" type="file" id="img" name="img[]" multiple
-            value="{{ old('city', $apartment->city) }}">
+            value="{{ old('city', $apartment->city) }}" required>
         @error('img')
         <small class="text-danger">{{ $message }}</small>
         @enderror
