@@ -18,7 +18,6 @@ class ApartmentService extends Model
     protected $fillable = [
         'apartment_id',
         'service_id',
-
     ];
 
     // relaziono con apartment
