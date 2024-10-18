@@ -67,11 +67,10 @@ class ApartmentController extends Controller
             $data['img'] = implode(', ', $images_path);
         }
         // Prendo la latitudine e longitudine dall'indirizzo inserito dall'utente
-        $address = "{$data['address']} {$data['civic_number']} {$data['city']}";
+        $address = $data['address'];
         $apiKey = env('TOMTOM_API_KEY');
         // utilizzo le funzioni create nell'helper per prendermi la latitudine e la longitudine dall'api di tomtom
         $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
-
         $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
 
         // creo un nuovo appartamento

@@ -52,8 +52,8 @@
         </div>
 
     </div>
-    <div class="d-flex gap-3 mb-3">
-        <div>
+    
+        <div class="mb-3">
             <label for="address" class="form-label">Indirizzo</label>
             <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address"
                 value="{{ old('address') }}" required>
@@ -62,23 +62,6 @@
             @enderror
         </div>
 
-        <div>
-            <label for="civic_number" class="form-label">N. Civico</label>
-            <input type="number" class="form-control @error('civic_number') is-invalid @enderror" id="civic_number"
-                name="civic_number" value="{{ old('civic_number') }}" required>
-            @error('civic_number')
-            <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
-        <div>
-            <label for="city" class="form-label">Città</label>
-            <input type="text" class="form-control @error('city') is-invalid @enderror" id="city" name="city"
-                value="{{ old('city') }}" required>
-            @error('city')
-            <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
-    </div>
 
     <div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
         @foreach ($services as $service)

@@ -2,6 +2,7 @@
 
 @section('content')
 
+@if (count($apartments) > 0)
 <h1>Questi sono i tuoi appartamenti</h1>
 <table class="table">
     <thead>
@@ -41,5 +42,9 @@
         @endforeach
     </tbody>
 </table>
+@else
+<h5>Non hai ancora aggiunto il tuo primo appartamento. Fallo subito da qui!!!</h5>
+<a class="btn btn-success" href="{{route('admin.apartments.create')}}">Aggiungi il tuo primo appartamento</a>
+@endif
 
 @endsection

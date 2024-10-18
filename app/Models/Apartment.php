@@ -20,8 +20,6 @@ class Apartment extends Model
         'bathrooms',
         'mq',
         'address',
-        'city',
-        'civic_number',
         'longitude',
         'latitude',
         'img',

@@ -26,9 +26,7 @@ class ApartmentSeeder extends Seeder
             $new_apartment->beds = $apartment['beds'];
             $new_apartment->bathrooms = $apartment['bathrooms'];
             $new_apartment->mq = $apartment['mq'];
-            $new_apartment->city = $apartment['city'];
             $new_apartment->address = $apartment['address'];
-            $new_apartment->civic_number = $apartment['civic_number'];
             $new_apartment->latitude = $apartment['latitude'];
             $new_apartment->longitude = $apartment['longitude'];
             $new_apartment->img = $apartment['img'];
