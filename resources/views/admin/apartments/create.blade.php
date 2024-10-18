@@ -7,6 +7,16 @@
 <form action="{{ route('admin.apartments.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
+    {{-- @if($errors->any())
+    <div class="alert alert-danger" role="alert">
+        <ul>
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif --}}
+
     <div class="mb-3">
         <label for="title" class="form-label">Titolo annuncio</label>
         <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
@@ -52,15 +62,15 @@
         </div>
 
     </div>
-    
-        <div class="mb-3">
-            <label for="address" class="form-label">Indirizzo</label>
-            <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address"
-                value="{{ old('address') }}" required>
-            @error('address')
-            <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
+
+    <div class="mb-3">
+        <label for="address" class="form-label">Indirizzo</label>
+        <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address"
+            value="{{ old('address') }}" required>
+        @error('address')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
 
 
     <div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
@@ -76,11 +86,18 @@
     </div>
 
     <div class="mb-3">
-        <label for="img" class="form-label">Immagine</label>
-        <input class="form-control" type="file" id="img" name="img[]" multiple required>
-        @error('img')
+        <label for="" class="form-label">Aggiungi immagini</label>
+        <input class="form-control" type="file" id="images" name="images[]" multiple required accept="image/*">
+        @error('images')
         <small class="text-danger">{{ $message }}</small>
         @enderror
+        @error('images.*')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
+
+        @if($errors->any())
+        <small class="text-danger">Inserisci nuovamente le immagini</small>
+        @endif
     </div>
     
     <div class="is-visible-radios mb-3">
