@@ -57,26 +57,30 @@
         <div class="mb-3">
             <label for="img" class="form-label">Immagine</label>
             <input class="form-control" type="file" id="img" name="img[]" multiple required>
-            <small class="text-danger" id="imgError" style="display: none;"></small>
+            @error('img')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
         </div>
-
         <div class="is-visible-radios mb-3">
             <div>Visibile</div>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="is_visible" value="1" id="flexRadioDefault1"
                     checked>
-                <label class="form-check-label" for="flexRadioDefault1">Si</label>
+                <label class="form-check-label" for="flexRadioDefault1">
+                    Si
+                </label>
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="is_visible" value="0" id="flexRadioDefault2">
-                <label class="form-check-label" for="flexRadioDefault2">No</label>
+                <label class="form-check-label" for="flexRadioDefault2">
+                    No
+                </label>
             </div>
-        </div>
 
-        <div class="mb-3">
-            <input type="submit" class="btn btn-primary" value="Invia">
-            <input type="reset" class="btn btn-danger" value="Annulla">
-        </div>
+            <div class="mb-3">
+                <input type="submit" class="btn btn-primary" value="Invia">
+                <input type="reset" class="btn btn-danger" value="Annulla">
+            </div>
     </form>
 
     <style>
