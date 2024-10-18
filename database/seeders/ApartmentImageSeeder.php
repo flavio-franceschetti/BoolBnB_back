@@ -24,10 +24,10 @@ class ApartmentImageSeeder extends Seeder
         // Crea da 1 a 3 img random per apartmnet
         foreach ($apartments as $apartment) {
             // Generate a random number of images between 1 and 3
-            $numberOfImgs = rand(1, 3); // Randomly choose between 1 and 3 images
+            $numberOfimages = rand(1, 3); // Randomly choose between 1 and 3 images
 
             // Create the images for the apartment
-            for ($i = 1; $i <= $numberOfImgs; $i++) {
+            for ($i = 1; $i <= $numberOfimages; $i++) {
                 ApartmentImage::create([
                     'apartment_id' => $apartment->id,
                     'img_path' => $faker->imageUrl(),
