@@ -25,11 +25,13 @@ class PageController extends Controller
 
     public function apartmentById($id)
     {
-        $apartment = Apartment::where('id', $id)->where('is_visible', true)->with('services')->first();
+        $apartment = Apartment::where('id', $id)->where('is_visible', true)->with('services', 'images')->first();
 
         if ($apartment) {
             $success = true;
-            $apartment->img = asset('storage/' . $apartment->img);
+            foreach ($apartment->images as $img) {
+                $img->img_path = asset('storage/' . $img->img_path);
+            }
         } else {
             $success = false;
         }
