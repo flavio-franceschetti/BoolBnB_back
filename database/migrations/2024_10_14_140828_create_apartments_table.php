@@ -20,9 +20,7 @@ return new class extends Migration
             $table->unsignedInteger('beds');
             $table->unsignedInteger('bathrooms');
             $table->smallInteger('mq');
-            $table->string('city');
             $table->string('address');
-            $table->unsignedInteger('civic_number');
             $table->decimal('longitude', 9, 6);
             $table->decimal('latitude', 9, 6);
             $table->string('img');
