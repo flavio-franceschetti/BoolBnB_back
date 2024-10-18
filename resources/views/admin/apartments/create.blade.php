@@ -82,6 +82,7 @@
         <small class="text-danger">{{ $message }}</small>
         @enderror
     </div>
+    
     <div class="is-visible-radios mb-3">
         <div>Visibile</div>
         <div class="form-check">
