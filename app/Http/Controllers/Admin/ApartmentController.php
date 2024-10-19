@@ -155,7 +155,7 @@ class ApartmentController extends Controller
         }
 
         // Get the updated latitude and longitude based on the address
-        $address = "{$data['address']} {$data['civic_number']} {$data['city']}";
+        $address = $data['address'];
         $apiKey = env('TOMTOM_API_KEY');
         $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
         $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
