@@ -104,16 +104,16 @@
                 errorElement.textContent = message;
                 errorElement.style.display = 'block';
                 const inputField = document.getElementById(fieldId);
-                inputField.classList.remove('is-valid'); // Rimuovi la classe di validità
-                inputField.classList.add('is-invalid'); // Aggiungi la classe di invalidità
+                inputField.classList.remove('is-valid');
+                inputField.classList.add('is-invalid');
             }
 
             function hideError(fieldId) {
                 const errorElement = document.getElementById(fieldId + 'Error');
                 errorElement.style.display = 'none';
                 const inputField = document.getElementById(fieldId);
-                inputField.classList.remove('is-invalid'); // Rimuovi la classe di invalidità
-                inputField.classList.add('is-valid'); // Aggiungi la classe di validità
+                inputField.classList.remove('is-invalid');
+                inputField.classList.add('is-valid');
             }
 
             // Gestione degli eventi di input per ciascun campo
