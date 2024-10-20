@@ -7,6 +7,7 @@ use App\Models\Apartment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApartmentRequest;
+use App\Models\ApartmentImage;
 use App\Models\ApartmentService;
 use App\Models\Service;
 use App\Models\Sponsorship;
@@ -45,44 +46,58 @@ class ApartmentController extends Controller
     public function store(ApartmentRequest $request)
     {
         // inserisco tutti i dati della richiesta dentro la variabile $data
-        $data = $request->all();
+        $data = $request->validated();
+
+        // creo un variabile per i dati dell'appartamento
+        $apartmentData = [
+            'title' => $data['title'],
+            'rooms' => $data['rooms'],
+            'beds' => $data['beds'],
+            'bathrooms' => $data['bathrooms'],
+            'mq' => $data['mq'],
+            'address' => $data['address'],
+            'is_visible' => $data['is_visible'],
+        ];
+
+        // creo una variabile per i dati delle immagini
+        $images = $data['images'];
 
         // genero lo slug prendendo il titolo dell appartamento con l'helper inserito in funcion
-        $data['slug'] = Helper::generateSlug($data['title'], Apartment::class);
+        $apartmentData['slug'] = Helper::generateSlug($apartmentData['title'], Apartment::class);
         // assegno all'user id l'id dell'utente che sta creando il nuovo annuncio
-        $data['user_id'] = Auth::id();
+        $apartmentData['user_id'] = Auth::id();
 
-        // controllo le immagini se esiste la key img in $data
-        if (array_key_exists('img', $data)) {
-            // creiamo un nuovo array per i percorsi delle immagini
-            $images_path = [];
-            // cicliamo l'array che arriva dal form con tutte le immagini
-            foreach ($data['img'] as $img) {
-                // con storage::put salvo il percorso dell immagine nella variabile $img_path
-                $img_path = Storage::put('uploads', $img);
-                // pushiamo i nuovi percorsi dentro $images_path
-                array_push($images_path, $img_path);
-            }
-            // sostituiamo l'array originale con quello dei path aggiornati riconvertito in stringa con implode
-            $data['img'] = implode(', ', $images_path);
-        }
         // Prendo la latitudine e longitudine dall'indirizzo inserito dall'utente
-        $address = $data['address'];
+        $address = $apartmentData['address'];
         $apiKey = env('TOMTOM_API_KEY');
         // utilizzo le funzioni create nell'helper per prendermi la latitudine e la longitudine dall'api di tomtom
-        $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
-        $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
+        $apartmentData['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
+        $apartmentData['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
 
         // creo un nuovo appartamento
-        $new_apartment = Apartment::create($data);
+        $new_apartment = Apartment::create($apartmentData);
 
         //gestisco i servizi
-        if (array_key_exists('services', $data)) {
-            $new_apartment->services()->attach($data['services']);
+        if (array_key_exists('services', $apartmentData)) {
+            $new_apartment->services()->attach($apartmentData['services']);
+        }
+
+        // gestisco la tabella apartment_images
+        foreach ($images as $img) {
+            // salvo in path nello store
+            $img_path = Storage::put('uploads', $img);
+            // salvo il nome del file
+            $img_name = $img->getClientOriginalName();
+            // creo le nuove immagini in relazione all'appartamento
+            ApartmentImage::create([
+                'apartment_id' => $new_apartment->id, // Set the apartment ID
+                'img_path' => $img_path, // Store the image path
+                'img_name' => $img_name, // salva nel db il nome dell'immagine
+            ]);
         }
 
 
-        return redirect()->route('admin.apartments.index');
+        return redirect()->route('admin.apartments.show', $new_apartment);
     }
 
     /**
@@ -155,7 +170,7 @@ class ApartmentController extends Controller
         }
 
         // Get the updated latitude and longitude based on the address
-        $address = "{$data['address']} {$data['civic_number']} {$data['city']}";
+        $address = $data['address'];
         $apiKey = env('TOMTOM_API_KEY');
         $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
         $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
@@ -176,16 +191,11 @@ class ApartmentController extends Controller
      */
     public function destroy(Apartment $apartment)
     {
-        // Verifica se ci sono immagini collegate
-        if ($apartment->img) {
-            // Estrai il nome dell'immagine e rimuovi eventuali spazi
-            $images = explode(',', $apartment->img);
-            foreach ($images as $image) {
-                // Rimuovi eventuali spazi extra
-                $image = trim($image);
-                // Elimina l'immagine dal storage
-                Storage::delete($image);
-            }
+        // faccio un ciclo di tutte le immagini relazionate all'apartment
+        foreach ($apartment->images as $img) {
+
+            // Elimina l'immagine dal storage
+            Storage::delete($img->img_path);
         }
         $apartment->delete();
 

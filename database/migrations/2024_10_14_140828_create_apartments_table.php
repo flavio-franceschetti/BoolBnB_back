@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('address');
             $table->decimal('longitude', 9, 6);
             $table->decimal('latitude', 9, 6);
-            $table->string('img');
             $table->boolean('is_visible')->default(true);
             $table->timestamps();
 

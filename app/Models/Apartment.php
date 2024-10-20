@@ -22,11 +22,13 @@ class Apartment extends Model
         'address',
         'longitude',
         'latitude',
-        'img',
         'is_visible',
     ];
 
-
+    public function images()
+    {
+        return $this->hasMany(ApartmentImage::class);
+    }
 
     // relazione con sponsorships
     public function sponsorships()
