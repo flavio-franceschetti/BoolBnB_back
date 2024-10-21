@@ -19,21 +19,25 @@ class ApartmentRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
-        return [
-
+        $rules = [
             'title' => 'required|string|max:255',
-            'rooms'  => 'required|numeric|min:1',
-            'beds'  => 'required|numeric|min:1',
-            'bathrooms' => 'required|numeric|min:1',
-            'mq' => 'required|numeric|min:30',
-            'address'  => 'required|string|max:255',
-            'images' => 'required|array|max:3',
-            'images.*' => 'file|mimes:jpg,jpeg,png,webp|max:10240',
-            'is_visible'   => 'required|boolean',
-            'services'  => 'nullable|exists:services,id'
+            'rooms' => 'required|integer|min:1',
+            'beds' => 'required|integer|min:1',
+            'bathrooms' => 'required|integer|min:1',
+            'mq' => 'required|integer|min:1',
+            'address' => 'required|string|max:255',
+            'is_visible' => 'boolean',
         ];
+
+        // Rendi obbligatorio il campo immagini solo per la creazione
+        if ($this->isMethod('post')) {
+            $rules['images'] = 'required|array|min:1';
+            $rules['images.*'] = 'image|max:10240';
+        }
+
+        return $rules;
     }
     public function messages()
     {
