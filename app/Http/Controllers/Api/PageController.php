@@ -17,7 +17,7 @@ class PageController extends Controller
         // Preparo la stringa per le immagini
         foreach ($apartments as $apartment) {
             foreach ($apartment->images as $img) {
-                $img->img_path = asset('storage/' . $img->img_path);
+                $img->img_path = url('storage/' . $img->img_path);
             }
         }
 
@@ -34,7 +34,7 @@ class PageController extends Controller
         if ($apartment) {
             // Preparo la stringa per il percorso delle immagini
             foreach ($apartment->images as $img) {
-                $img->img_path = asset('storage/' . $img->img_path);
+                $img->img_path = url('storage/' . $img->img_path);
             }
             $success = true;
         } else {
@@ -71,7 +71,7 @@ class PageController extends Controller
         // Preparo la stringa per le immagini
         foreach ($apartments as $apartment) {
             foreach ($apartment->images as $img) {
-                $img->img_path = asset('storage/' . $img->img_path);
+                $img->img_path = url('storage/' . $img->img_path);
             }
         }
 
