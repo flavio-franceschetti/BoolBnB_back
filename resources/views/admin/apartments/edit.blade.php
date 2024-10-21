@@ -45,13 +45,16 @@
             </div>
         </div>
 
+
         <!-- Indirizzo -->
         <div class="mb-3">
             <label for="address" class="form-label">Indirizzo</label>
             <input type="text" class="form-control" id="address" name="address"
                 value="{{ old('address', $apartment->address) }}" required>
+
             <small class="text-danger" id="addressError" style="display: none;"></small>
         </div>
+
 
         <!-- Servizi -->
         <div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">

@@ -39,4 +39,6 @@ class Helper
         // ritorno la latitudine presa dalla risposta dell'api
         return $response['results'][0]['position'][$param];
     }
+
+   
 }
