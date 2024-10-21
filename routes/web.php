@@ -35,11 +35,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Rotte per la gestione degli appartamenti
     Route::resource('/apartments', ApartmentController::class);
 
-    // Rotta per visualizzare la pagina di acquisto delle sponsorizzazioni
-    Route::get('/sponsorships/purchase/{id}', [SponsorshipController::class, 'purchase'])->name('sponsorships.purchase');
+    // // Rotta per visualizzare la pagina di acquisto delle sponsorizzazioni
+    // Route::get('/sponsorships/purchase/{id}', [SponsorshipController::class, 'purchase'])->name('sponsorships.purchase');
 
-    // Rotta per elaborare il pagamento delle sponsorizzazioni
-    Route::post('/sponsorships/process', [SponsorshipController::class, 'processPayment'])->name('sponsorships.process');
+    // // Rotta per elaborare il pagamento delle sponsorizzazioni
+    // Route::post('/sponsorships/process', [SponsorshipController::class, 'processPayment'])->name('sponsorships.process');
 });
 
 // Includi le rotte di autenticazione

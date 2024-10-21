@@ -151,6 +151,7 @@
       searchInput.setAttribute("name", "address"); // aggiungo l'attributo name
       searchInput.setAttribute("id", "address");// aggiungo l'attributo id
       searchInput.setAttribute("required", true);// aggiungo l'attributo required
+      searchInput.setAttribute("autocomplete", 'off');// aggiungo l'attributo autocomplete e lo imposto su off per non avere i suggerimenti del browser quando scrivo nell'input
       // gestione errori laravel
         @if ($errors->has('address'))
             searchInput.classList.add("is-invalid");
