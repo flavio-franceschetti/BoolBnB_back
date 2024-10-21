@@ -63,15 +63,17 @@
 
     </div>
 
-    <div class="mb-3">
+    {{-- <div class="mb-3">
         <label for="address" class="form-label">Indirizzo</label>
         <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address"
             value="{{ old('address') }}" required>
         @error('address')
         <small class="text-danger">{{ $message }}</small>
         @enderror
-    </div>
+    </div>  --}}
 
+    {{-- searchbox --}}
+    <div id="search-box-container" class="mb-3"></div>
 
     <div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
         @foreach ($services as $service)
@@ -120,4 +122,56 @@
         <input type="reset" class="btn btn-danger" value="Annulla">
     </div>
 </form>
+<script>
+    // recuper la chiave dell'api inserita in config
+    const apiKey = "{{ config('app.tomtomApiKey') }}";
+     // queste sono le impostazioni della searchBox di tomtom
+     let options = {
+        searchOptions: {
+          key: apiKey, // l' API key
+          language: "it-IT", // linguaggio della ricerca
+          limit: 10, // numero di risultati visualizzati nel dropdown dei risultati
+          countrySet: ["IT"], // Limita la ricerca all'Italia
+          //   entityType: "Address", // Mostra solo gli indirizzi
+        },
+        autocompleteOptions: {
+          key: apiKey,
+          language: "it-IT",
+          countrySet: ["IT"], // Limita i suggerimenti all'Italia
+          //   entityType: "Address", // Suggerisce solo indirizzi nel dropdown
+        },
+        labels: {
+          suggestions: {
+            brand: "Brand Suggerito",
+            category: "Categoria Suggerita",
+          },
+          placeholder: "Inserisci l'indirizzo", // placeholder della barra di ricerca
+          noResultsMessage: "Nessun risultato trovato", // messaggio quando si inserisce un valore che non viene trovato
+        },
+      };
+
+      // Creo la serachbox con il costruttore di tomtom tt.plugins.SearchBox
+      // tt.services è il servizio di ricerca che tomtom usa per gestire le richieste
+      // option è la variabile creata con tutte le opzioni dentro
+      let ttSearchBox = new tt.plugins.SearchBox(tt.services, options);
+
+      // Con getSearchBoxHTML mi restituisce il blocco html dove è inserita la searchbox già creata
+      let searchBoxHTML = ttSearchBox.getSearchBoxHTML();
+      // inserisco la searchbox nel mio div html tramite l append
+      document.getElementById("search-box-container").append(searchBoxHTML);
+
+      // Seleziono l'input della search box e gli assegno un 'name'
+      let searchInput = document.querySelector("#search-box-container input");
+      searchInput.setAttribute("name", "address"); // aggiungo l'attributo name
+      searchInput.setAttribute("id", "address");// aggiungo l'attributo id
+      searchInput.setAttribute("required", true);// aggiungo l'attributo required
+      //aggiungo la classe form-control all input così prende il css di bootstrap
+    //   searchInput.classList.add("form-control");
+      // Aggiungo la per la validazione Laravel
+        @if ($errors->has('address'))
+            searchInput.classList.add("is-invalid");
+        @endif
+        // imposto l'old sul valore dell'input
+      searchInput.value = '{{old('address')}}';
+</script>
 @endsection
