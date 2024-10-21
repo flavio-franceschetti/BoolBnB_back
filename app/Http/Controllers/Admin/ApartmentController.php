@@ -140,11 +140,10 @@ class ApartmentController extends Controller
 
     public function update(ApartmentRequest $request, Apartment $apartment)
     {
-        // Get the data from the request
+        // Ottieni i dati dalla richiesta validata
         $data = $request->validated();
 
-        // dd($data);
-        // creo un variabile per i dati dell'appartamento
+        // Creo un variabile per i dati dell'appartamento
         $apartmentData = [
             'title' => $data['title'],
             'rooms' => $data['rooms'],
@@ -155,55 +154,68 @@ class ApartmentController extends Controller
             'is_visible' => $data['is_visible'],
         ];
 
-        // If the form passes validation, proceed with the actual image deletion
+        // Controllo se ci sono immagini da eliminare
+        $deletedImages = false;
         if ($request->has('delete_images')) {
             foreach ($request->delete_images as $imgId) {
-                $db_img = Apartmentimage::find($imgId);
+                $db_img = ApartmentImage::find($imgId);
                 if ($db_img) {
-                    // Delete the image file from storage
+                    // Elimina il file dell'immagine dallo storage
                     Storage::delete($db_img->img_path);
-                    // Remove the image record from the database
+                    // Rimuovi il record dell'immagine dal database
                     $db_img->delete();
+                    $deletedImages = true; // Imposta a true se almeno un'immagine è stata eliminata
                 }
             }
         }
 
-        // Generate a new slug if the title has changed
+        // Verifica se ci sono ancora immagini associate all'appartamento dopo l'eliminazione
+        $remainingImages = $apartment->images()->count();
+
+        // Se non ci sono immagini rimanenti e non vengono caricate nuove immagini, ritorna con errore
+        if ($remainingImages == 0 && !$request->hasFile('images')) {
+            return redirect()->back()->withErrors(['images' => 'Devi caricare almeno un\'immagine se elimini tutte le immagini esistenti.']);
+        }
+
+        // Genera un nuovo slug solo se il titolo è stato modificato
         if ($apartmentData['title'] !== $apartment->title) {
             $apartmentData['slug'] = Helper::generateSlug($apartmentData['title'], Apartment::class);
         }
 
-        // Get the updated latitude and longitude based on the address
+        // Aggiorna latitudine e longitudine solo se l'indirizzo è stato modificato
+        if ($apartmentData['address'] !== $apartment->address) {
+            $address = $apartmentData['address'];
+            $apiKey = env('TOMTOM_API_KEY');
+            $apartmentData['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
+            $apartmentData['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
+        }
 
-        $address = "{$apartmentData['address']}";
-
-        $apiKey = env('TOMTOM_API_KEY');
-        $apartmentData['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
-        $apartmentData['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
-
-        // Update the apartment details
+        // Aggiorna i dettagli dell'appartamento
         $apartment->update($apartmentData);
 
+        // Se l'utente ha caricato nuove immagini, gestisco il caricamento
         if ($request->hasFile('images')) {
             $images = $request->file('images');
             foreach ($images as $img) {
-                // Save the image in the 'uploads' directory
+                // Salva l'immagine nella directory 'uploads'
                 $img_path = Storage::put('uploads', $img);
-                // Get the original file name
+                // Ottieni il nome originale del file
                 $img_name = $img->getClientOriginalName();
-                // Create new image records in relation to the apartment
+                // Crea nuovi record immagine collegati all'appartamento
                 ApartmentImage::create([
-                    'apartment_id' => $apartment->id, // Set the apartment ID
-                    'img_path' => $img_path, // Store the image path
-                    'img_name' => $img_name, // Save the original image name
+                    'apartment_id' => $apartment->id,
+                    'img_path' => $img_path,
+                    'img_name' => $img_name,
                 ]);
             }
         }
-        // Handle services
-        if (array_key_exists('services', $apartmentData)) {
-            $apartment->services()->sync($apartmentData['services']);
+
+        // Gestisco i servizi
+        if (isset($data['services'])) {
+            $apartment->services()->sync($data['services']);
         }
 
+        // Ritorna alla vista dell'appartamento con un messaggio di successo
         return redirect()->route('admin.apartments.show', $apartment)->with('success', 'Appartamento aggiornato con successo!');
     }
 
