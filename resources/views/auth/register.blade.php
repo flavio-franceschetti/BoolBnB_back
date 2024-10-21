@@ -246,15 +246,15 @@
             let errorMessage = '';
 
             if (password.value.length < minLength) {
-                errorMessage += 'La password deve avere almeno 8 caratteri. ';
+                errorMessage += 'La password deve avere almeno 8 caratteri. <br>';
             }
 
             if (requiresMixedCase && !/^(?=.*[a-z])(?=.*[A-Z])/.test(password.value)) {
-                errorMessage += 'La password deve contenere almeno una lettera maiuscola e una minuscola. ';
+                errorMessage += 'La password deve contenere almeno una lettera maiuscola e una minuscola. <br>';
             }
 
             if (requiresNumbers && !/\d/.test(password.value)) {
-                errorMessage += 'La password deve contenere almeno un numero. ';
+                errorMessage += 'La password deve contenere almeno un numero.<br> ';
             }
 
             if (errorMessage) {
