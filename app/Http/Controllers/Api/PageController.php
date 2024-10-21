@@ -30,12 +30,17 @@ class PageController extends Controller
     {
         $apartment = Apartment::where('id', $id)->where('is_visible', true)->with('services', 'images')->first();
 
-        // Preparo la stringa per le immagini
-        foreach ($apartment->images as $img) {
-            $img->img_path = asset('storage/' . $img->img_path);
+        // Verifica se l'appartamento esiste
+        if ($apartment) {
+            // Preparo la stringa per il percorso delle immagini
+            foreach ($apartment->images as $img) {
+                $img->img_path = asset('storage/' . $img->img_path);
+            }
+            $success = true;
+        } else {
+            $success = false;
+            $apartment = null; // Assicurarsi che l'appartamento sia null in caso di fallimento
         }
-        // validazione API
-        $success = $apartment->isNotEmpty();
         return response()->json(compact('success', 'apartment'));
     }
 
