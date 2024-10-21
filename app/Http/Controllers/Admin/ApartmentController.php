@@ -45,6 +45,7 @@ class ApartmentController extends Controller
      */
     public function store(ApartmentRequest $request)
     {
+
         // inserisco tutti i dati della richiesta dentro la variabile $data
         $data = $request->validated();
 
@@ -143,44 +144,65 @@ class ApartmentController extends Controller
         // Get the data from the request
         $data = $request->all();
 
-        // Generate a new slug if the title has changed
-        if ($data['title'] !== $apartment->title) {
-            $data['slug'] = Helper::generateSlug($data['title'], Apartment::class);
-        }
+        // dd($data);
+        // creo un variabile per i dati dell'appartamento
+        $apartmentData = [
+            'title' => $data['title'],
+            'rooms' => $data['rooms'],
+            'beds' => $data['beds'],
+            'bathrooms' => $data['bathrooms'],
+            'mq' => $data['mq'],
+            'address' => $data['address'],
+            'is_visible' => $data['is_visible'],
+        ];
 
-        // Handle the images
-        if ($request->hasFile('img')) {
-            // Check if there are existing images
-            if ($apartment->img) {
-                // Delete existing images from storage
-                $images = explode(',', $apartment->img);
-                foreach ($images as $image) {
-                    $image = trim($image);
-                    Storage::delete($image);
+        // If the form passes validation, proceed with the actual image deletion
+        if ($request->has('delete_images')) {
+            foreach ($request->delete_images as $imgId) {
+                $db_img = Apartmentimage::find($imgId);
+                if ($db_img) {
+                    // Delete the image file from storage
+                    Storage::delete($db_img->img_path);
+                    // Remove the image record from the database
+                    $db_img->delete();
                 }
             }
+        }
 
-            // Create a new array for image paths
-            $images_path = [];
-            foreach ($request->file('img') as $img) {
-                $img_path = Storage::put('uploads', $img);
-                array_push($images_path, $img_path);
-            }
-            $data['img'] = implode(', ', $images_path);
+        // Generate a new slug if the title has changed
+        if ($apartmentData['title'] !== $apartment->title) {
+            $apartmentData['slug'] = Helper::generateSlug($apartmentData['title'], Apartment::class);
         }
 
         // Get the updated latitude and longitude based on the address
-        $address = $data['address'];
+
+        $address = "{$apartmentData['address']}";
+      
         $apiKey = env('TOMTOM_API_KEY');
-        $data['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
-        $data['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
+        $apartmentData['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
+        $apartmentData['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
 
         // Update the apartment details
-        $apartment->update($data);
+        $apartment->update($apartmentData);
 
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach ($images as $img) {
+                // Save the image in the 'uploads' directory
+                $img_path = Storage::put('uploads', $img);
+                // Get the original file name
+                $img_name = $img->getClientOriginalName();
+                // Create new image records in relation to the apartment
+                ApartmentImage::create([
+                    'apartment_id' => $apartment->id, // Set the apartment ID
+                    'img_path' => $img_path, // Store the image path
+                    'img_name' => $img_name, // Save the original image name
+                ]);
+            }
+        }
         // Handle services
-        if (array_key_exists('services', $data)) {
-            $apartment->services()->sync($data['services']);
+        if (array_key_exists('services', $apartmentData)) {
+            $apartment->services()->sync($apartmentData['services']);
         }
 
         return redirect()->route('admin.apartments.show', $apartment)->with('success', 'Appartamento aggiornato con successo!');
