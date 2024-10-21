@@ -3,7 +3,15 @@
 @section('content')
 <h1>Modifica i dati dell'appartamento</h1>
 
-
+@if($errors->any())
+<div class="alert alert-danger" role="alert">
+    <ul>
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
 
 <form action="{{ route('admin.apartments.update', $apartment->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
@@ -57,14 +65,14 @@
     </div>
 
     <!-- Indirizzo -->
-        <div class="mb-3">
-            <label for="address" class="form-label">Indirizzo</label>
-            <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address"
-                value="{{ old('address', $apartment->address) }}" required>
-            @error('address')
-            <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
+    <div class="mb-3">
+        <label for="address" class="form-label">Indirizzo</label>
+        <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address"
+            value="{{ old('address', $apartment->address) }}" required>
+        @error('address')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
 
 
     <!-- Servizi -->
@@ -80,23 +88,37 @@
         @enderror
     </div>
 
-    <!-- Immagine -->
-    <div class="mb-3">
-        <label for="img" class="form-label">Immagine</label>
-        <input class="form-control" type="file" id="img" name="img[]" multiple
-            value="{{ old('city', $apartment->city) }}" required>
-        @error('img')
-        <small class="text-danger">{{ $message }}</small>
-        @enderror
-        <!-- Mostra immagini esistenti -->
-        @if ($apartment->img)
-        <div class="mt-3">
-            <p>Immagini esistenti:</p>
-            @foreach (explode(',', $apartment->img) as $image)
-            <img src="{{ asset('storage/' . trim($image)) }}" alt="Immagine appartamento" style="width: 150px;">
+    <!-- Mostra immagini esistenti -->
+    <div class="form-group mb-3">
+        <label>Immagini attuali dell'appartamento:</label>
+        <div class="row">
+            @foreach ($apartment->images as $image)
+            <div class="col-md-2 mb-3">
+                <img src="{{ asset('storage/' . $image->img_path) }}" alt="{{ $image->img_name }}" class="img-fluid">
+                <div class="form-check mt-2">
+                    <input type="checkbox" name="delete_images[]" value="{{ $image->id }}" class="form-check-input">
+                    <label class="form-check-label">Elimina questa immagine</label>
+                </div>
+                <!-- Hidden input to retain non-deleted images -->
+                <input type="hidden" name="existing_images[]" value="{{ $image->id }}">
+            </div>
             @endforeach
         </div>
-        @endif
+    </div>
+    <!-- Immagine -->
+    <div class="mb-3">
+        <label for="" class="form-label">Aggiungi immagini</label>
+        <input class="form-control" type="file" id="images" name="images[]" multiple accept="image/*">
+        @error('images')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
+        @error('images.*')
+        <small class="text-danger">{{ $message }}</small>
+        @enderror
+
+        {{-- @if($errors->any())
+        <small class="text-danger">Inserisci nuovamente le immagini</small>
+        @endif --}}
     </div>
 
     <!-- Visibilità -->
@@ -137,4 +159,5 @@
         @endforeach
     </ul>
 </div> --}}
+
 @endsection
