@@ -1,162 +1,147 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Inserisci i dati per il nuovo appartamento</h1>
+    <h1>Inserisci i dati per il nuovo appartamento</h1>
 
-@if($errors->any())
-<div class="alert alert-danger" role="alert">
-    <ul>
-        @foreach($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-<form action="{{ route('admin.apartments.store') }}" method="POST" enctype="multipart/form-data" id="apartmentForm">
-    @csrf
-
-    <div class="mb-3">
-        <label for="title" class="form-label">Titolo annuncio</label>
-        <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
-        <small class="text-danger" id="titleError" style="display: none;"></small>
-    </div>
-
-    <div class="d-flex gap-3 mb-3">
-        <div>
-            <label for="rooms" class="form-label">N. Camere</label>
-            <input type="number" class="form-control" id="rooms" name="rooms" value="{{ old('rooms') }}" required>
-            <small class="text-danger" id="roomsError" style="display: none;"></small>
+    @if ($errors->any())
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <div>
-            <label for="beds" class="form-label">N. Letti</label>
-            <input type="number" class="form-control" id="beds" name="beds" value="{{ old('beds') }}" required>
-            <small class="text-danger" id="bedsError" style="display: none;"></small>
-        </div>
-        <div>
-            <label for="bathrooms" class="form-label">N. Bagni</label>
-            <input type="number" class="form-control" id="bathrooms" name="bathrooms" value="{{ old('bathrooms') }}"
-                required>
-            <small class="text-danger" id="bathroomsError" style="display: none;"></small>
-        </div>
-        <div>
-            <label for="mq" class="form-label">Metri Quadri</label>
-            <input type="number" class="form-control" id="mq" name="mq" value="{{ old('mq') }}" required>
-            <small class="text-danger" id="mqError" style="display: none;"></small>
-        </div>
-    </div>
+    @endif
 
-    {{-- <div class="mb-3">
-        <label for="address" class="form-label">Indirizzo</label>
-        <input type="text" class="form-control" id="address" name="address" value="{{ old('address') }}" required>
-        <small class="text-danger" id="addressError" style="display: none;"></small>
-    </div> --}}
+    <form action="{{ route('admin.apartments.store') }}" method="POST" enctype="multipart/form-data" id="apartmentForm">
+        @csrf
 
-    {{-- searchbox --}}
-    <div id="search-box-container" class="mb-3"></div>
-
-    <div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
-        @foreach ($services as $service)
-        <input name="services[]" type="checkbox" value="{{ $service->id }}" class="btn-check"
-            id="service-{{ $service->id }}" autocomplete="off" @if (in_array($service->id, old('services', []))) checked
-        @endif>
-        <label class="btn btn-outline-primary" for="service-{{ $service->id }}">{{ $service->name }}</label>
-        @endforeach
-        <small class="text-danger" id="servicesError" style="display: none;"></small>
-    </div>
-
-    <div class="mb-3">
-        <label for="images" class="form-label">Immagine</label>
-        <input class="form-control" type="file" id="images" name="images[]" multiple required accept="image/*">
-        @error('images')
-        <small class="text-danger">{{ $message }}</small>
-        @enderror
-    </div>
-    <div class="is-visible-radios mb-3">
-        <div>Visibile</div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="is_visible" value="1" id="flexRadioDefault1" checked>
-            <label class="form-check-label" for="flexRadioDefault1">
-                Si
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="is_visible" value="0" id="flexRadioDefault2">
-            <label class="form-check-label" for="flexRadioDefault2">
-                No
-            </label>
+        <div class="mb-3">
+            <label for="title" class="form-label">Titolo annuncio</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
+            <small class="text-danger" id="titleError" style="display: none;"></small>
         </div>
 
+        <div class="d-flex gap-3 mb-3">
+            <div>
+                <label for="rooms" class="form-label">N. Camere</label>
+                <input type="number" class="form-control" id="rooms" name="rooms" value="{{ old('rooms') }}"
+                    required>
+                <small class="text-danger" id="roomsError" style="display: none;"></small>
+            </div>
+            <div>
+                <label for="beds" class="form-label">N. Letti</label>
+                <input type="number" class="form-control" id="beds" name="beds" value="{{ old('beds') }}"
+                    required>
+                <small class="text-danger" id="bedsError" style="display: none;"></small>
+            </div>
+            <div>
+                <label for="bathrooms" class="form-label">N. Bagni</label>
+                <input type="number" class="form-control" id="bathrooms" name="bathrooms" value="{{ old('bathrooms') }}"
+                    required>
+                <small class="text-danger" id="bathroomsError" style="display: none;"></small>
+            </div>
+            <div>
+                <label for="mq" class="form-label">Metri Quadri</label>
+                <input type="number" class="form-control" id="mq" name="mq" value="{{ old('mq') }}"
+                    required>
+                <small class="text-danger" id="mqError" style="display: none;"></small>
+            </div>
+        </div>
+
+        {{-- searchbox --}}
+        <div id="search-box-container" class="mb-3"></div>
+
+        <div class="btn-group mb-3" role="group" aria-label="Basic checkbox toggle button group">
+            @foreach ($services as $service)
+                <input name="services[]" type="checkbox" value="{{ $service->id }}" class="btn-check"
+                    id="service-{{ $service->id }}" autocomplete="off" @if (in_array($service->id, old('services', []))) checked @endif>
+                <label class="btn btn-outline-primary" for="service-{{ $service->id }}">{{ $service->name }}</label>
+            @endforeach
+            <small class="text-danger" id="servicesError" style="display: none;"></small>
+        </div>
+
+        <div class="mb-3">
+            <label for="images" class="form-label">Inserisci l'immagine (Puoi caricare solo file JPG, JPEG, PNG,
+                WEBP)</label>
+            <input class="form-control" type="file" id="images" name="images[]" multiple required accept="image/*">
+            @error('images')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
+            <small class="text-danger" id="imagesCount" style="display: block;">Inserisci da 1 a 3 file massimi.</small>
+            <small class="text-danger" id="imagesError" style="display: none;"></small>
+        </div>
+
+        <div class="is-visible-radios mb-3">
+            <div>Visibile</div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="is_visible" value="1" id="flexRadioDefault1"
+                    checked>
+                <label class="form-check-label" for="flexRadioDefault1">Si</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="is_visible" value="0" id="flexRadioDefault2">
+                <label class="form-check-label" for="flexRadioDefault2">No</label>
+            </div>
+        </div>
 
         <div class="mb-3">
             <input type="submit" class="btn btn-primary" value="Invia">
             <input type="reset" class="btn btn-danger" value="Annulla">
         </div>
-</form>
+    </form>
 
-<style>
-    .is-valid {
-        border-color: green;
-        /* Cambia il colore del bordo in verde */
-    }
+    <style>
+        .is-valid {
+            border-color: green;
+        }
 
-    .is-invalid {
-        border-color: red;
-        /* Cambia il colore del bordo in rosso */
-    }
-</style>
+        .is-invalid {
+            border-color: red;
+        }
+    </style>
 
-<script>
-    // SEZIONE DELLA SEARCHBOX
-    // recuper la chiave dell'api inserita in config
-    const apiKey = "{{ config('app.tomtomApiKey') }}";
-     // queste sono le impostazioni della searchBox di tomtom
-     let options = {
-        searchOptions: {
-          key: apiKey, // l' API key
-          language: "it-IT", // linguaggio della ricerca
-          limit: 10, // numero di risultati visualizzati nel dropdown dei risultati
-          countrySet: ["IT"], // Limita la ricerca all'Italia
-          //   entityType: "Address", // Mostra solo gli indirizzi
-        },
-        autocompleteOptions: {
-          key: apiKey,
-          language: "it-IT",
-          countrySet: ["IT"], // Limita i suggerimenti all'Italia
-          //   entityType: "Address", // Suggerisce solo indirizzi nel dropdown
-        },
-        labels: {
-          suggestions: {
-            brand: "Brand Suggerito",
-            category: "Categoria Suggerita",
-          },
-          placeholder: "Inserisci l'indirizzo", // placeholder della barra di ricerca
-          noResultsMessage: "Nessun risultato trovato", // messaggio quando si inserisce un valore che non viene trovato
-        },
-      };
+    <script>
+        // SEZIONE DELLA SEARCHBOX
+        const apiKey = "{{ config('app.tomtomApiKey') }}";
+        let options = {
+            searchOptions: {
+                key: apiKey,
+                language: "it-IT",
+                limit: 10,
+                countrySet: ["IT"],
+            },
+            autocompleteOptions: {
+                key: apiKey,
+                language: "it-IT",
+                countrySet: ["IT"],
+            },
+            labels: {
+                suggestions: {
+                    brand: "Brand Suggerito",
+                    category: "Categoria Suggerita",
+                },
+                placeholder: "Inserisci l'indirizzo",
+                noResultsMessage: "Nessun risultato trovato",
+            },
+        };
 
-      // Creo la serachbox con il costruttore di tomtom tt.plugins.SearchBox
-      // tt.services è il servizio di ricerca che tomtom usa per gestire le richieste
-      // option è la variabile creata con tutte le opzioni dentro
-      let ttSearchBox = new tt.plugins.SearchBox(tt.services, options);
+        let ttSearchBox = new tt.plugins.SearchBox(tt.services, options);
+        let searchBoxHTML = ttSearchBox.getSearchBoxHTML();
+        document.getElementById("search-box-container").append(searchBoxHTML);
 
-      // Con getSearchBoxHTML mi restituisce il blocco html dove è inserita la searchbox già creata
-      let searchBoxHTML = ttSearchBox.getSearchBoxHTML();
-      // inserisco la searchbox nel mio div html tramite l append
-      document.getElementById("search-box-container").append(searchBoxHTML);
+        let searchInput = document.querySelector("#search-box-container input");
+        searchInput.setAttribute("name", "address");
+        searchInput.setAttribute("id", "address");
+        searchInput.setAttribute("required", true);
 
-      // Seleziono l'input della search box e gli assegno un 'name'
-      let searchInput = document.querySelector("#search-box-container input");
-      searchInput.setAttribute("name", "address"); // aggiungo l'attributo name
-      searchInput.setAttribute("id", "address");// aggiungo l'attributo id
-      searchInput.setAttribute("required", true);// aggiungo l'attributo required
-      // gestione errori laravel
         @if ($errors->has('address'))
             searchInput.classList.add("is-invalid");
         @endif
-        // imposto l'old sul valore dell'input
-      searchInput.value = '{{old('address')}}';
 
-    // SEZIONE DEI CONTROLLI
+        searchInput.value = '{{ old('address') }}';
+
+        // SEZIONE DEI CONTROLLI
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('apartmentForm');
 
@@ -228,85 +213,73 @@
                 }
             });
 
-            const services = document.querySelectorAll('input[name="services[]"]');
-            services.forEach(service => {
-                service.addEventListener('change', function() {
-                    const checkedServices = Array.from(services).some(s => s.checked);
-                    if (!checkedServices) {
-                        showError('services', 'Devi selezionare almeno un servizio.');
-                    } else {
-                        hideError('services');
-                    }
-                });
-            });
+            const imagesInput = document.getElementById('images');
+            imagesInput.addEventListener('change', function() {
+                const files = this.files;
+                const maxFiles = 3;
 
-            document.getElementById('img').addEventListener('change', function() {
-                if (this.files.length === 0) {
-                    showError('img', 'Devi caricare almeno un\'immagine.');
+                // Controllo numero file
+                const fileCount = files.length;
+
+                if (fileCount === 0) {
+                    document.getElementById('imagesCount').textContent = "Inserisci da 1 a 3 file massimi.";
+                } else if (fileCount > maxFiles) {
+                    showError('images', `Puoi caricare al massimo ${maxFiles} immagini.`);
+                } else if (fileCount === maxFiles) {
+                    document.getElementById('imagesCount').textContent =
+                        `Hai inserito ${fileCount}/${maxFiles} file.`;
+                    hideError('images');
                 } else {
-                    hideError('img');
+                    const remainingFiles = maxFiles - fileCount;
+                    document.getElementById('imagesCount').textContent =
+                        `Mancano ancora ${remainingFiles} file da inserire.`;
+                    hideError('images');
+                }
+
+                // Controllo dimensione file
+                let valid = true;
+                for (let i = 0; i < files.length; i++) {
+                    if (files[i].size > 10 * 1024 * 1024) {
+                        showError('images', 'Ogni immagine deve essere al massimo di 10 MB.');
+                        valid = false;
+                        break;
+                    }
+
+                    // Controllo tipo di file
+                    const fileType = files[i].type;
+                    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+                    if (!validTypes.includes(fileType)) {
+                        showError('images', 'Puoi caricare solo file JPG, JPEG, PNG, WEBP.');
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if (valid) {
+                    hideError('images');
                 }
             });
 
             form.addEventListener('submit', function(event) {
-                let hasErrors = false;
+                const isValid = [...form.elements].every(input => {
+                    if (input.hasAttribute('required') && !input.value) {
+                        showError(input.id,
+                            `${input.previousElementSibling.innerText} è obbligatorio.`);
+                        return false;
+                    }
+                    return true;
+                });
 
-                // Controllo del titolo
-                if (document.getElementById('title').value.trim() === '') {
-                    showError('title', 'Il titolo è obbligatorio.');
-                    hasErrors = true;
+                // Controllo se ci sono errori sui file
+                if (fileCount > maxFiles) {
+                    event.preventDefault();
                 }
 
-                // Controllo del numero di camere
-                if (document.getElementById('rooms').value <= 0) {
-                    showError('rooms', 'Devi inserire un numero valido di camere.');
-                    hasErrors = true;
-                }
-
-                // Controllo del numero di letti
-                if (document.getElementById('beds').value <= 0) {
-                    showError('beds', 'Devi inserire un numero valido di letti.');
-                    hasErrors = true;
-                }
-
-                // Controllo del numero di bagni
-                if (document.getElementById('bathrooms').value <= 0) {
-                    showError('bathrooms', 'Devi inserire un numero valido di bagni.');
-                    hasErrors = true;
-                }
-
-                // Controllo dei metri quadri
-                if (document.getElementById('mq').value < 30) {
-                    showError('mq', 'Devi inserire almeno 30 m²');
-                    hasErrors = true;
-                } else if (document.getElementById('mq').value <= 0) {
-                    showError('mq', 'Devi inserire un numero valido di m²');
-                    hasErrors = true;
-                }
-
-                // Controllo dell'indirizzo
-                if (document.getElementById('address').value.trim() === '') {
-                    showError('address', 'L\'indirizzo è obbligatorio.');
-                    hasErrors = true;
-                }
-
-                // Controllo dei servizi
-                const checkedServices = Array.from(services).some(s => s.checked);
-                if (!checkedServices) {
-                    showError('services', 'Devi selezionare almeno un servizio.');
-                    hasErrors = true;
-                }
-
-                // Controllo dell'immagine
-                if (document.getElementById('images').files.length === 0) {
-                    showError('images', 'Devi caricare almeno un\'immagine.');
-                    hasErrors = true;
-                }
-
-                if (hasErrors) {
-                    event.preventDefault(); // Impedisce l'invio del modulo
+                if (!isValid) {
+                    event.preventDefault();
                 }
             });
         });
-</script>
+    </script>
 @endsection

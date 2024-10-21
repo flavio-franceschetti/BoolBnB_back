@@ -4,9 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Apartment;
 use App\Models\ApartmentImage;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Config; // Import Config facade
 
 class ApartmentImageSeeder extends Seeder
 {
@@ -15,24 +14,25 @@ class ApartmentImageSeeder extends Seeder
      */
     public function run(): void
     {
+        // Load images from the config
+        $images = collect(config('apartment_images')); // Wrap the config array into a collection
 
-        // ottengo la lista degli id di apartments
+        // Get the list of all apartments
         $apartments = Apartment::all();
-        // Crea un'istanza di Faker
-        $faker = Faker::create();
 
-        // Crea da 1 a 3 img random per apartmnet
         foreach ($apartments as $apartment) {
-            // Generate a random number of images between 1 and 3
-            $numberOfimages = rand(1, 3); // Randomly choose between 1 and 3 images
+            // Get a random number of images (between 1 and 3)
+            $randomImages = $images->random(rand(1, 3));
 
-            // Create the images for the apartment
-            for ($i = 1; $i <= $numberOfimages; $i++) {
-                ApartmentImage::create([
-                    'apartment_id' => $apartment->id,
-                    'img_path' => $faker->imageUrl(),
-                    'img_name' => $faker->word,
-                ]);
+            foreach ($randomImages as $image) {
+                // Create a new ApartmentImage instance
+                $new_apartmentImage = new ApartmentImage();
+                $new_apartmentImage->apartment_id = $apartment->id;
+                $new_apartmentImage->img_path = $image['img_path']; // Use array notation
+                $new_apartmentImage->img_name = $image['img_name']; // Use array notation
+
+                // Save the relationship in the database
+                $new_apartmentImage->save();
             }
         }
     }

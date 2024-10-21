@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\ApartmentImage;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Storage;
 
 class ApartmentRequest extends FormRequest
 {
@@ -16,39 +14,27 @@ class ApartmentRequest extends FormRequest
         return true;
     }
 
-
-    const MAX_IMAGES = 3;
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
-        // Count the current images associated with the apartment
-        $existingImagesCount = count($this->input('existing_images', []));
-        $deletedImagesCount = count($this->input('delete_images', []));
-        $maxNewImages = self::MAX_IMAGES - ($existingImagesCount - $deletedImagesCount); // Adjusting for deletions
-
         $rules = [
             'title' => 'required|string|max:255',
-            'rooms' => 'required|numeric|min:1',
-            'beds' => 'required|numeric|min:1',
-            'bathrooms' => 'required|numeric|min:1',
-            'mq' => 'required|numeric|min:30',
+            'rooms' => 'required|integer|min:1',
+            'beds' => 'required|integer|min:1',
+            'bathrooms' => 'required|integer|min:1',
+            'mq' => 'required|integer|min:1',
             'address' => 'required|string|max:255',
-            'delete_images' => 'nullable|array',
-            'is_visible' => 'required|boolean',
-            'services' => 'nullable|exists:services,id',
+            'is_visible' => 'boolean',
         ];
 
-        // Use required_without_all if all existing images are being deleted
-        if ($deletedImagesCount === $existingImagesCount || $existingImagesCount === 0) {
-            $rules['images'] = 'required|array|max:' . $maxNewImages;
-            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:10240';
-        } else {
-            $rules['images'] = 'array|max:' . $maxNewImages;
-            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:10240';
+        // Rendi obbligatorio il campo immagini solo per la creazione
+        if ($this->isMethod('post')) {
+            $rules['images'] = 'required|array|min:1';
+            $rules['images.*'] = 'image|max:10240';
         }
 
         return $rules;

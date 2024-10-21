@@ -8,7 +8,6 @@ return [
     ['name' => 'TV Satellitare'],
     ['name' => 'Lavatrice'],
     ['name' => 'Palestra'],
-    ['name' => 'Piscina'],
     ['name' => 'Giardino'],
     ['name' => 'Idromassaggio'],
     ['name' => 'Cucina'],

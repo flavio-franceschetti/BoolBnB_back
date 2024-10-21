@@ -17,5 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/apartments', [PageController::class, 'index']);
 Route::get('/apartmentById/{id}', [PageController::class, 'apartmentById']);
-Route::get('/apartmentByAddress/{address}', [PageController::class, 'apartmentByAddress']);
-Route::get('/apartmentWithSponsorship', [PageController::class, 'apartmentWithSponsorship']);
+Route::get('/apartmentsByAddress/{address}', [PageController::class, 'apartmentsByAddress']);
+Route::get('/apartmentsWithSponsorship', [PageController::class, 'apartmentsWithSponsorship']);
