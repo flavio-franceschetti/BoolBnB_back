@@ -39,11 +39,11 @@
             </div>
         </div>
 
-        <div class="mb-3">
+        {{-- <div class="mb-3">
             <label for="address" class="form-label">Indirizzo</label>
             <input type="text" class="form-control" id="address" name="address" value="{{ old('address') }}" required>
             <small class="text-danger" id="addressError" style="display: none;"></small>
-        </div>
+        </div> --}}
         
         {{-- searchbox --}}
         <div id="search-box-container" class="mb-3"></div>
@@ -143,9 +143,7 @@
       searchInput.setAttribute("name", "address"); // aggiungo l'attributo name
       searchInput.setAttribute("id", "address");// aggiungo l'attributo id
       searchInput.setAttribute("required", true);// aggiungo l'attributo required
-      //aggiungo la classe form-control all input così prende il css di bootstrap
-    //   searchInput.classList.add("form-control");
-      // Aggiungo la per la validazione Laravel
+      // gestione errori laravel
         @if ($errors->has('address'))
             searchInput.classList.add("is-invalid");
         @endif  
