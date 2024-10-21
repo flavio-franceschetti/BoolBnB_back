@@ -29,8 +29,8 @@ class ApartmentRequest extends FormRequest
             'bathrooms' => 'required|numeric|min:1',
             'mq' => 'required|numeric|min:30',
             'address'  => 'required|string|max:255',
-            'images' => 'required|array|max:3',
-            'images.*' => 'file|mimes:jpg,jpeg,png,webp|max:10240',
+            // 'images' => 'required|array|max:3',
+            // 'images.*' => 'file|mimes:jpg,jpeg,png,webp|max:10240',
             'is_visible'   => 'required|boolean',
             'services'  => 'nullable|exists:services,id'
         ];

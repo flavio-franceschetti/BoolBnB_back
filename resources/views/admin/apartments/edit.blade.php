@@ -72,7 +72,7 @@
         <!-- Immagine -->
         <div class="mb-3">
             <label for="img" class="form-label">Immagine</label>
-            <input class="form-control" type="file" id="img" name="img[]" multiple required>
+            <input class="form-control" type="file" id="img" name="img[]" multiple>
             <small class="text-danger" id="imgError" style="display: none;"></small>
             <!-- Mostra immagini esistenti -->
             @if ($apartment->img)
