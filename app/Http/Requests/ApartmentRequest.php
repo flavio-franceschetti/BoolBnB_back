@@ -17,21 +17,6 @@ class ApartmentRequest extends FormRequest
     }
 
 
-    /**
-     * Prepara i dati per la convalida e gestisce la rimozione delle immagini
-     */
-    // protected function prepareForValidation()
-    // {
-    //     // Simulate deletion of the images for validation purposes
-    //     if ($this->has('delete_images')) {
-    //         $remainingImages = array_diff($this->input('existing_images', []), $this->input('delete_images', []));
-
-    //         // Update the count of remaining images for validation purposes
-    //         $this->merge([
-    //             'existing_images' => $remainingImages,
-    //         ]);
-    //     }
-    // }
     const MAX_IMAGES = 3;
     /**
      * Get the validation rules that apply to the request.
