@@ -68,7 +68,7 @@
             @error('images')
                 <small class="text-danger">{{ $message }}</small>
             @enderror
-            <small class="text-danger" id="imagesCount" style="display: block;">Inserisci da 1 a 3 file massimi.</small>
+            <small class="text-primary" id="imagesCount" style="display: block;">Inserisci da 1 a 3 file massimi.</small>
             <small class="text-danger" id="imagesError" style="display: none;"></small>
         </div>
 
