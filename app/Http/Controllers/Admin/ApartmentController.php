@@ -48,7 +48,6 @@ class ApartmentController extends Controller
 
         // inserisco tutti i dati della richiesta dentro la variabile $data
         $data = $request->validated();
-
         // creo un variabile per i dati dell'appartamento
         $apartmentData = [
             'title' => $data['title'],
@@ -79,8 +78,8 @@ class ApartmentController extends Controller
         $new_apartment = Apartment::create($apartmentData);
 
         //gestisco i servizi
-        if (array_key_exists('services', $apartmentData)) {
-            $new_apartment->services()->attach($apartmentData['services']);
+        if (isset($data['services'])) {
+            $new_apartment->services()->attach($data['services']);
         }
 
         // gestisco la tabella apartment_images
@@ -142,7 +141,7 @@ class ApartmentController extends Controller
     public function update(ApartmentRequest $request, Apartment $apartment)
     {
         // Get the data from the request
-        $data = $request->all();
+        $data = $request->validated();
 
         // dd($data);
         // creo un variabile per i dati dell'appartamento
@@ -177,7 +176,7 @@ class ApartmentController extends Controller
         // Get the updated latitude and longitude based on the address
 
         $address = "{$apartmentData['address']}";
-      
+
         $apiKey = env('TOMTOM_API_KEY');
         $apartmentData['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
         $apartmentData['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
