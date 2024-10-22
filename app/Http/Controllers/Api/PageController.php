@@ -62,27 +62,58 @@ class PageController extends Controller
         return response()->json(compact('success', 'apartment'));
     }
     // chiamata di tutti gli appartamenti visibili
-    public function apartmentsByAddress($address)
+    public function apartmentsByAddress(Request $request)
     {
-        // Prendo la latitudine e longitudine dall'indirizzo inserito dall'utente
-        // utilizzo le funzioni create nell'helper per prendermi la latitudine e la longitudine dall'api di tomtom
+        // Recupero la chiave API e l'indirizzo dall'input della richiesta
         $apiKey = env('TOMTOM_API_KEY');
+        $address = $request->query('address');
+
+        // Ottengo latitudine e longitudine dall'API TomTom in base all'indirizzo
         $latitude = Helper::getLatLon($address, $apiKey, 'lat');
         $longitude = Helper::getLatLon($address, $apiKey, 'lon');
-        // aggiungo la distanza del raggio di ricerca
-        $distance = 20;
 
-        // Filtro gli appartamenti
-        $apartments = Apartment::where('is_visible', true) //seleziono solo quelli visibili
-            ->where('address', 'LIKE', "%{$address}%") // in address deve essere contenuto l'indirizzo immesso
-            ->select('*') // seleziono tutto
+        // Parametri regolabili dalla query con valori predefiniti
+        $distance = $request->query('distance');  // Default a 20 km
+        $rooms = $request->query('rooms');  // Default a minimo 1 stanza
+        $beds = $request->query('beds');  // Default a minimo 1 letto
+        $services = $request->query('services');  // Nessun default, filtro se fornito (lista separata da virgole)
+
+        // Suddivido l'indirizzo inserito in parole per una ricerca flessibile
+        $addressWords = explode(' ', $address);  // Divido l'input in parole
+
+        // Query di base per gli appartamenti
+        $apartments = Apartment::where('is_visible', true) // Solo appartamenti visibili
+
+            // Filtro per ogni parola nell'indirizzo (in qualsiasi ordine)
+            ->where(function ($query) use ($addressWords) {
+                foreach ($addressWords as $word) {
+                    $query->where('address', 'LIKE', "%{$word}%");  // Aggiungo un 'where' per ogni parola
+                }
+            })
+
+            // Filtro per numero minimo di stanze e letti
+            ->where('rooms', '>=', $rooms)  // Almeno `rooms` numero di stanze
+            ->where('beds', '>=', $beds)  // Almeno `beds` numero di letti
+
+            // Filtro per distanza utilizzando la formula di Haversine
+            ->select('*')
             ->selectRaw("(
-                6371 * acos(cos(radians(?)) * cos(radians(latitude))
-                * cos(radians(longitude) - radians(?))
-                + sin(radians(?)) * sin(radians(latitude)))
-            ) AS distance", [$latitude, $longitude, $latitude]) // calcolo la distanza dall'indirizzo fornito basandomi sulla lat e lon
-            ->having('distance', '<', $distance) // filtro tutti gli indirizzi che hanno una distanza minore di quella inserita nella variabile
-            ->with('services', 'images') // importo anche i dati di servizi e immagini
+            6371 * acos(cos(radians(?)) * cos(radians(latitude))
+            * cos(radians(longitude) - radians(?))
+            + sin(radians(?)) * sin(radians(latitude)))
+        ) AS distance", [$latitude, $longitude, $latitude])
+            ->having('distance', '<', $distance)  // Filtro per distanza dalla posizione fornita
+
+            // Filtro opzionale per servizi (se fornito)
+            ->when($services, function ($query) use ($services) {
+                $serviceList = explode(',', $services);  // Divido la lista di servizi separati da virgole
+                return $query->whereHas('services', function ($query) use ($serviceList) {
+                    $query->whereIn('name', $serviceList);  // Cerco tra i servizi forniti
+                });
+            })
+
+            // Carico le relazioni (servizi, immagini)
+            ->with('services', 'images')  // Includo servizi e immagini collegati
             ->get();
 
         // Preparo la stringa per le immagini
