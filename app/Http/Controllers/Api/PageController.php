@@ -44,6 +44,23 @@ class PageController extends Controller
         return response()->json(compact('success', 'apartment'));
     }
 
+    public function apartmentBySlug($slug)
+    {
+        $apartment = Apartment::where('slug', $slug)->where('is_visible', true)->with('services', 'images')->first();
+
+        // Verifica se l'appartamento esiste
+        if ($apartment) {
+            // Preparo la stringa per il percorso delle immagini
+            foreach ($apartment->images as $img) {
+                $img->img_path = url('storage/' . $img->img_path);
+            }
+            $success = true;
+        } else {
+            $success = false;
+            $apartment = null; // Assicurarsi che l'appartamento sia null in caso di fallimento
+        }
+        return response()->json(compact('success', 'apartment'));
+    }
     // chiamata di tutti gli appartamenti visibili
     public function apartmentsByAddress($address)
     {
