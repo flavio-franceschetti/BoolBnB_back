@@ -20,3 +20,10 @@ Route::get('/apartmentById/{id}', [PageController::class, 'apartmentById']);
 Route::get('/apartmentBySlug/{slug}', [PageController::class, 'apartmentBySlug']);
 Route::get('/apartmentsByAddress/{address}', [PageController::class, 'apartmentsByAddress']);
 Route::get('/apartmentsWithSponsorship', [PageController::class, 'apartmentsWithSponsorship']);
+
+// rotta per passare la key dell'api di tomtom al front
+Route::get('/tomtomKey', function(){
+   return response()->json([
+    'apiKey'=> env('TOMTOM_API_KEY'),
+   ]);
+});
