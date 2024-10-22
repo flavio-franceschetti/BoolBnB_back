@@ -29,6 +29,7 @@ class ApartmentRequest extends FormRequest
             'mq' => 'required|integer|min:1',
             'address' => 'required|string|max:255',
             'is_visible' => 'boolean',
+            'services' => 'nullable'
         ];
 
         // Rendi obbligatorio il campo immagini solo per la creazione
