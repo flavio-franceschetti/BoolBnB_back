@@ -134,6 +134,7 @@
         searchInput.setAttribute("name", "address");
         searchInput.setAttribute("id", "address");
         searchInput.setAttribute("required", true);
+        searchInput.setAttribute("autocomplete", "off");
 
         @if ($errors->has('address'))
             searchInput.classList.add("is-invalid");
