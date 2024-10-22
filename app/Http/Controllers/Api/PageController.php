@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Functions\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Apartment;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -24,6 +25,14 @@ class PageController extends Controller
         // validazione API
         $success = $apartments->isNotEmpty();
         return response()->json(compact('success', 'apartments'));
+    }
+
+    public function services()
+    {
+        $services = Service::all();
+
+        $success = $services->isNotEmpty();
+        return response()->json(compact('success', 'services'));
     }
 
     public function apartmentById($id)
@@ -73,9 +82,9 @@ class PageController extends Controller
         $longitude = Helper::getLatLon($address, $apiKey, 'lon');
 
         // Parametri regolabili dalla query con valori predefiniti
-        $distance = $request->query('distance');  // Default a 20 km
-        $rooms = $request->query('rooms');  // Default a minimo 1 stanza
-        $beds = $request->query('beds');  // Default a minimo 1 letto
+        $distance = $request->query('distance');
+        $rooms = $request->query('rooms');
+        $beds = $request->query('beds');
         $services = $request->query('services');  // Nessun default, filtro se fornito (lista separata da virgole)
 
         // Suddivido l'indirizzo inserito in parole per una ricerca flessibile
