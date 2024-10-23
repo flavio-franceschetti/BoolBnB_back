@@ -201,16 +201,20 @@
                     this.classList.add('is-valid');
                 }
             });
-
             document.getElementById('sponsorshipSelect').addEventListener('change', function() {
                 const sponsorshipId = this.value;
-                const apartmentId =
-                    "{{ $apartment->id }}"; // Assicurati che $apartment sia disponibile in vista
+                const apartmentId = "{{ $apartment->id }}";
                 const paymentLink = document.getElementById('paymentLink');
-                paymentLink.href =
-                    "{{ route('admin.apartments.payment', ['apartmentId' => ':apartmentId', 'sponsorshipId' => ':sponsorshipId']) }}"
-                    .replace(':apartmentId', apartmentId)
-                    .replace(':sponsorshipId', sponsorshipId);
+                if (sponsorshipId) {
+                    paymentLink.href =
+                        "{{ route('admin.apartments.payment', ['apartmentId' => ':apartmentId', 'sponsorshipId' => ':sponsorshipId']) }}"
+                        .replace(':apartmentId', apartmentId)
+                        .replace(':sponsorshipId', sponsorshipId);
+                    paymentLink.style.display = 'inline'; // Mostra il link se non è visibile
+                } else {
+                    paymentLink.style.display =
+                    'none'; // Nascondi se nessuna sponsorizzazione è selezionata
+                }
             });
         });
     </script>
