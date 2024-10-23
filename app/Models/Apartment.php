@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class Apartment extends Model
 {
@@ -23,6 +24,8 @@ class Apartment extends Model
         'longitude',
         'latitude',
         'is_visible',
+        'last_sponsorship',
+        'sponsorship_price',
         'sponsorship_hours',
     ];
 
@@ -34,7 +37,8 @@ class Apartment extends Model
     public function sponsorships()
     {
         return $this->belongsToMany(Sponsorship::class, 'apartment_sponsorship')
-            ->withPivot('end_date');
+            ->withPivot('sponsorship_hours', 'end_date')
+            ->withTimestamps();
     }
 
     public function messages()
@@ -53,7 +57,7 @@ class Apartment extends Model
             ->withTimestamps();
     }
 
-    // Aggiungi questo metodo per calcolare le ore residue di sponsorizzazione
+    // Calcola le ore residue di sponsorizzazione
     public function getRemainingSponsorshipHours()
     {
         $sponsorshipHours = 0;
@@ -61,7 +65,7 @@ class Apartment extends Model
         foreach ($this->sponsorships as $sponsorship) {
             $endDate = $sponsorship->pivot->end_date;
 
-            // Log delle sponsorizzazioni
+            // Log delle sponsorizzazioni attive
             Log::info('Controllo sponsorizzazione: ', [
                 'sponsorship_id' => $sponsorship->id,
                 'end_date' => $endDate,
@@ -69,10 +73,34 @@ class Apartment extends Model
             ]);
 
             if ($endDate > now()) {
-                $sponsorshipHours += $sponsorship->duration; // Assicurati che 'duration' sia il campo corretto
+                $sponsorshipHours += $sponsorship->duration;
             }
         }
 
         return $sponsorshipHours;
+    }
+
+    // Metodo per estendere una sponsorizzazione esistente o crearne una nuova
+    public function extendSponsorship(Sponsorship $sponsorship)
+    {
+        // Trova la sponsorizzazione più recente
+        $currentSponsorship = $this->sponsorships()
+            ->where('sponsorship_id', $sponsorship->id)
+            ->latest('pivot_end_date')
+            ->first();
+
+        if ($currentSponsorship && $currentSponsorship->pivot->end_date > now()) {
+            // Se esiste una sponsorizzazione attiva, estendi la durata
+            $newEndDate = Carbon::parse($currentSponsorship->pivot->end_date)->addSeconds($sponsorship->duration);
+            $currentSponsorship->pivot->end_date = $newEndDate;
+            $currentSponsorship->pivot->sponsorship_hours += $sponsorship->duration; // Aggiorna le ore
+            $currentSponsorship->pivot->save();
+        } else {
+            // Altrimenti, crea una nuova associazione
+            $this->sponsorships()->attach($sponsorship->id, [
+                'end_date' => Carbon::now()->addSeconds($sponsorship->duration),
+                'sponsorship_hours' => $sponsorship->duration,
+            ]);
+        }
     }
 }
