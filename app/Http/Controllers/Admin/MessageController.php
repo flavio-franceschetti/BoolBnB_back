@@ -30,6 +30,7 @@ class MessageController extends Controller
             'surname' => 'required|max:255',
             'email' => 'required|email',
             'content' => 'required|min:10',
+            'apartment_id' => 'required'
         ]);
 
         // Creazione di un nuovo contatto nel database
