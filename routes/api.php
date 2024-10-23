@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Api\PageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,4 @@ Route::get('/apartmentById/{id}', [PageController::class, 'apartmentById']);
 Route::get('/apartmentBySlug/{slug}', [PageController::class, 'apartmentBySlug']);
 Route::get('/apartmentsByAddress/{address}', [PageController::class, 'apartmentsByAddress']);
 Route::get('/apartmentsWithSponsorship', [PageController::class, 'apartmentsWithSponsorship']);
+Route::post('/contatto', [MessageController::class, 'store']);
