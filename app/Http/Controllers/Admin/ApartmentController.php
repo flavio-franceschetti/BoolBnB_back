@@ -119,19 +119,17 @@ class ApartmentController extends Controller
      */
     public function edit(Apartment $apartment)
     {
-
         // Controllo opzionale per verificare se l'appartamento appartiene all'utente loggato
-
-
         if ($apartment->user_id !== Auth::id()) {
-            return abort('404');
+            return abort(404);
         }
 
         $services = Service::all();
-        $sponsorships = Sponsorship::all();
+        $sponsorships = Sponsorship::all(); // Recupera tutte le sponsorizzazioni
+        $sponsorship = $sponsorships->first(); // Imposta la prima sponsorizzazione come predefinita
 
-        // Passa l'appartamento alla view insieme agli altri dati
-        return view('admin.apartments.edit', compact('apartment', 'services', 'sponsorships'));
+        // Passa l'appartamento e le sponsorizzazioni alla vista
+        return view('admin.apartments.edit', compact('apartment', 'services', 'sponsorships', 'sponsorship'));
     }
 
     /**
@@ -193,6 +191,24 @@ class ApartmentController extends Controller
         // Aggiorna i dettagli dell'appartamento
         $apartment->update($apartmentData);
 
+        // Gestisci la sponsorizzazione
+        if ($request->has('sponsorship_id')) {
+            $sponsorshipId = $request->input('sponsorship_id');
+            $sponsorship = Sponsorship::find($sponsorshipId);
+
+            // Calcola le ore di sponsorizzazione in base al prezzo
+            $hours = $sponsorship->duration; // Assumi che 'duration' contenga le ore
+
+            // Aggiungi le ore di sponsorizzazione all'appartamento
+            $apartment->sponsorship_hours += $hours;
+            $apartment->save();
+
+            // Aggiungi la sponsorizzazione alla tabella pivot
+            $apartment->sponsorship()->attach($sponsorship->id, [
+                'end_date' => now()->addHours($sponsorship->duration),
+            ]);
+        }
+
         // Se l'utente ha caricato nuove immagini, gestisco il caricamento
         if ($request->hasFile('images')) {
             $images = $request->file('images');
@@ -218,7 +234,6 @@ class ApartmentController extends Controller
         // Ritorna alla vista dell'appartamento con un messaggio di successo
         return redirect()->route('admin.apartments.show', $apartment)->with('success', 'Appartamento aggiornato con successo!');
     }
-
     /**
      * Remove the specified resource from storage.
      */

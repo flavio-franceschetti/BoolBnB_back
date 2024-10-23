@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 class Apartment extends Model
 {
-    use HasFactory;
-
-    use SoftDeletes;
-
-    // definizione delle fillable
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -26,6 +23,7 @@ class Apartment extends Model
         'longitude',
         'latitude',
         'is_visible',
+        'sponsorship_hours',
     ];
 
     public function images()
@@ -33,33 +31,48 @@ class Apartment extends Model
         return $this->hasMany(ApartmentImage::class);
     }
 
-    // relazione con sponsorships
     public function sponsorships()
     {
-        return $this->belongsToMany(Sponsorship::class)
+        return $this->belongsToMany(Sponsorship::class, 'apartment_sponsorship')
             ->withPivot('end_date');
     }
-
-    // relazione con messages
 
     public function messages()
     {
         return $this->hasMany(Message::class);
     }
-    // relazione con views
 
     public function views()
-
     {
         return $this->hasMany(View::class);
     }
 
-    // relazione con  services
-
     public function services()
     {
-        // collegamento con la tabella pivot apartment_service
         return $this->belongsToMany(Service::class, 'apartment_service')
             ->withTimestamps();
+    }
+
+    // Aggiungi questo metodo per calcolare le ore residue di sponsorizzazione
+    public function getRemainingSponsorshipHours()
+    {
+        $sponsorshipHours = 0;
+
+        foreach ($this->sponsorships as $sponsorship) {
+            $endDate = $sponsorship->pivot->end_date;
+
+            // Log delle sponsorizzazioni
+            Log::info('Controllo sponsorizzazione: ', [
+                'sponsorship_id' => $sponsorship->id,
+                'end_date' => $endDate,
+                'is_active' => $endDate > now(),
+            ]);
+
+            if ($endDate > now()) {
+                $sponsorshipHours += $sponsorship->duration; // Assicurati che 'duration' sia il campo corretto
+            }
+        }
+
+        return $sponsorshipHours;
     }
 }

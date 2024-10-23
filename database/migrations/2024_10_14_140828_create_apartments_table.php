@@ -24,6 +24,7 @@ return new class extends Migration
             $table->decimal('longitude', 9, 6);
             $table->decimal('latitude', 9, 6);
             $table->boolean('is_visible')->default(true);
+            $table->integer('sponsorship_hours')->default(0);
             $table->softDeletes();
             $table->timestamps();
 
