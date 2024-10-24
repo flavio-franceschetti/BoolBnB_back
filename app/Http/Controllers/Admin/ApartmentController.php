@@ -111,6 +111,18 @@ class ApartmentController extends Controller
             return abort('404');
         }
 
+        // Verifica se l'appartamento ha una sponsorizzazione attiva
+        $activeSponsorship = $apartment->sponsorships()
+            ->where('end_date', '>', now())
+            ->first();
+
+        if ($activeSponsorship) {
+            // Logica se l'appartamento ha una sponsorizzazione attiva
+            // Ad esempio: mostra le informazioni sulla sponsorizzazione attiva
+        } else {
+            // Logica se non ha sponsorizzazione attiva
+        }
+
         return view('admin.apartments.show', compact('apartment'));
     }
 
@@ -191,24 +203,30 @@ class ApartmentController extends Controller
         // Aggiorna i dettagli dell'appartamento
         $apartment->update($apartmentData);
 
+
+
         // Gestisci la sponsorizzazione
-        if ($request->has('sponsorship_id')) {
+        if ($request->has('sponsorship_id') && $request->input('sponsorship_id') != $apartment->current_sponsorship_id) {
             $sponsorshipId = $request->input('sponsorship_id');
             $sponsorship = Sponsorship::find($sponsorshipId);
 
-            // Calcola le ore di sponsorizzazione in base al prezzo
-            $hours = $sponsorship->duration; // Assumi che 'duration' contenga le ore
+            if ($sponsorship) {
+                // Calcola le ore di sponsorizzazione in base alla durata
+                $sponsorshipHours = $sponsorship->duration; // Assicurati che questo sia un numero di ore valido
 
-            // Aggiungi le ore di sponsorizzazione all'appartamento
-            $apartment->sponsorship_hours += $hours;
-            $apartment->save();
+                // Aggiorna le ore di sponsorizzazione solo se è selezionata una nuova sponsorizzazione
+                $apartment->sponsorship_hours = now()->addHours($sponsorshipHours);
+                $apartment->save();
 
-            // Aggiungi la sponsorizzazione alla tabella pivot
-            $apartment->sponsorship()->attach($sponsorship->id, [
-                'end_date' => now()->addHours($sponsorship->duration),
-            ]);
+                // Aggiungi o aggiorna la sponsorizzazione nella tabella pivot
+                $apartment->sponsorships()->syncWithoutDetaching([
+                    $sponsorship->id => [
+                        'end_date' => now()->addHours($sponsorshipHours),
+                        'sponsorship_hours' => $sponsorshipHours,
+                    ],
+                ]);
+            }
         }
-
         // Se l'utente ha caricato nuove immagini, gestisco il caricamento
         if ($request->hasFile('images')) {
             $images = $request->file('images');
