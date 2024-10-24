@@ -205,25 +205,29 @@ class ApartmentController extends Controller
 
 
         // Gestisci la sponsorizzazione
-        if ($request->has('sponsorship_id') && $request->input('sponsorship_id') != $apartment->current_sponsorship_id) {
+        if ($request->has('sponsorship_id')) {
             $sponsorshipId = $request->input('sponsorship_id');
-            $sponsorship = Sponsorship::find($sponsorshipId);
 
-            if ($sponsorship) {
-                // Calcola le ore di sponsorizzazione in base alla durata
-                $sponsorshipHours = $sponsorship->duration;
+            // Se la sponsorizzazione è stata selezionata, ma non è stata pagata, faccio un controllo.
+            if ($request->input('is_paid') === 'true') {  // Aggiungi un campo hidden 'is_paid' nel form se necessario
+                $sponsorship = Sponsorship::find($sponsorshipId);
+                if ($sponsorship) {
+                    // Calcola le ore di sponsorizzazione
+                    $sponsorshipHours = $sponsorship->duration;
+                    $apartment->sponsorship_hours = now()->addHours($sponsorshipHours);
+                    $apartment->save();
 
-                // Aggiorna le ore di sponsorizzazione solo se è selezionata una nuova sponsorizzazione
-                $apartment->sponsorship_hours = now()->addHours($sponsorshipHours);
-                $apartment->save();
-
-                // Aggiungi o aggiorna la sponsorizzazione nella tabella pivot
-                $apartment->sponsorships()->syncWithoutDetaching([
-                    $sponsorship->id => [
-                        'end_date' => now()->addHours($sponsorshipHours),
-                        'sponsorship_hours' => $sponsorshipHours,
-                    ],
-                ]);
+                    // Aggiorna la relazione tra appartamento e sponsorizzazione
+                    $apartment->sponsorships()->syncWithoutDetaching([
+                        $sponsorship->id => [
+                            'end_date' => now()->addHours($sponsorshipHours),
+                            'sponsorship_hours' => $sponsorshipHours,
+                        ],
+                    ]);
+                }
+            } else {
+                // Qui non faccio nulla per la sponsorizzazione se non è stata pagata
+                // Posso eventualmente loggare l'informazione o mostrare un messaggio
             }
         }
         // Se l'utente ha caricato nuove immagini, gestisco il caricamento
