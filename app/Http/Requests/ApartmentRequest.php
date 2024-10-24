@@ -47,9 +47,9 @@ class ApartmentRequest extends FormRequest
 
         $rules = [
             'title' => 'required|string|max:255',
-            'rooms' => 'required|numeric|min:1',
-            'beds' => 'required|numeric|min:1',
-            'bathrooms' => 'required|numeric|min:1',
+            'rooms' => 'required|numeric|min:1|max:100',
+            'beds' => 'required|numeric|min:1|max:100',
+            'bathrooms' => 'required|numeric|min:1|max:100',
             'mq' => 'required|numeric|min:30|max:2000',
             'address' => 'required|string|max:255',
             'delete_images' => 'nullable|array',
