@@ -240,8 +240,10 @@
                 // Controllo dimensione file
                 let valid = true;
                 for (let i = 0; i < files.length; i++) {
-                    if (files[i].size > 10 * 1024 * 1024) {
-                        showError('images', 'Ogni immagine deve essere al massimo di 10 MB.');
+                    if (files[i].size > 2 * 1024 * 1024) {
+                        showError('images',
+                            'Il file che stai cercando di caricare è superiore a 2 MB e non è accettato.'
+                        );
                         valid = false;
                         break;
                     }
@@ -261,7 +263,6 @@
                     hideError('images');
                 }
             });
-
             form.addEventListener('submit', function(event) {
                 const isValid = [...form.elements].every(input => {
                     if (input.hasAttribute('required') && !input.value) {
