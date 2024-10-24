@@ -88,6 +88,8 @@ class PageController extends Controller
         $services = $request->query('services');  // Nessun default, filtro se fornito (lista separata da virgole)
 
         // Suddivido l'indirizzo inserito in parole per una ricerca flessibile
+        $cleanAddress = preg_replace('/[^\w\s]/', '', $address); // rimuovo i caratteri speciali
+
         $addressWords = explode(' ', $address);  // Divido l'input in parole
 
         // Query di base per gli appartamenti
