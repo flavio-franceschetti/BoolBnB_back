@@ -50,7 +50,7 @@ class ApartmentRequest extends FormRequest
             'rooms' => 'required|numeric|min:1',
             'beds' => 'required|numeric|min:1',
             'bathrooms' => 'required|numeric|min:1',
-            'mq' => 'required|numeric|min:30',
+            'mq' => 'required|numeric|min:30|max:2000',
             'address' => 'required|string|max:255',
             'delete_images' => 'nullable|array',
             'is_visible' => 'required|boolean',
@@ -60,10 +60,10 @@ class ApartmentRequest extends FormRequest
         // Use required_without_all if all existing images are being deleted
         if ($deletedImagesCount === $existingImagesCount || $existingImagesCount === 0) {
             $rules['images'] = 'required|array|max:' . $maxNewImages;
-            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:10240';
+            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:8192';
         } else {
             $rules['images'] = 'array|max:' . $maxNewImages;
-            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:10240';
+            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:8192';
         }
 
         return $rules;
