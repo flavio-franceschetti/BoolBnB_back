@@ -51,51 +51,6 @@ class PaymentController extends Controller
             $amount = (float)$request->input('amount');
             $paymentMethodNonce = $request->input('payment_method_nonce');
             $apartmentId = $request->input('apartment_id');
-
-            // Elabora il pagamento
-            $result = $this->braintree->transaction()->sale([
-                'amount' => number_format($amount, 2, '.', ''),
-                'paymentMethodNonce' => $paymentMethodNonce,
-                'options' => [
-                    'submitForSettlement' => true,
-                ],
-            ]);
-
-            // Log del risultato
-            Log::info('Risultato pagamento Braintree: ', (array)$result);
-
-            if ($result->success) {
-                $redirectUrl = route('admin.apartments.show', $apartmentId);
-                return response()->json(['success' => true, 'redirect_url' => $redirectUrl]);
-            } else {
-                // Log dell'errore di pagamento
-                Log::error('Errore di pagamento Braintree: ', (array)$result);
-                return response()->json(['success' => false, 'error' => $result->message], 500);
-            }
-        } catch (\Throwable $e) {
-            Log::error('Errore nel processo di pagamento: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'error' => 'Si è verificato un errore durante l\'elaborazione del pagamento. Riprova più tardi.',
-            ], 500);
-        }
-    }
-
-    public function checkout(Request $request)
-    {
-        try {
-            // Validazione dei dati in ingresso
-            $request->validate([
-                'sponsorship_id' => 'required|exists:sponsorships,id',
-                'payment_method_nonce' => 'required',
-                'apartment_id' => 'required|integer|exists:apartments,id',
-                'amount' => 'required|numeric',
-            ]);
-
-            // Estrai i dati dalla richiesta
-            $amount = (float)$request->input('amount');
-            $paymentMethodNonce = $request->input('payment_method_nonce');
-            $apartmentId = $request->input('apartment_id');
             $sponsorshipId = $request->input('sponsorship_id');
 
             // Elabora il pagamento
@@ -111,36 +66,50 @@ class PaymentController extends Controller
             Log::info('Risultato pagamento Braintree: ', (array)$result);
 
             if ($result->success) {
-                // Recupera la durata della sponsorizzazione in ore
+                // Recupera la sponsorizzazione selezionata
                 $sponsorship = Sponsorship::findOrFail($sponsorshipId);
-                $durationHours = $sponsorship->duration;
+                $durationSeconds = $sponsorship->duration * 3600; // Converti ore in secondi
 
-                Log::info('Durata Sponsorizzazione: ', ['duration' => $durationHours]);
-
-                // Imposta la data di fine
-                $endDate = Carbon::now()->addHours($durationHours);
-
-                // Aggiorna il campo sponsorship_hours dell'appartamento
+                // Recupera l'appartamento
                 $apartment = Apartment::findOrFail($apartmentId);
-                $apartment->sponsorship_hours += $durationHours;
-                $apartment->save();
 
-                Log::info('Sponsorship hours aggiornate: ', ['sponsorship_hours' => $apartment->sponsorship_hours]);
+                // Verifica se c'è una sponsorizzazione attiva
+                $currentSponsorship = $apartment->sponsorships()
+                    ->where('sponsorship_id', $sponsorshipId)
+                    ->latest('pivot_end_date')
+                    ->first();
 
-                // Crea l'associazione nella tabella pivot
-                $apartment->sponsorships()->attach($sponsorshipId, [
-                    'end_date' => $endDate,
+                // Calcola la nuova data di fine
+                if ($currentSponsorship && $currentSponsorship->pivot->end_date > now()) {
+                    // Estendi la durata della sponsorizzazione esistente
+                    $newEndDate = Carbon::parse($currentSponsorship->pivot->end_date)->addSeconds($durationSeconds);
+                    // Cumulare le ore di sponsorizzazione
+                    $totalSponsorshipHours = $currentSponsorship->pivot->sponsorship_hours + $sponsorship->duration;
+                } else {
+                    // Nessuna sponsorizzazione attiva, imposta la nuova data di fine
+                    $newEndDate = Carbon::now()->addSeconds($durationSeconds);
+                    $totalSponsorshipHours = $sponsorship->duration; // Imposta le ore totali
+                }
+
+                // Crea o aggiorna l'associazione nella tabella pivot
+                $apartment->sponsorships()->syncWithoutDetaching([
+                    $sponsorshipId => [
+                        'end_date' => $newEndDate,
+                        'sponsorship_hours' => $totalSponsorshipHours, // Qui viene cumulata la durata
+                    ],
                 ]);
 
-                Log::info('Sponsorship associata all\'appartamento: ', [
-                    'apartment_id' => $apartmentId,
-                    'sponsorship_id' => $sponsorshipId,
-                    'end_date' => $endDate,
+                // Aggiorna l'appartamento con le informazioni della sponsorizzazione
+                $apartment->update([
+                    'last_sponsorship' => $sponsorship->name,
+                    'sponsorship_price' => $sponsorship->price,
+                    'sponsorship_hours' => $apartment->sponsorship_hours + $sponsorship->duration, // Aggiorna il totale delle ore di sponsorizzazione
                 ]);
 
-                $redirectUrl = route('admin.apartments.show', $apartmentId);
-                return response()->json(['success' => true, 'redirect_url' => $redirectUrl]);
+                // Reindirizza all'appartamento modificato con un messaggio di successo
+                return response()->json(['success' => true, 'redirect_url' => route('admin.apartments.show', $apartmentId)]);
             } else {
+                // Log dell'errore di pagamento
                 Log::error('Errore di pagamento Braintree: ', (array)$result);
                 return response()->json(['success' => false, 'error' => $result->message], 500);
             }
