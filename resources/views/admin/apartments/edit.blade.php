@@ -121,6 +121,7 @@
         <div class="form-group mb-3">
             <label for="sponsorship">Seleziona una Sponsorizzazione:</label>
             <select name="sponsorship_id" class="form-control" id="sponsorshipSelect">
+                <option value="">seleziona la sponsorizzazione</option>
                 @foreach ($sponsorships as $sponsorship)
                     <option value="{{ $sponsorship->id }}">{{ $sponsorship->name }} - €{{ $sponsorship->price }}
                     </option>
@@ -188,6 +189,14 @@
         @endif
 
         searchInput.value = '{{ old('address', $apartment->address) }}';
+
+
+
+
+
+
+
+
 
         // SEZIONE DEI CONTROLLI
         document.addEventListener('DOMContentLoaded', function() {

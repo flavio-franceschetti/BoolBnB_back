@@ -150,6 +150,8 @@ class ApartmentController extends Controller
         // Ottieni i dati dalla richiesta validata
         $data = $request->validated();
 
+        // dd($request->all());
+
         // Creo un variabile per i dati dell'appartamento
         $apartmentData = [
             'title' => $data['title'],
