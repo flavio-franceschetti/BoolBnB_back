@@ -88,14 +88,14 @@ class PaymentController extends Controller
                 } else {
                     // Nessuna sponsorizzazione attiva, imposta la nuova data di fine
                     $newEndDate = Carbon::now()->addSeconds($durationSeconds);
-                    $totalSponsorshipHours = $sponsorship->duration; // Imposta le ore totali
+                    $totalSponsorshipHours = $sponsorship->duration;
                 }
 
                 // Crea o aggiorna l'associazione nella tabella pivot
                 $apartment->sponsorships()->syncWithoutDetaching([
                     $sponsorshipId => [
                         'end_date' => $newEndDate,
-                        'sponsorship_hours' => $totalSponsorshipHours, // Qui viene cumulata la durata
+                        'sponsorship_hours' => $totalSponsorshipHours,
                     ],
                 ]);
 
@@ -103,7 +103,7 @@ class PaymentController extends Controller
                 $apartment->update([
                     'last_sponsorship' => $sponsorship->name,
                     'sponsorship_price' => $sponsorship->price,
-                    'sponsorship_hours' => $apartment->sponsorship_hours + $sponsorship->duration, // Aggiorna il totale delle ore di sponsorizzazione
+                    'sponsorship_hours' => $apartment->sponsorship_hours + $sponsorship->duration,
                 ]);
 
                 // Reindirizza all'appartamento modificato con un messaggio di successo

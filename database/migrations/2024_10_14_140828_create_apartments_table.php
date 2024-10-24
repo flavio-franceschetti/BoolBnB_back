@@ -24,7 +24,7 @@ return new class extends Migration
             $table->decimal('longitude', 9, 6);
             $table->decimal('latitude', 9, 6);
             $table->boolean('is_visible')->default(true);
-            $table->string('last_sponsorship')->nullable(); // Per tenere traccia dell'ultima sponsorizzazione
+            $table->string('last_sponsorship')->nullable();
             $table->decimal('sponsorship_price', 8, 2)->nullable();
             $table->integer('sponsorship_hours')->nullable();
             $table->softDeletes();

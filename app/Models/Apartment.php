@@ -93,7 +93,7 @@ class Apartment extends Model
             // Se esiste una sponsorizzazione attiva, estendi la durata
             $newEndDate = Carbon::parse($currentSponsorship->pivot->end_date)->addSeconds($sponsorship->duration);
             $currentSponsorship->pivot->end_date = $newEndDate;
-            $currentSponsorship->pivot->sponsorship_hours += $sponsorship->duration; // Aggiorna le ore
+            $currentSponsorship->pivot->sponsorship_hours += $sponsorship->duration;
             $currentSponsorship->pivot->save();
         } else {
             // Altrimenti, crea una nuova associazione

@@ -90,9 +90,9 @@ class ApartmentController extends Controller
             $img_name = $img->getClientOriginalName();
             // creo le nuove immagini in relazione all'appartamento
             ApartmentImage::create([
-                'apartment_id' => $new_apartment->id, // Set the apartment ID
-                'img_path' => $img_path, // Store the image path
-                'img_name' => $img_name, // salva nel db il nome dell'immagine
+                'apartment_id' => $new_apartment->id,
+                'img_path' => $img_path,
+                'img_name' => $img_name,
             ]);
         }
 
@@ -117,10 +117,7 @@ class ApartmentController extends Controller
             ->first();
 
         if ($activeSponsorship) {
-            // Logica se l'appartamento ha una sponsorizzazione attiva
-            // Ad esempio: mostra le informazioni sulla sponsorizzazione attiva
         } else {
-            // Logica se non ha sponsorizzazione attiva
         }
 
         return view('admin.apartments.show', compact('apartment'));
@@ -137,8 +134,8 @@ class ApartmentController extends Controller
         }
 
         $services = Service::all();
-        $sponsorships = Sponsorship::all(); // Recupera tutte le sponsorizzazioni
-        $sponsorship = $sponsorships->first(); // Imposta la prima sponsorizzazione come predefinita
+        $sponsorships = Sponsorship::all();
+        $sponsorship = $sponsorships->first();
 
         // Passa l'appartamento e le sponsorizzazioni alla vista
         return view('admin.apartments.edit', compact('apartment', 'services', 'sponsorships', 'sponsorship'));
@@ -172,9 +169,9 @@ class ApartmentController extends Controller
                 if ($db_img) {
                     // Elimina il file dell'immagine dallo storage
                     Storage::delete($db_img->img_path);
-                    // Rimuovi il record dell'immagine dal database
+
                     $db_img->delete();
-                    $deletedImages = true; // Imposta a true se almeno un'immagine è stata eliminata
+                    $deletedImages = true;
                 }
             }
         }
@@ -212,7 +209,7 @@ class ApartmentController extends Controller
 
             if ($sponsorship) {
                 // Calcola le ore di sponsorizzazione in base alla durata
-                $sponsorshipHours = $sponsorship->duration; // Assicurati che questo sia un numero di ore valido
+                $sponsorshipHours = $sponsorship->duration;
 
                 // Aggiorna le ore di sponsorizzazione solo se è selezionata una nuova sponsorizzazione
                 $apartment->sponsorship_hours = now()->addHours($sponsorshipHours);
