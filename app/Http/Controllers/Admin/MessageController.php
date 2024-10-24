@@ -15,8 +15,11 @@ class MessageController extends Controller
     public function index()
     {
         $userApartments = Auth::user()->apartments->pluck('id'); // Prendo gli ID degli appartamenti dell'utente
-        $messages = Message::whereIn('apartment_id', $userApartments)->orderBy('id')->get(); // Filtro i messaggi per appartamenti dell'utente
-
+        // $messages = Message::whereIn('apartment_id', $userApartments)->orderBy('id')->get(); // Filtro i messaggi per appartamenti dell'utente
+        $messages = Message::whereIn('apartment_id', $userApartments)
+                        ->with('apartment') // Includo la relazione apartment
+                        ->orderBy('id')
+                        ->get(); // Filtro i messaggi per appartamenti dell'utente
         return view('admin.messages.index', compact('messages'));
     }
 
@@ -49,7 +52,12 @@ class MessageController extends Controller
      */
     public function show(Message $message)
     {
-
+        $userApartments = Auth::user()->apartments->pluck('id'); // Prendo gli ID degli appartamenti dell'utente
+        // Controllo se il messaggio è associato a un appartamento dell'utente
+        // se negli fra gli id degli appartamenti dell'user non c'è la foregn key che è nei messaggi dell appartamento allora da errore 404
+        if (!$userApartments->contains($message->apartment_id)) {
+            abort(404);
+        }
         
         return view('admin.messages.show', compact('message'));
     }

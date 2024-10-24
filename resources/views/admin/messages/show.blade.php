@@ -2,6 +2,7 @@
 
 @section('content')
     <h3>Dettaglio del messaggio</h3>
+    <div>Titolo annuncio: {{ $message->apartment->title }}</div>
     <div>Mittente: {{ $message->name }} {{ $message->surname }}</div>
     <div>Email: {{ $message->email }}</div>
     <div>Messaggio: {{ $message->content }}</div>
