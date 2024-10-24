@@ -219,7 +219,6 @@
                 const files = this.files;
                 const maxFiles = 3;
 
-                // Controllo numero file
                 const fileCount = files.length;
 
                 if (fileCount === 0) {
@@ -237,18 +236,16 @@
                     hideError('images');
                 }
 
-                // Controllo dimensione file
                 let valid = true;
                 for (let i = 0; i < files.length; i++) {
                     if (files[i].size > 2 * 1024 * 1024) {
                         showError('images',
                             'Il file che stai cercando di caricare è superiore a 2 MB e non è accettato.'
-                        );
+                            );
                         valid = false;
                         break;
                     }
 
-                    // Controllo tipo di file
                     const fileType = files[i].type;
                     const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
@@ -256,6 +253,12 @@
                         showError('images', 'Puoi caricare solo file JPG, JPEG, PNG, WEBP.');
                         valid = false;
                         break;
+                    }
+
+                    if (!uploadFile(files[i])) {
+                        showError('images', 'L\'immagine ' + (i + 1) +
+                        ' non è riuscita a essere caricata.');
+                        valid = false;
                     }
                 }
 
