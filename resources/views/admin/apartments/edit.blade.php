@@ -86,7 +86,8 @@
                             <input type="checkbox" name="delete_images[]" value="{{ $image->id }}"
                                 class="form-check-input delete-checkbox" id="delete-image-{{ $image->id }}"
                                 autocomplete="off">
-                            <label class="form-check-label" for="delete-image-{{ $image->id }}">Elimina</label>
+                            <label class="form-check-label" for="delete-image-{{ $image->id }}">seleziona per modificare
+                                o eliminare</label>
                         </div>
                         <input type="hidden" name="existing_images[]" value="{{ $image->id }}">
                     </div>
@@ -98,8 +99,20 @@
 
         <!-- Aggiungi immagini -->
         <div class="mb-3">
-            <label for="images" class="form-label">Modifica o aggiungi Immagini (opzionale)</label>
-            <input class="form-control" type="file" id="images" name="images[]" multiple accept="image/*">
+            <label for="images" class="form-label text-primary">modifica l'immagine selezionando il file già inserito.
+                <br><span class="text-danger"> oppure eleziona
+                    l'immagine per eliminarla</span>
+                <br></label>
+            <input class="form-control" type="file" id="images" name="images[]" multiple required
+                accept="image/*">
+            @error('images')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
+            <small class="text-primary" id="imagesCount" style="display: block;">Inserisci da 1 a 3 file massimi.
+                <br>(Puoi
+                caricare
+                solo file JPG, JPEG, PNG,
+                WEBP massimo 10MB)</small>
             <small class="text-danger" id="imagesError" style="display: none;"></small>
         </div>
 
@@ -190,17 +203,125 @@
 
         searchInput.value = '{{ old('address', $apartment->address) }}';
 
-
-
-
-
-
-
-
-
         // SEZIONE DEI CONTROLLI
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('apartmentForm');
+
+            function showError(fieldId, message) {
+                const errorElement = document.getElementById(fieldId + 'Error');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+                const inputField = document.getElementById(fieldId);
+                inputField.classList.remove('is-valid');
+                inputField.classList.add('is-invalid');
+            }
+
+            function hideError(fieldId) {
+                const errorElement = document.getElementById(fieldId + 'Error');
+                errorElement.style.display = 'none';
+                const inputField = document.getElementById(fieldId);
+                inputField.classList.remove('is-invalid');
+                inputField.classList.add('is-valid');
+            }
+
+            // Gestione degli eventi di input per ciascun campo
+            document.getElementById('title').addEventListener('input', function() {
+                if (this.value.trim() === '') {
+                    showError('title', 'Il titolo è obbligatorio.');
+                } else {
+                    hideError('title');
+                }
+            });
+
+            document.getElementById('rooms').addEventListener('input', function() {
+                if (this.value <= 0) {
+                    showError('rooms', 'Devi inserire un numero valido di camere.');
+                } else {
+                    hideError('rooms');
+                }
+            });
+
+            document.getElementById('beds').addEventListener('input', function() {
+                if (this.value <= 0) {
+                    showError('beds', 'Devi inserire un numero valido di letti.');
+                } else {
+                    hideError('beds');
+                }
+            });
+
+            document.getElementById('bathrooms').addEventListener('input', function() {
+                if (this.value <= 0) {
+                    showError('bathrooms', 'Devi inserire un numero valido di bagni.');
+                } else {
+                    hideError('bathrooms');
+                }
+            });
+
+            document.getElementById('mq').addEventListener('input', function() {
+                if (this.value < 30) {
+                    showError('mq', 'Devi inserire almeno 30 metri quadri.');
+                } else if (this.value <= 0) {
+                    showError('mq', 'Devi inserire un numero valido di metri quadri.');
+                } else {
+                    hideError('mq');
+                }
+            });
+
+            document.getElementById('address').addEventListener('input', function() {
+                if (this.value.trim() === '') {
+                    showError('address', 'L\'indirizzo è obbligatorio.');
+                } else {
+                    hideError('address');
+                }
+            });
+
+            const imagesInput = document.getElementById('images');
+            imagesInput.addEventListener('change', function() {
+                const files = this.files;
+                const maxFiles = 3;
+
+                // Controllo numero file
+                const fileCount = files.length;
+
+                if (fileCount === 0) {
+                    document.getElementById('imagesCount').textContent = "Inserisci da 1 a 3 file massimi.";
+                } else if (fileCount > maxFiles) {
+                    showError('images', `Puoi caricare al massimo ${maxFiles} immagini.`);
+                } else if (fileCount === maxFiles) {
+                    document.getElementById('imagesCount').textContent =
+                        `Hai inserito ${fileCount}/${maxFiles} file.`;
+                    hideError('images');
+                } else {
+                    const remainingFiles = maxFiles - fileCount;
+                    document.getElementById('imagesCount').textContent =
+                        `Mancano ancora ${remainingFiles} file da inserire.`;
+                    hideError('images');
+                }
+
+                // Controllo dimensione file
+                let valid = true;
+                for (let i = 0; i < files.length; i++) {
+                    if (files[i].size > 10 * 1024 * 1024) {
+                        showError('images', 'Ogni immagine deve essere al massimo di 10 MB.');
+                        valid = false;
+                        break;
+                    }
+
+                    // Controllo tipo di file
+                    const fileType = files[i].type;
+                    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+                    if (!validTypes.includes(fileType)) {
+                        showError('images', 'Puoi caricare solo file JPG, JPEG, PNG, WEBP.');
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if (valid) {
+                    hideError('images');
+                }
+            });
 
             // Validazione in tempo reale per il titolo
             document.getElementById('title').addEventListener('input', function() {
@@ -215,10 +336,12 @@
                     this.classList.add('is-valid');
                 }
             });
+
             document.getElementById('sponsorshipSelect').addEventListener('change', function() {
                 const sponsorshipId = this.value;
                 const apartmentId = "{{ $apartment->id }}";
                 const paymentLink = document.getElementById('paymentLink');
+
                 if (sponsorshipId) {
                     paymentLink.href =
                         "{{ route('admin.apartments.payment', ['apartmentId' => ':apartmentId', 'sponsorshipId' => ':sponsorshipId']) }}"
