@@ -8,6 +8,7 @@
         @foreach ($messages as $message)
             <div class="card m-3 col-6" style="width: 18rem;">
                 <div class="card-body">
+                <h5 class="card-title">{{ $message->apartment->title }}</h5>
                 <h5 class="card-title">Da: {{ $message->name }} {{ $message->surname }}</h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">Email: {{ $message->email }}</h6>
                 <div>{{ $message->created_at->format('d-m-Y') }}</div>

@@ -15,8 +15,11 @@ class MessageController extends Controller
     public function index()
     {
         $userApartments = Auth::user()->apartments->pluck('id'); // Prendo gli ID degli appartamenti dell'utente
-        $messages = Message::whereIn('apartment_id', $userApartments)->orderBy('id')->get(); // Filtro i messaggi per appartamenti dell'utente
-
+        // $messages = Message::whereIn('apartment_id', $userApartments)->orderBy('id')->get(); // Filtro i messaggi per appartamenti dell'utente
+        $messages = Message::whereIn('apartment_id', $userApartments)
+                        ->with('apartment') // Includo la relazione apartment
+                        ->orderBy('id')
+                        ->get(); // Filtro i messaggi per appartamenti dell'utente
         return view('admin.messages.index', compact('messages'));
     }
 
