@@ -86,6 +86,7 @@ class ApartmentRequest extends FormRequest
             'mq.required' => 'Il campo Metri Quadri è obbligatorio.',
             'mq.numeric' => 'Il campo Metri Quadri deve essere un numero.',
             'mq.min' => 'I Metri Quadri devono essere almeno :min.',
+            'mq.max' => 'I Metri Quadri possono essere massimo :max.',
             'address.required' => 'Il campo Indirizzo è obbligatorio.',
             'address.string' => 'L\'Indirizzo deve essere una stringa valida.',
             'address.max' => 'L\'Indirizzo non può superare i :max caratteri.',
