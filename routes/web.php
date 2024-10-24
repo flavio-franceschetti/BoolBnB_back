@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ApartmentController;
+use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\SponsorshipController;
 use App\Http\Controllers\Guest\PageController;
 use App\Http\Controllers\PaymentController;
@@ -24,6 +25,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Rotte per la gestione degli appartamenti
     Route::resource('/apartments', ApartmentController::class);
+
+    // Rotte per la gestione degli appartamenti
+    Route::resource('/messages', MessageController::class);
 
     // Rotta reindirizzamento dettaglio appartamento dopo pagamento
     Route::get('/apartments/{apartment}', [ApartmentController::class, 'show'])->name('apartments.show');

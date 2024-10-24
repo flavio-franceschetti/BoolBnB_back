@@ -14,9 +14,10 @@ class MessageController extends Controller
      */
     public function index()
     {
-        $messages = Message::orderBy('id')->where('apartment_id', Auth::id())->get();
+        $userApartments = Auth::user()->apartments->pluck('id'); // Prendo gli ID degli appartamenti dell'utente
+        $messages = Message::whereIn('apartment_id', $userApartments)->orderBy('id')->get(); // Filtro i messaggi per appartamenti dell'utente
 
-
+        return view('admin.messages.index', compact('messages'));
     }
 
     /**
@@ -46,9 +47,11 @@ class MessageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Message $message)
     {
-        //
+
+        
+        return view('admin.messages.show', compact('message'));
     }
 
     /**
@@ -62,8 +65,10 @@ class MessageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Message $message)
     {
-        //
+        $message->delete();
+
+        return redirect()->route('admin.messages.index');
     }
 }
