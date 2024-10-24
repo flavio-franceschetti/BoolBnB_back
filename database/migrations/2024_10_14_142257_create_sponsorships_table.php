@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->decimal('price');
-            $table->unsignedSmallInteger('duration');
+            $table->unsignedInteger('duration');
             $table->timestamps();
         });
     }

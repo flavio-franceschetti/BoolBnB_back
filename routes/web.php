@@ -4,19 +4,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ApartmentController;
 use App\Http\Controllers\Admin\SponsorshipController;
 use App\Http\Controllers\Guest\PageController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|---------------------------------------------------------------------------
-| Web Routes
-|---------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 // Rotta per la homepage
 Route::get('/', [PageController::class, 'index'])->name('home');
@@ -35,11 +25,18 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Rotte per la gestione degli appartamenti
     Route::resource('/apartments', ApartmentController::class);
 
-    // Rotta per visualizzare la pagina di acquisto delle sponsorizzazioni
-    Route::get('/sponsorships/purchase/{id}', [SponsorshipController::class, 'purchase'])->name('sponsorships.purchase');
+    // Rotta reindirizzamento dettaglio appartamento dopo pagamento
+    Route::get('/apartments/{apartment}', [ApartmentController::class, 'show'])->name('apartments.show');
 
-    // Rotta per elaborare il pagamento delle sponsorizzazioni
-    Route::post('/sponsorships/process', [SponsorshipController::class, 'processPayment'])->name('sponsorships.process');
+    // Rotta per mostrare il modulo di pagamento
+    Route::get('/apartments/payment/{apartmentId}/{sponsorshipId}', [PaymentController::class, 'showPaymentForm'])->name('apartments.payment');
+
+    // Rotta per processare il pagamento
+    Route::post('/payment/checkout', [PaymentController::class, 'processPayment'])->name('payment.checkout');
+
+
+    // Rotta per generare il token (se necessario)
+    Route::get('/apartments/generateToken', [PaymentController::class, 'generateToken'])->name('apartments.generateToken');
 });
 
 // Includi le rotte di autenticazione

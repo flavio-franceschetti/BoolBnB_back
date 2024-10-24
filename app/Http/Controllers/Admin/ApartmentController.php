@@ -90,9 +90,9 @@ class ApartmentController extends Controller
             $img_name = $img->getClientOriginalName();
             // creo le nuove immagini in relazione all'appartamento
             ApartmentImage::create([
-                'apartment_id' => $new_apartment->id, // Set the apartment ID
-                'img_path' => $img_path, // Store the image path
-                'img_name' => $img_name, // salva nel db il nome dell'immagine
+                'apartment_id' => $new_apartment->id,
+                'img_path' => $img_path,
+                'img_name' => $img_name,
             ]);
         }
 
@@ -111,6 +111,15 @@ class ApartmentController extends Controller
             return abort('404');
         }
 
+        // Verifica se l'appartamento ha una sponsorizzazione attiva
+        $activeSponsorship = $apartment->sponsorships()
+            ->where('end_date', '>', now())
+            ->first();
+
+        if ($activeSponsorship) {
+        } else {
+        }
+
         return view('admin.apartments.show', compact('apartment'));
     }
 
@@ -119,19 +128,17 @@ class ApartmentController extends Controller
      */
     public function edit(Apartment $apartment)
     {
-
         // Controllo opzionale per verificare se l'appartamento appartiene all'utente loggato
-
-
         if ($apartment->user_id !== Auth::id()) {
-            return abort('404');
+            return abort(404);
         }
 
         $services = Service::all();
         $sponsorships = Sponsorship::all();
+        $sponsorship = $sponsorships->first();
 
-        // Passa l'appartamento alla view insieme agli altri dati
-        return view('admin.apartments.edit', compact('apartment', 'services', 'sponsorships'));
+        // Passa l'appartamento e le sponsorizzazioni alla vista
+        return view('admin.apartments.edit', compact('apartment', 'services', 'sponsorships', 'sponsorship'));
     }
 
     /**
@@ -162,9 +169,9 @@ class ApartmentController extends Controller
                 if ($db_img) {
                     // Elimina il file dell'immagine dallo storage
                     Storage::delete($db_img->img_path);
-                    // Rimuovi il record dell'immagine dal database
+
                     $db_img->delete();
-                    $deletedImages = true; // Imposta a true se almeno un'immagine è stata eliminata
+                    $deletedImages = true;
                 }
             }
         }
@@ -193,6 +200,30 @@ class ApartmentController extends Controller
         // Aggiorna i dettagli dell'appartamento
         $apartment->update($apartmentData);
 
+
+
+        // Gestisci la sponsorizzazione
+        if ($request->has('sponsorship_id') && $request->input('sponsorship_id') != $apartment->current_sponsorship_id) {
+            $sponsorshipId = $request->input('sponsorship_id');
+            $sponsorship = Sponsorship::find($sponsorshipId);
+
+            if ($sponsorship) {
+                // Calcola le ore di sponsorizzazione in base alla durata
+                $sponsorshipHours = $sponsorship->duration;
+
+                // Aggiorna le ore di sponsorizzazione solo se è selezionata una nuova sponsorizzazione
+                $apartment->sponsorship_hours = now()->addHours($sponsorshipHours);
+                $apartment->save();
+
+                // Aggiungi o aggiorna la sponsorizzazione nella tabella pivot
+                $apartment->sponsorships()->syncWithoutDetaching([
+                    $sponsorship->id => [
+                        'end_date' => now()->addHours($sponsorshipHours),
+                        'sponsorship_hours' => $sponsorshipHours,
+                    ],
+                ]);
+            }
+        }
         // Se l'utente ha caricato nuove immagini, gestisco il caricamento
         if ($request->hasFile('images')) {
             $images = $request->file('images');
@@ -218,7 +249,6 @@ class ApartmentController extends Controller
         // Ritorna alla vista dell'appartamento con un messaggio di successo
         return redirect()->route('admin.apartments.show', $apartment)->with('success', 'Appartamento aggiornato con successo!');
     }
-
     /**
      * Remove the specified resource from storage.
      */

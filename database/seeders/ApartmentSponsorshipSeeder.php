@@ -6,7 +6,6 @@ use App\Models\Apartment;
 use App\Models\ApartmentSponsorship;
 use App\Models\Sponsorship;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ApartmentSponsorshipSeeder extends Seeder
@@ -16,23 +15,33 @@ class ApartmentSponsorshipSeeder extends Seeder
      */
     public function run(): void
     {
-        // recupero tutti gli apartment e sponsorship dalla configurazione
-
+        // Recupero tutti gli apartment e sponsorship dalla configurazione
         $apartments = Apartment::all();
         $sponsorships = Sponsorship::all();
 
-        // associo ogni appartamento con una sponsorship randomica
-
+        // Associo ogni appartamento con una sponsorship randomica
         foreach ($apartments as $apartment) {
-            $new_apartment_sponsorship = new ApartmentSponsorship();
-            $new_apartment_sponsorship->apartment_id = $apartment->id;
-            $new_apartment_sponsorship->sponsorship_id = $sponsorships->random()->id;
-            // imposto una random end_date
-            $new_apartment_sponsorship->end_date = Carbon::now()->addDays(rand(1, 30));
+            // Seleziona una sponsorizzazione casuale
+            $sponsorship = $sponsorships->random();
 
-            // salvo la relazione del db
+            // Calcola sponsorship_hours, assumendo che 'duration' sia in ore
+            $sponsorshipHours = $sponsorship->duration; // Durata in ore
 
-            $new_apartment_sponsorship->save();
+            // Calcola end_date basandoti sulle ore di sponsorizzazione
+            $endDate = Carbon::now()->addHours($sponsorshipHours);
+
+            // Crea o aggiorna la relazione nel database
+            $apartment->sponsorships()->attach($sponsorship->id, [
+                'end_date' => $endDate,
+                'sponsorship_hours' => $sponsorshipHours,
+            ]);
+
+            // Modifica l'appartamento se necessario
+            $apartment->update([
+                'last_sponsorship' => $sponsorship->name, // Aggiungi un campo per tenere traccia dell'ultima sponsorizzazione
+                'sponsorship_price' => $sponsorship->price, // Aggiungi un campo per il prezzo della sponsorizzazione
+                // Puoi aggiungere ulteriori modifiche necessarie all'appartamento
+            ]);
         }
     }
 }

@@ -89,6 +89,10 @@
                                     <p><strong>Data Pubblicazione:</strong> {{ $apartment->created_at->format('d F Y') }}
                                     </p>
                                 </div>
+                                <div class="text-muted">
+                                    <p><strong>Sponsorizzazione:</strong> {{ $apartment->sponsorship_hours }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
 

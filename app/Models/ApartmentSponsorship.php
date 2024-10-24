@@ -13,7 +13,6 @@ class ApartmentSponsorship extends Model
     protected $table = 'apartment_sponsorship';
 
     // definizione delle fillable
-
     protected $fillable = [
         'apartment_id',
         'sponsorship_id',
@@ -21,17 +20,20 @@ class ApartmentSponsorship extends Model
     ];
 
     // relazione con apartment
-
     public function apartment()
     {
         return $this->belongsTo(Apartment::class);
     }
 
     // relazione con  Sponsorship
-
     public function sponsorship()
-
     {
         return $this->belongsTo(Sponsorship::class);
+    }
+
+    // Metodo per verificare se una sponsorizzazione è attiva
+    public function isActive()
+    {
+        return $this->end_date > now();
     }
 }

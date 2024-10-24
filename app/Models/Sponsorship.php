@@ -14,6 +14,7 @@ class Sponsorship extends Model
     protected $fillable = [
         'name',
         'slug',
+        'hours',
         'price',
         'duration',
     ];
@@ -25,9 +26,7 @@ class Sponsorship extends Model
     {
         // una sponsorizzazione appartiene ad un appartamento
         return $this->belongsToMany(Apartment::class, 'apartment_sponsorship')
-            // gestione dei timestamp
-            ->withTimestamps()
-            // inclusione di end_date nella relazione
-            ->withPivot('end_date');
+            ->withPivot('end_date')
+            ->withTimestamps();
     }
 }
