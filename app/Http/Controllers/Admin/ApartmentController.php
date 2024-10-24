@@ -209,7 +209,7 @@ class ApartmentController extends Controller
             $sponsorshipId = $request->input('sponsorship_id');
 
             // Se la sponsorizzazione è stata selezionata, ma non è stata pagata, faccio un controllo.
-            if ($request->input('is_paid') === 'true') {  // Aggiungi un campo hidden 'is_paid' nel form se necessario
+            if ($request->input('is_paid') === 'true') {
                 $sponsorship = Sponsorship::find($sponsorshipId);
                 if ($sponsorship) {
                     // Calcola le ore di sponsorizzazione
@@ -226,8 +226,6 @@ class ApartmentController extends Controller
                     ]);
                 }
             } else {
-                // Qui non faccio nulla per la sponsorizzazione se non è stata pagata
-                // Posso eventualmente loggare l'informazione o mostrare un messaggio
             }
         }
         // Se l'utente ha caricato nuove immagini, gestisco il caricamento
