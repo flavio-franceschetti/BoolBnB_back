@@ -60,10 +60,10 @@ class ApartmentRequest extends FormRequest
         // Use required_without_all if all existing images are being deleted
         if ($deletedImagesCount === $existingImagesCount || $existingImagesCount === 0) {
             $rules['images'] = 'required|array|max:' . $maxNewImages;
-            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:8192';
+            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:2048';
         } else {
             $rules['images'] = 'array|max:' . $maxNewImages;
-            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:8192';
+            $rules['images.*'] = 'file|mimes:jpg,jpeg,png,webp|max:2048';
         }
 
         return $rules;
