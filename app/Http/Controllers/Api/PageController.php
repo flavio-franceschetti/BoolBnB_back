@@ -13,7 +13,7 @@ class PageController extends Controller
     // chiamata di tutti gli appartamenti visibili
     public function index()
     {
-        $apartments = Apartment::where('is_visible', true)->with('services', 'images')->get();
+        $apartments = Apartment::whereNotNull('sponsorship_price')->with('services', 'images')->get();
 
         // Preparo la stringa per le immagini
         foreach ($apartments as $apartment) {
