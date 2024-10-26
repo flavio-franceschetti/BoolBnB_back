@@ -105,24 +105,54 @@ class ApartmentController extends Controller
      */
     public function show(Apartment $apartment)
     {
-        // condizione per far vedere all'utente solo i propri appartamenti
-
+        // Verifica che l'appartamento appartenga all'utente loggato
         if ($apartment->user_id !== Auth::id()) {
-            return abort('404');
+            return abort(404);
         }
 
-        // Verifica se l'appartamento ha una sponsorizzazione attiva
+        // Recupera la sponsorizzazione principale attiva
         $activeSponsorship = $apartment->sponsorships()
             ->where('end_date', '>', now())
+            ->orderBy('end_date', 'asc')
             ->first();
 
+        // Inizializza le variabili per il nome, le ore e i minuti rimanenti
+        $primarySponsorshipName = null;
+        $remainingHours = 0;
+        $remainingMinutes = 0;
+        $remainingSeconds = 0;
+
+        // Se esiste una sponsorizzazione attiva, ottieni il nome e le ore e i minuti rimanenti
         if ($activeSponsorship) {
-        } else {
+            $primarySponsorshipName = $activeSponsorship->name;
+
+            // Calcola la differenza di tempo
+            $now = now(); // Prendi il tempo attuale
+            $endDate = $activeSponsorship->pivot->end_date;
+
+            // Calcola la differenza totale in minuti
+            $totalMinutes = $now->diffInMinutes($endDate, false);
+
+            // Se il tempo è passato, imposta a zero
+            if ($totalMinutes < 0) {
+                $totalMinutes = 0;
+            }
+
+            // Calcola ore e minuti rimanenti
+
+            // Ore complete
+            $remainingHours = floor($totalMinutes / 60);
+            // Minuti rimanenti
+            $remainingMinutes = $totalMinutes % 60;
         }
 
-        return view('admin.apartments.show', compact('apartment'));
+        return view('admin.apartments.show', compact(
+            'apartment',
+            'primarySponsorshipName',
+            'remainingHours',
+            'remainingMinutes'
+        ));
     }
-
     /**
      * Show the form for editing the specified resource.
      */
