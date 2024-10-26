@@ -254,12 +254,6 @@
                         valid = false;
                         break;
                     }
-
-                    if (!uploadFile(files[i])) {
-                        showError('images', 'L\'immagine ' + (i + 1) +
-                            ' non è riuscita a essere caricata.');
-                        valid = false;
-                    }
                 }
 
                 if (valid) {
