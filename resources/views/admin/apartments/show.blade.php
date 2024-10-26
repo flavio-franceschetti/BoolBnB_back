@@ -89,10 +89,25 @@
                                     <p><strong>Data Pubblicazione:</strong> {{ $apartment->created_at->format('d F Y') }}
                                     </p>
                                 </div>
-                                <div class="text-muted">
-                                    <p><strong>Sponsorizzazione:</strong> {{ $apartment->sponsorship_hours }}
-                                    </p>
-                                </div>
+                                @if ($primarySponsorshipName)
+                                    <div class="card mb-4">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0">Sponsorizzazione Attiva</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <h6 class="card-title">Opzione Pacchetto: {{ $primarySponsorshipName }}</h6>
+                                            <p class="card-text">
+                                                <strong>Tempo Rimanente:</strong>
+                                                {{ $remainingHours }} ore e {{ $remainingMinutes }} minuti
+                                            </p>
+                                            <hr>
+                                            <p class="text-muted">
+                                                Questa sponsorizzazione ti offre una maggiore visibilità e opportunità per
+                                                il tuo appartamento!
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -110,29 +125,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-                {{-- Sezione Sponsorships --}}
-                {{-- <div class="mb-3">
-                <h4>Sponsorizzazioni attive</h4>
-                @if ($apartment->sponsorships)
-                @foreach ($apartment->sponsorships as $sponsorship)
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $sponsorship->name }}</h5>
-                        <p><strong>Prezzo:</strong> €{{ number_format($sponsorship->price, 2) }}</p>
-                        <p><strong>Durata:</strong> {{ $sponsorship->duration }} ore</p>
-                        <p>{{ $sponsorship->pivot->end_date }}</p>
-                    </div>
-                </div>
-                @endforeach
-                @else
-                <p>Nessuna sponsorizzazione attiva</p>
-                @endif
-            </div> --}}
-
             </div>
         </div>
     </div>
@@ -159,5 +151,30 @@
             new tt.Marker().setLngLat(center).addTo(map);
         })
     </script>
+
+
+    <style>
+        .card {
+            border: 1px solid #007bff;
+            /* Colore del bordo */
+            border-radius: 0.5rem;
+            /* Raggio degli angoli */
+        }
+
+        .card-header {
+            font-size: 1.25rem;
+            /* Dimensione del font */
+        }
+
+        .card-title {
+            font-weight: bold;
+            /* Grassetto per il titolo */
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            /* Dimensione del testo */
+        }
+    </style>
 
 @endsection
