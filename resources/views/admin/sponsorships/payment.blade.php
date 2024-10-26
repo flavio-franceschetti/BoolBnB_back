@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://js.braintreegateway.com/web/dropin/1.43.0/js/dropin.min.js"></script>
-    <title>Pagamento Sponsorship</title>
+    <title>Pagamento Sponsorizzazione</title>
 </head>
 
 <body>
@@ -27,7 +27,8 @@
 
         braintree.dropin.create({
             authorization: '{{ $clientToken }}',
-            container: '#dropin-container'
+            container: '#dropin-container',
+            locale: 'it_IT' // Imposta la lingua del form Braintree in italiano
         }, function(error, dropinInstance) {
             if (error) {
                 console.error('Errore durante la creazione del dropin: ', error);
@@ -64,8 +65,7 @@
 
                                 // Reindirizzamento dopo 2 secondi
                                 setTimeout(function() {
-                                    window.location.href = data
-                                        .redirect_url;
+                                    window.location.href = data.redirect_url;
                                 }, 2000);
                             } else {
                                 // Messaggio di errore

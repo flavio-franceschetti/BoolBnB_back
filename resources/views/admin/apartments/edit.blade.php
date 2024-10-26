@@ -304,7 +304,11 @@
                     if (files[i].size > 2 * 1024 * 1024) { // Cambiato a 2 MB
                         showError('images',
                             'Il file che stai cercando di caricare è superiore a 2 MB e non è accettato.'
+<<<<<<< HEAD
                             );
+=======
+                        );
+>>>>>>> main
                         valid = false;
                         break;
                     }

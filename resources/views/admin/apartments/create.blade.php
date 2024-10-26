@@ -241,7 +241,7 @@
                     if (files[i].size > 2 * 1024 * 1024) {
                         showError('images',
                             'Il file che stai cercando di caricare è superiore a 2 MB e non è accettato.'
-                            );
+                        );
                         valid = false;
                         break;
                     }
@@ -253,12 +253,6 @@
                         showError('images', 'Puoi caricare solo file JPG, JPEG, PNG, WEBP.');
                         valid = false;
                         break;
-                    }
-
-                    if (!uploadFile(files[i])) {
-                        showError('images', 'L\'immagine ' + (i + 1) +
-                        ' non è riuscita a essere caricata.');
-                        valid = false;
                     }
                 }
 
