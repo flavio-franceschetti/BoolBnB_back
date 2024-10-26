@@ -103,7 +103,7 @@
                 <br><span class="text-danger"> oppure eleziona
                     l'immagine per eliminarla</span>
                 <br></label>
-            <input class="form-control" type="file" id="images" name="images[]" multiple required
+            <input class="form-control" type="file" id="images" name="images[]" multiple
                 accept="image/*">
             @error('images')
                 <small class="text-danger">{{ $message }}</small>
