@@ -22,11 +22,10 @@
                 <div class="col-md-4 mb-3">
                     <div class="card sponsorship-card animate__animated animate__fadeIn">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $sponsorship['name'] }}</h5>
-                            <p class="card-text">Prezzo: €{{ number_format($sponsorship['price'], 2) }}</p>
+                            <h5 class="card-title"><strong>{{ $sponsorship['name'] }}</strong></h5>
+                            <p class="card-text text-success">Prezzo: {{ number_format($sponsorship['price'], 2) }}€</p>
                             <p class="card-description">{{ $sponsorship['description'] }}</p>
-                            <p><strong>Durata: {{ $sponsorship['duration'] }} ore</strong></p>
-                            <h6 class="slogans-title">Slogan:</h6>
+                            <p class="text-warning"><strong>(Durata: {{ $sponsorship['duration'] }} ore</strong>)</p>
                             <div class="slogans">
                                 @foreach ($sponsorship['slogans'] as $slogan)
                                     <p class="slogan-item">{{ $slogan }}</p>
