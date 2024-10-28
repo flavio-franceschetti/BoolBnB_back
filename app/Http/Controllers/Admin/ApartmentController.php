@@ -11,8 +11,10 @@ use App\Models\ApartmentImage;
 use App\Models\ApartmentService;
 use App\Models\Service;
 use App\Models\Sponsorship;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ApartmentController extends Controller
@@ -110,41 +112,44 @@ class ApartmentController extends Controller
             return abort(404);
         }
 
-        // Recupera la sponsorizzazione principale attiva
-        $activeSponsorship = $apartment->sponsorships()
+        // Recupera tutte le sponsorizzazioni attive
+        $activeSponsorships = $apartment->sponsorships()
             ->where('end_date', '>', now())
-            ->orderBy('end_date', 'asc')
-            ->first();
+            ->get();
 
         // Inizializza le variabili per il nome, le ore e i minuti rimanenti
         $primarySponsorshipName = null;
         $remainingHours = 0;
         $remainingMinutes = 0;
-        $remainingSeconds = 0;
 
-        // Se esiste una sponsorizzazione attiva, ottieni il nome e le ore e i minuti rimanenti
-        if ($activeSponsorship) {
-            $primarySponsorshipName = $activeSponsorship->name;
-
-            // Calcola la differenza di tempo
-            $now = now(); // Prendi il tempo attuale
-            $endDate = $activeSponsorship->pivot->end_date;
-
-            // Calcola la differenza totale in minuti
-            $totalMinutes = $now->diffInMinutes($endDate, false);
-
-            // Se il tempo è passato, imposta a zero
-            if ($totalMinutes < 0) {
-                $totalMinutes = 0;
+        // Se ci sono sponsorizzazioni attive, calcola le ore e i minuti rimanenti
+        foreach ($activeSponsorships as $activeSponsorship) {
+            // Ottiene il nome della sponsorizzazione principale (se non già impostato)
+            if (!$primarySponsorshipName) {
+                $primarySponsorshipName = $activeSponsorship->name;
             }
 
-            // Calcola ore e minuti rimanenti
+            // Calcola il tempo rimanente per questa sponsorizzazione
+            $now = now(); // Prendi il tempo attuale
+            $endDate = Carbon::parse($activeSponsorship->pivot->end_date); // Assicurati che sia un'istanza di Carbon
 
-            // Ore complete
-            $remainingHours = floor($totalMinutes / 60);
-            // Minuti rimanenti
-            $remainingMinutes = $totalMinutes % 60;
+            // Calcola la differenza in secondi
+            $remainingSeconds = $now->diffInSeconds($endDate, false);
+
+            // Se il tempo è passato, ignora
+            if ($remainingSeconds > 0) {
+                // Somma le ore e i minuti
+                $remainingHours += floor($remainingSeconds / 3600);
+                $remainingMinutes += floor(($remainingSeconds % 3600) / 60);
+            }
         }
+
+        // Corregge eventuali overflow di minuti in ore
+        $remainingHours += floor($remainingMinutes / 60);
+        $remainingMinutes = $remainingMinutes % 60;
+
+        // Log dei risultati
+        Log::info('Ore rimanenti:', ['remainingHours' => $remainingHours, 'remainingMinutes' => $remainingMinutes]);
 
         return view('admin.apartments.show', compact(
             'apartment',
@@ -234,30 +239,46 @@ class ApartmentController extends Controller
 
 
 
-        // Gestisci la sponsorizzazione
         if ($request->has('sponsorship_id')) {
             $sponsorshipId = $request->input('sponsorship_id');
 
-            // Se la sponsorizzazione è stata selezionata, ma non è stata pagata, faccio un controllo.
             if ($request->input('is_paid') === 'true') {
                 $sponsorship = Sponsorship::find($sponsorshipId);
                 if ($sponsorship) {
-                    // Calcola le ore di sponsorizzazione
+                    // Recupera le ore di sponsorizzazione
                     $sponsorshipHours = $sponsorship->duration;
-                    $apartment->sponsorship_hours = now()->addHours($sponsorshipHours);
-                    $apartment->save();
 
-                    // Aggiorna la relazione tra appartamento e sponsorizzazione
-                    $apartment->sponsorships()->syncWithoutDetaching([
-                        $sponsorship->id => [
-                            'end_date' => now()->addHours($sponsorshipHours),
+                    // Controlla se c'è una sponsorizzazione attiva esistente
+                    $currentSponsorship = $apartment->sponsorships()
+                        ->where('sponsorship_id', $sponsorshipId)
+                        ->where('end_date', '>', now())
+                        ->first();
+
+                    if ($currentSponsorship) {
+                        // Se esiste una sponsorizzazione attiva, estendi la durata
+                        $newEndDate = Carbon::parse($currentSponsorship->pivot->end_date)->addSeconds($sponsorshipHours);
+                        $totalSponsorshipHours = $currentSponsorship->pivot->sponsorship_hours + $sponsorshipHours;
+
+                        // Aggiorna la relazione pivot
+                        $currentSponsorship->pivot->sponsorship_hours = $totalSponsorshipHours;
+                        $currentSponsorship->pivot->end_date = $newEndDate;
+                        $currentSponsorship->pivot->save();
+                    } else {
+                        // Se non esiste una sponsorizzazione attiva, creane una nuova
+                        $apartment->sponsorships()->attach($sponsorship->id, [
+                            'end_date' => now()->addSeconds($sponsorshipHours),
                             'sponsorship_hours' => $sponsorshipHours,
-                        ],
-                    ]);
+                        ]);
+                    }
+
+                    // Aggiorna il campo sponsorship_hours dell'appartamento
+                    $apartment->sponsorship_hours = $apartment->sponsorships()->sum('sponsorship_hours'); // Somma le ore
+                    $apartment->save(); // Salva le modifiche
+
                 }
-            } else {
             }
         }
+
         // Se l'utente ha caricato nuove immagini, gestisco il caricamento
         if ($request->hasFile('images')) {
             $images = $request->file('images');

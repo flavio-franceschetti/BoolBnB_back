@@ -130,18 +130,41 @@
             </div>
         </fieldset>
 
-        <!-- Sponsorship Selection -->
-        <div class="form-group mb-3">
-            <label for="sponsorship">Seleziona una Sponsorizzazione:</label>
-            <select name="sponsorship_id" class="form-control" id="sponsorshipSelect">
-                <option value="">seleziona la sponsorizzazione</option>
-                @foreach ($sponsorships as $sponsorship)
-                    <option value="{{ $sponsorship->id }}">{{ $sponsorship->name }} - €{{ $sponsorship->price }}
-                    </option>
-                @endforeach
-            </select>
-            <div class="mt-3">
-                <a href="#" class="btn btn-success" id="paymentLink">Sponsorizza Appartamento</a>
+        <!-- Sezione Sponsorizzazione -->
+        <div class="container text-center mb-4 p-4 sponsorship-container">
+            <h3 class="sponsorship-title">🚀 Potenzia la Visibilità del Tuo Appartamento! 🚀</h3>
+            <p class="sponsorship-subtitle">Scegli una sponsorizzazione e affitta più velocemente con la nostra
+                piattaforma!</p>
+
+            {{-- Card sponsorship --}}
+            <div class="form-group mb-3">
+                <label for="sponsorship" class="sponsorship-label">Seleziona una Sponsorizzazione:</label>
+                <div class="d-flex flex-wrap justify-content-center">
+                    @foreach ($sponsorships as $sponsorship)
+                        <div class="card m-2 sponsorship-card" data-id="{{ $sponsorship->id }}"
+                            style="cursor: pointer; width: 20rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $sponsorship->name }}</h5>
+                                <p class="card-text text-success">Prezzo: €{{ $sponsorship->price }}</p>
+                                <p class="card-description text-primary">{{ $sponsorship->description }}</p>
+                                <!-- Aggiunta della descrizione -->
+                                <div class="card-slogans">
+                                    @if (isset($sponsorship->slogans))
+                                        @foreach (json_decode($sponsorship->slogans) as $slogan)
+                                            <p class="card-slogan">{{ $slogan }}</p>
+                                        @endforeach
+                                    @else
+                                        <p class="card-slogan">Nessuno slogan disponibile.</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="mt-3">
+                    <a href="#" class="btn btn-success" id="paymentLink" style="display: none;">Sponsorizza
+                        Appartamento</a>
+                </div>
             </div>
         </div>
 
@@ -150,215 +173,269 @@
             <input type="submit" class="btn btn-primary" value="Modifica">
             <input type="reset" class="btn btn-danger" value="Annulla">
         </div>
-    </form>
 
-    <style>
-        .is-valid {
-            border-color: green;
-        }
+        <style>
+            .sponsorship-card {
+                border: 2px solid transparent;
 
-        .is-invalid {
-            border-color: red;
-        }
-    </style>
+                border-radius: 10px;
+                padding: 20px;
+                transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 
-    <script>
-        // SEZIONE DELLA SEARCHBOX
-        const apiKey = "{{ config('app.tomtomApiKey') }}";
-        let options = {
-            searchOptions: {
-                key: apiKey,
-                language: "it-IT",
-                limit: 10,
-                countrySet: ["IT"],
-            },
-            autocompleteOptions: {
-                key: apiKey,
-                language: "it-IT",
-                countrySet: ["IT"],
-            },
-            labels: {
-                suggestions: {
-                    brand: "Brand Suggerito",
-                    category: "Categoria Suggerita",
+                cursor: pointer;
+                margin: 15px;
+                width: 20rem;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+            }
+
+            .sponsorship-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+            }
+
+            .selected {
+                border: 2px solid green;
+                background-color: #e7ffe7;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+            }
+
+            /* Stile per il contenitore della sponsorship */
+            .sponsorship-container {
+                background-color: #f9f9f9;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .sponsorship-title {
+                color: #333;
+                font-weight: bold;
+            }
+
+            .sponsorship-subtitle {
+                color: #666;
+            }
+        </style>
+        <script>
+            // SEZIONE DELLA SEARCHBOX
+            const apiKey = "{{ config('app.tomtomApiKey') }}";
+            let options = {
+                searchOptions: {
+                    key: apiKey,
+                    language: "it-IT",
+                    limit: 10,
+                    countrySet: ["IT"],
                 },
-                placeholder: "Inserisci l'indirizzo",
-                noResultsMessage: "Nessun risultato trovato",
-            },
-        };
+                autocompleteOptions: {
+                    key: apiKey,
+                    language: "it-IT",
+                    countrySet: ["IT"],
+                },
+                labels: {
+                    suggestions: {
+                        brand: "Brand Suggerito",
+                        category: "Categoria Suggerita",
+                    },
+                    placeholder: "Inserisci l'indirizzo",
+                    noResultsMessage: "Nessun risultato trovato",
+                },
+            };
 
-        let ttSearchBox = new tt.plugins.SearchBox(tt.services, options);
-        let searchBoxHTML = ttSearchBox.getSearchBoxHTML();
-        document.getElementById("search-box-container").append(searchBoxHTML);
+            let ttSearchBox = new tt.plugins.SearchBox(tt.services, options);
+            let searchBoxHTML = ttSearchBox.getSearchBoxHTML();
+            document.getElementById("search-box-container").append(searchBoxHTML);
 
-        let searchInput = document.querySelector("#search-box-container input");
-        searchInput.setAttribute("name", "address");
-        searchInput.setAttribute("id", "address");
-        searchInput.setAttribute("required", true);
-        searchInput.setAttribute("autocomplete", "off");
+            let searchInput = document.querySelector("#search-box-container input");
+            searchInput.setAttribute("name", "address");
+            searchInput.setAttribute("id", "address");
+            searchInput.setAttribute("required", true);
+            searchInput.setAttribute("autocomplete", "off");
 
-        @if ($errors->has('address'))
-            searchInput.classList.add("is-invalid");
-        @endif
+            @if ($errors->has('address'))
+                searchInput.classList.add("is-invalid");
+            @endif
 
-        searchInput.value = '{{ old('address', $apartment->address) }}';
+            searchInput.value = '{{ old('address', $apartment->address) }}';
 
-        // SEZIONE DEI CONTROLLI
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('apartmentForm');
+            // SEZIONE DEI CONTROLLI
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('apartmentForm');
 
-            function showError(fieldId, message) {
-                const errorElement = document.getElementById(fieldId + 'Error');
-                errorElement.textContent = message;
-                errorElement.style.display = 'block';
-                const inputField = document.getElementById(fieldId);
-                inputField.classList.remove('is-valid');
-                inputField.classList.add('is-invalid');
-            }
-
-            function hideError(fieldId) {
-                const errorElement = document.getElementById(fieldId + 'Error');
-                errorElement.style.display = 'none';
-                const inputField = document.getElementById(fieldId);
-                inputField.classList.remove('is-invalid');
-                inputField.classList.add('is-valid');
-            }
-
-            // Gestione degli eventi di input per ciascun campo
-            document.getElementById('title').addEventListener('input', function() {
-                if (this.value.trim() === '') {
-                    showError('title', 'Il titolo è obbligatorio.');
-                } else {
-                    hideError('title');
-                }
-            });
-
-            document.getElementById('rooms').addEventListener('input', function() {
-                if (this.value <= 0) {
-                    showError('rooms', 'Devi inserire un numero valido di camere.');
-                } else {
-                    hideError('rooms');
-                }
-            });
-
-            document.getElementById('beds').addEventListener('input', function() {
-                if (this.value <= 0) {
-                    showError('beds', 'Devi inserire un numero valido di letti.');
-                } else {
-                    hideError('beds');
-                }
-            });
-
-            document.getElementById('bathrooms').addEventListener('input', function() {
-                if (this.value <= 0) {
-                    showError('bathrooms', 'Devi inserire un numero valido di bagni.');
-                } else {
-                    hideError('bathrooms');
-                }
-            });
-
-            document.getElementById('mq').addEventListener('input', function() {
-                if (this.value < 30) {
-                    showError('mq', 'Devi inserire almeno 30 metri quadri.');
-                } else if (this.value <= 0) {
-                    showError('mq', 'Devi inserire un numero valido di metri quadri.');
-                } else {
-                    hideError('mq');
-                }
-            });
-
-            document.getElementById('address').addEventListener('input', function() {
-                if (this.value.trim() === '') {
-                    showError('address', 'L\'indirizzo è obbligatorio.');
-                } else {
-                    hideError('address');
-                }
-            });
-
-            const imagesInput = document.getElementById('images');
-            imagesInput.addEventListener('change', function() {
-                const files = this.files;
-                const maxFiles = 3;
-
-                // Controllo numero file
-                const fileCount = files.length;
-
-                if (fileCount === 0) {
-                    document.getElementById('imagesCount').textContent = "Inserisci da 1 a 3 file massimi.";
-                } else if (fileCount > maxFiles) {
-                    showError('images', `Puoi caricare al massimo ${maxFiles} immagini.`);
-                } else if (fileCount === maxFiles) {
-                    document.getElementById('imagesCount').textContent =
-                        `Hai inserito ${fileCount}/${maxFiles} file.`;
-                    hideError('images');
-                } else {
-                    const remainingFiles = maxFiles - fileCount;
-                    document.getElementById('imagesCount').textContent =
-                        `Mancano ancora ${remainingFiles} file da inserire.`;
-                    hideError('images');
+                function showError(fieldId, message) {
+                    const errorElement = document.getElementById(fieldId + 'Error');
+                    errorElement.textContent = message;
+                    errorElement.style.display = 'block';
+                    const inputField = document.getElementById(fieldId);
+                    inputField.classList.remove('is-valid');
+                    inputField.classList.add('is-invalid');
                 }
 
-                // Controllo dimensione file
-                let valid = true;
-                for (let i = 0; i < files.length; i++) {
-                    if (files[i].size > 2 * 1024 * 1024) { // Cambiato a 2 MB
-                        showError('images',
-                            'Il file che stai cercando di caricare è superiore a 2 MB e non è accettato.'
-<<<<<<< HEAD
+                function hideError(fieldId) {
+                    const errorElement = document.getElementById(fieldId + 'Error');
+                    errorElement.style.display = 'none';
+                    const inputField = document.getElementById(fieldId);
+                    inputField.classList.remove('is-invalid');
+                    inputField.classList.add('is-valid');
+                }
+
+                // Gestione degli eventi di input per ciascun campo
+                document.getElementById('title').addEventListener('input', function() {
+                    if (this.value.trim() === '') {
+                        showError('title', 'Il titolo è obbligatorio.');
+                    } else {
+                        hideError('title');
+                    }
+                });
+
+
+                document.getElementById('rooms').addEventListener('input', function() {
+                    if (this.value <= 0) {
+                        showError('rooms', 'Devi inserire un numero valido di camere.');
+                    } else {
+                        hideError('rooms');
+
+                });
+
+                document.getElementById('beds').addEventListener('input', function() {
+                    if (this.value <= 0) {
+                        showError('beds', 'Devi inserire un numero valido di letti.');
+                    } else {
+                        hideError('beds');
+                    }
+                });
+
+                document.getElementById('bathrooms').addEventListener('input', function() {
+                    if (this.value <= 0) {
+                        showError('bathrooms', 'Devi inserire un numero valido di bagni.');
+                    } else {
+                        hideError('bathrooms');
+                    }
+                });
+
+                document.getElementById('mq').addEventListener('input', function() {
+                    if (this.value < 30) {
+                        showError('mq', 'Devi inserire almeno 30 metri quadri.');
+                    } else if (this.value <= 0) {
+                        showError('mq', 'Devi inserire un numero valido di metri quadri.');
+                    } else {
+                        hideError('mq');
+                    }
+                });
+
+                document.getElementById('address').addEventListener('input', function() {
+                    if (this.value.trim() === '') {
+                        showError('address', 'L\'indirizzo è obbligatorio.');
+                    } else {
+                        hideError('address');
+                    }
+                });
+
+                const imagesInput = document.getElementById('images');
+                imagesInput.addEventListener('change', function() {
+                    const files = this.files;
+                    const maxFiles = 3;
+
+                    // Controllo numero file
+                    const fileCount = files.length;
+
+                    if (fileCount === 0) {
+                        document.getElementById('imagesCount').textContent = "Inserisci da 1 a 3 file massimi.";
+                    } else if (fileCount > maxFiles) {
+                        showError('images', `Puoi caricare al massimo ${maxFiles} immagini.`);
+                    } else if (fileCount === maxFiles) {
+                        document.getElementById('imagesCount').textContent =
+                            `Hai inserito ${fileCount}/${maxFiles} file.`;
+                        hideError('images');
+                    } else {
+                        const remainingFiles = maxFiles - fileCount;
+                        document.getElementById('imagesCount').textContent =
+                            `Mancano ancora ${remainingFiles} file da inserire.`;
+                        hideError('images');
+                    }
+
+                    // Controllo dimensione file
+                    let valid = true;
+                    for (let i = 0; i < files.length; i++) {
+                        if (files[i].size > 2 * 1024 * 1024) { // Cambiato a 2 MB
+                            showError('images',
+                                'Il file che stai cercando di caricare è superiore a 2 MB e non è accettato.'
                             );
-=======
-                        );
->>>>>>> main
-                        valid = false;
-                        break;
+                            valid = false;
+                            break;
+                        }
+
+                        // Controllo tipo di file
+                        const fileType = files[i].type;
+                        const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+                        if (!validTypes.includes(fileType)) {
+                            showError('images', 'Puoi caricare solo file JPG, JPEG, PNG, WEBP.');
+                            valid = false;
+                            break;
+                        }
                     }
 
-                    // Controllo tipo di file
-                    const fileType = files[i].type;
-                    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-
-                    if (!validTypes.includes(fileType)) {
-                        showError('images', 'Puoi caricare solo file JPG, JPEG, PNG, WEBP.');
-                        valid = false;
-                        break;
+                    if (valid) {
+                        hideError('images');
                     }
-                }
+                });
 
-                if (valid) {
-                    hideError('images');
-                }
-            });
+                // Validazione in tempo reale per il titolo
+                document.getElementById('title').addEventListener('input', function() {
+                    const titleError = document.getElementById('titleError');
+                    if (this.value.trim() === '') {
+                        titleError.innerText = 'Il titolo è obbligatorio.';
+                        titleError.style.display = 'block';
+                        this.classList.add('is-invalid');
+                    } else {
+                        titleError.style.display = 'none';
+                        this.classList.remove('is-invalid');
+                        this.classList.add('is-valid');
+                    }
+                });
 
-            // Validazione in tempo reale per il titolo
-            document.getElementById('title').addEventListener('input', function() {
-                const titleError = document.getElementById('titleError');
-                if (this.value.trim() === '') {
-                    titleError.innerText = 'Il titolo è obbligatorio.';
-                    titleError.style.display = 'block';
-                    this.classList.add('is-invalid');
-                } else {
-                    titleError.style.display = 'none';
-                    this.classList.remove('is-invalid');
-                    this.classList.add('is-valid');
-                }
-            });
 
-            document.getElementById('sponsorshipSelect').addEventListener('change', function() {
-                const sponsorshipId = this.value;
+                // SPONSORSHIPS
+
                 const apartmentId = "{{ $apartment->id }}";
                 const paymentLink = document.getElementById('paymentLink');
 
-                if (sponsorshipId) {
-                    paymentLink.href =
-                        "{{ route('admin.apartments.payment', ['apartmentId' => ':apartmentId', 'sponsorshipId' => ':sponsorshipId']) }}"
-                        .replace(':apartmentId', apartmentId)
-                        .replace(':sponsorshipId', sponsorshipId);
-                    paymentLink.style.display = 'inline'; // Mostra il link se non è visibile
-                } else {
-                    paymentLink.style.display =
-                        'none'; // Nascondi se nessuna sponsorizzazione è selezionata
-                }
+                // Event click
+                document.querySelectorAll('.sponsorship-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const isSelected = this.classList.contains('selected');
+
+                        // Rimuovi la selezione da tutte le card
+                        document.querySelectorAll('.sponsorship-card').forEach(c => {
+                            c.classList.remove('selected');
+                        });
+
+                        // Se la card cliccata non era già selezionata, selezionala
+                        if (!isSelected) {
+                            this.classList.add('selected');
+
+                            // A seconda della card, attribuisci data E ID
+                            const sponsorshipId = this.getAttribute('data-id');
+
+                            if (sponsorshipId) {
+                                // Update del pagamento in base alla card di sponsorizzazione
+                                paymentLink.href =
+                                    "{{ route('admin.apartments.payment', ['apartmentId' => ':apartmentId', 'sponsorshipId' => ':sponsorshipId']) }}"
+                                    .replace(':apartmentId', apartmentId)
+                                    .replace(':sponsorshipId', sponsorshipId);
+                                paymentLink.style.display = 'inline';
+                            } else {
+                                paymentLink.style.display = 'none';
+                            }
+                        } else {
+                            // Se la card è già selezionata, nascondi il link di pagamento
+                            paymentLink.style.display = 'none';
+                        }
+                    });
+                });
             });
-        });
-    </script>
-@endsection
+        </script>
+    @endsection

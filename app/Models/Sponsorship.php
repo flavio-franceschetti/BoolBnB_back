@@ -17,6 +17,8 @@ class Sponsorship extends Model
         'hours',
         'price',
         'duration',
+        'description',
+        'slogans',
     ];
 
 
