@@ -77,9 +77,13 @@ class PageController extends Controller
         $apiKey = config('app.tomtomapikey');
         $address = $request->query('address');
 
+        // Rimuovo le virgole e caratteri speciali dall'indirizzo
+        $cleanAddress = preg_replace('/[^\w\s]/', '', $address); // rimuovo i caratteri speciali
+        $cleanAddress = str_replace(',', '', $cleanAddress); // rimuovo le virgole
+
         // Ottengo latitudine e longitudine dall'API TomTom in base all'indirizzo
-        $latitude = Helper::getLatLon($address, $apiKey, 'lat');
-        $longitude = Helper::getLatLon($address, $apiKey, 'lon');
+        $latitude = Helper::getLatLon($cleanAddress, $apiKey, 'lat');
+        $longitude = Helper::getLatLon($cleanAddress, $apiKey, 'lon');
 
         // Parametri regolabili dalla query con valori predefiniti
         $distance = $request->query('distance');
@@ -87,20 +91,18 @@ class PageController extends Controller
         $beds = $request->query('beds');
         $services = $request->query('services');  // Nessun default, filtro se fornito (lista separata da virgole)
 
-        // Suddivido l'indirizzo inserito in parole per una ricerca flessibile
-        $cleanAddress = preg_replace('/[^\w\s]/', '', $address); // rimuovo i caratteri speciali
-
-        $addressWords = explode(' ', $address);  // Divido l'input in parole
+        // Suddivido l'indirizzo pulito in parole per una ricerca flessibile
+        $addressWords = explode(' ', $cleanAddress);  // Divido l'input in parole
 
         // Query di base per gli appartamenti
         $apartments = Apartment::where('is_visible', true) // Solo appartamenti visibili
 
             // Filtro per ogni parola nell'indirizzo (in qualsiasi ordine)
-            ->where(function ($query) use ($addressWords) {
-                foreach ($addressWords as $word) {
-                    $query->where('address', 'LIKE', "%{$word}%");  // Aggiungo un 'where' per ogni parola
-                }
-            })
+            // ->where(function ($query) use ($addressWords) {
+            //     foreach ($addressWords as $word) {
+            //         $query->orWhere('address', 'LIKE', "%{$word}%");  // Aggiungo un 'where' per ogni parola
+            //     }
+            // })
 
             // Filtro per numero minimo di stanze e letti
             ->where('rooms', '>=', $rooms)  // Almeno `rooms` numero di stanze
@@ -122,7 +124,8 @@ class PageController extends Controller
                     $query->whereIn('name', $serviceList);  // Cerco tra i servizi forniti
                 });
             })
-
+            // ->orderByDesc('sponsorship_price')
+            ->orderBy('distance') // Ordina per distanza calcolata
             // Carico le relazioni (servizi, immagini)
             ->with('services', 'images')  // Includo servizi e immagini collegati
             ->get();
