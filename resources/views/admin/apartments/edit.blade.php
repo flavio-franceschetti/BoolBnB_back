@@ -130,18 +130,22 @@
             </div>
         </fieldset>
 
-        <!-- Sponsorship Selection -->
         <div class="form-group mb-3">
             <label for="sponsorship">Seleziona una Sponsorizzazione:</label>
-            <select name="sponsorship_id" class="form-control" id="sponsorshipSelect">
-                <option value="">seleziona la sponsorizzazione</option>
+            <div class="d-flex flex-wrap">
                 @foreach ($sponsorships as $sponsorship)
-                    <option value="{{ $sponsorship->id }}">{{ $sponsorship->name }} - €{{ $sponsorship->price }}
-                    </option>
+                    <div class="card m-2 sponsorship-card" data-id="{{ $sponsorship->id }}"
+                        style="cursor: pointer; width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $sponsorship->name }}</h5>
+                            <p class="card-text">€{{ $sponsorship->price }}</p>
+                        </div>
+                    </div>
                 @endforeach
-            </select>
+            </div>
             <div class="mt-3">
-                <a href="#" class="btn btn-success" id="paymentLink">Sponsorizza Appartamento</a>
+                <a href="#" class="btn btn-success" id="paymentLink" style="display: none;">Sponsorizza
+                    Appartamento</a>
             </div>
         </div>
 
@@ -159,6 +163,35 @@
 
         .is-invalid {
             border-color: red;
+        }
+
+        .sponsorship-card {
+            border: 1px solid #ccc;
+
+            border-radius: 5px;
+
+            padding: 15px;
+
+            transition: 0.3s;
+
+            cursor: pointer;
+
+            margin: 10px;
+
+            width: 18rem;
+
+        }
+
+        .sponsorship-card:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+        }
+
+        .selected {
+            border: 2px solid green;
+
+            background-color: #e7ffe7;
+
         }
     </style>
 
@@ -339,21 +372,39 @@
                 }
             });
 
-            document.getElementById('sponsorshipSelect').addEventListener('change', function() {
-                const sponsorshipId = this.value;
-                const apartmentId = "{{ $apartment->id }}";
-                const paymentLink = document.getElementById('paymentLink');
 
-                if (sponsorshipId) {
-                    paymentLink.href =
-                        "{{ route('admin.apartments.payment', ['apartmentId' => ':apartmentId', 'sponsorshipId' => ':sponsorshipId']) }}"
-                        .replace(':apartmentId', apartmentId)
-                        .replace(':sponsorshipId', sponsorshipId);
-                    paymentLink.style.display = 'inline'; // Mostra il link se non è visibile
-                } else {
-                    paymentLink.style.display =
-                        'none'; // Nascondi se nessuna sponsorizzazione è selezionata
-                }
+            // SPONSORSHIPS
+
+            const apartmentId = "{{ $apartment->id }}";
+            const paymentLink = document.getElementById('paymentLink');
+
+            //    event click
+            document.querySelectorAll('.sponsorship-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // rimozione event click
+                    document.querySelectorAll('.sponsorship-card').forEach(c => {
+                        c.classList.remove(
+                            'selected'); //
+                    });
+
+                    //    seleziona la card
+                    this.classList.add('selected');
+
+                    // a seconda della card gli attribuisce data E ID
+                    const sponsorshipId = this.getAttribute('data-id');
+
+                    if (sponsorshipId) {
+                        // update del pagamento in base alla card sponsorizzazione
+                        paymentLink.href =
+                            "{{ route('admin.apartments.payment', ['apartmentId' => ':apartmentId', 'sponsorshipId' => ':sponsorshipId']) }}"
+                            .replace(':apartmentId', apartmentId)
+                            .replace(':sponsorshipId', sponsorshipId);
+                        paymentLink.style.display = 'inline';
+                    } else {
+                        paymentLink.style.display =
+                            'none';
+                    }
+                });
             });
         });
     </script>
