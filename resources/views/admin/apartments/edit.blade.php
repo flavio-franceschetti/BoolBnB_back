@@ -176,27 +176,29 @@
 
         <style>
             .sponsorship-card {
-                border: 1px solid #ccc;
+                border: 2px solid transparent;
+
                 border-radius: 10px;
                 padding: 20px;
-                transition: transform 0.2s, box-shadow 0.2s;
+                transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+
                 cursor: pointer;
                 margin: 15px;
                 width: 20rem;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
             }
 
             .sponsorship-card:hover {
                 transform: translateY(-5px);
-
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 
             }
 
             .selected {
                 border: 2px solid green;
-
                 background-color: #e7ffe7;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 
             }
 
@@ -206,7 +208,6 @@
                 border-radius: 10px;
                 padding: 20px;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
             }
 
             .sponsorship-title {
@@ -218,7 +219,6 @@
                 color: #666;
             }
         </style>
-
         <script>
             // SEZIONE DELLA SEARCHBOX
             const apiKey = "{{ config('app.tomtomApiKey') }}";
