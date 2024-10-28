@@ -30,8 +30,8 @@ class MessageController extends Controller
     {
         // Validazione dei dati inviati dall'utente
         $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'surname' => 'required|max:255',
+            'name' => 'nullable|min:2|max:50',
+            'surname' => 'nullable|min:2|max:50',
             'email' => 'required|email',
             'content' => 'required|min:10',
             'apartment_id' => 'required'
