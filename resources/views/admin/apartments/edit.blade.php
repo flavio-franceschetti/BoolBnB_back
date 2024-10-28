@@ -103,7 +103,7 @@
                 <br><span class="text-danger"> oppure eleziona
                     l'immagine per eliminarla</span>
                 <br></label>
-            <input class="form-control" type="file" id="images" name="images[]" multiple required
+            <input class="form-control" type="file" id="images" name="images[]" multiple
                 accept="image/*">
             @error('images')
                 <small class="text-danger">{{ $message }}</small>
@@ -191,7 +191,15 @@
                 </div>
             </div>
 
+
             <style>
+               .is-valid {
+            border-color: green;
+              }
+
+              .is-invalid {
+                  border-color: red;
+             }
                 /* Stile generale */
                 .sponsorship-container {
                     background-color: #1d1d1d;
@@ -215,6 +223,7 @@
                     margin: 15px;
                     width: 20rem;
                     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+
                 }
 
                 .sponsorship-card:hover {
@@ -263,8 +272,8 @@
                     margin-right: 8px;
                 }
 
-                @keyframes keyWave {
 
+                @keyframes keyWave {
                     0%,
                     100% {
                         transform: translateY(0);
@@ -323,7 +332,7 @@
             </style>
             <script>
                 // SEZIONE DELLA SEARCHBOX
-                const apiKey = "{{ config('app.tomtomApiKey') }}";
+                const apiKey = "{{ config('app.tomtomapikey') }}";
                 let options = {
                     searchOptions: {
                         key: apiKey,
