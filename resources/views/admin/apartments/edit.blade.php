@@ -402,31 +402,36 @@
                 const apartmentId = "{{ $apartment->id }}";
                 const paymentLink = document.getElementById('paymentLink');
 
-                //    event click
+                // Event click
                 document.querySelectorAll('.sponsorship-card').forEach(card => {
                     card.addEventListener('click', function() {
-                        // rimozione event click
+                        const isSelected = this.classList.contains('selected');
+
+                        // Rimuovi la selezione da tutte le card
                         document.querySelectorAll('.sponsorship-card').forEach(c => {
-                            c.classList.remove(
-                                'selected'); //
+                            c.classList.remove('selected');
                         });
 
-                        //    seleziona la card
-                        this.classList.add('selected');
+                        // Se la card cliccata non era già selezionata, selezionala
+                        if (!isSelected) {
+                            this.classList.add('selected');
 
-                        // a seconda della card gli attribuisce data E ID
-                        const sponsorshipId = this.getAttribute('data-id');
+                            // A seconda della card, attribuisci data E ID
+                            const sponsorshipId = this.getAttribute('data-id');
 
-                        if (sponsorshipId) {
-                            // update del pagamento in base alla card sponsorizzazione
-                            paymentLink.href =
-                                "{{ route('admin.apartments.payment', ['apartmentId' => ':apartmentId', 'sponsorshipId' => ':sponsorshipId']) }}"
-                                .replace(':apartmentId', apartmentId)
-                                .replace(':sponsorshipId', sponsorshipId);
-                            paymentLink.style.display = 'inline';
+                            if (sponsorshipId) {
+                                // Update del pagamento in base alla card di sponsorizzazione
+                                paymentLink.href =
+                                    "{{ route('admin.apartments.payment', ['apartmentId' => ':apartmentId', 'sponsorshipId' => ':sponsorshipId']) }}"
+                                    .replace(':apartmentId', apartmentId)
+                                    .replace(':sponsorshipId', sponsorshipId);
+                                paymentLink.style.display = 'inline';
+                            } else {
+                                paymentLink.style.display = 'none';
+                            }
                         } else {
-                            paymentLink.style.display =
-                                'none';
+                            // Se la card è già selezionata, nascondi il link di pagamento
+                            paymentLink.style.display = 'none';
                         }
                     });
                 });
