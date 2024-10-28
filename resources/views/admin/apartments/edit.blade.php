@@ -164,7 +164,7 @@
 
     <script>
         // SEZIONE DELLA SEARCHBOX
-        const apiKey = "{{ config('app.tomtomApiKey') }}";
+        const apiKey = "{{ config('app.tomtomapikey') }}";
         let options = {
             searchOptions: {
                 key: apiKey,

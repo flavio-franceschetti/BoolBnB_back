@@ -69,7 +69,7 @@ class ApartmentController extends Controller
 
         // Prendo la latitudine e longitudine dall'indirizzo inserito dall'utente
         $address = $apartmentData['address'];
-        $apiKey = env('TOMTOM_API_KEY');
+        $apiKey = config('app.tomtomapikey');
         // utilizzo le funzioni create nell'helper per prendermi la latitudine e la longitudine dall'api di tomtom
         $apartmentData['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
         $apartmentData['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
@@ -224,7 +224,7 @@ class ApartmentController extends Controller
         // Aggiorna latitudine e longitudine solo se l'indirizzo è stato modificato
         if ($apartmentData['address'] !== $apartment->address) {
             $address = $apartmentData['address'];
-            $apiKey = env('TOMTOM_API_KEY');
+            $apiKey = config('app.tomtomapikey');
             $apartmentData['latitude'] = Helper::getLatLon($address, $apiKey, 'lat');
             $apartmentData['longitude'] = Helper::getLatLon($address, $apiKey, 'lon');
         }

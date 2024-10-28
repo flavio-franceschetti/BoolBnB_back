@@ -13,14 +13,14 @@
                 <h6 class="card-subtitle mb-2 text-body-secondary">Email: {{ $message->email }}</h6>
                 <div>{{ $message->created_at->format('d-m-Y H:i') }}</div>
                 <p class="card-text">{{ $message->content }}</p>
-                <div class="d-flex gap-3">
-                    <a href="{{ route('admin.messages.show', $message) }}" class="btn btn-primary">Visualizza</a>
-                    <form action="{{ route('admin.messages.destroy', $message) }}" method="POST" onsubmit="return confirm('Sicuro di voler eliminare questo messaggio?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Elimina</button>
-                    </form>
-                </div>
+                    <div class="d-flex gap-3">
+                        <a href="{{ route('admin.messages.show', $message) }}" class="btn btn-primary">Visualizza</a>
+                        <form action="{{ route('admin.messages.destroy', $message) }}" method="POST" onsubmit="return confirm('Sicuro di voler eliminare questo messaggio?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Elimina</button>
+                        </form>
+                    </div>
                 </div>
             </div>
          @endforeach

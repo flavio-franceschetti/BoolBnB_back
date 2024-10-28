@@ -27,6 +27,6 @@ Route::post('/contatto', [MessageController::class, 'store']);
 // rotta per passare la key dell'api di tomtom al front
 Route::get('/tomtomKey', function () {
     return response()->json([
-        'apiKey' => env('TOMTOM_API_KEY'),
+        'apiKey' => config('app.tomtomapikey'),
     ]);
 });

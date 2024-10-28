@@ -213,5 +213,6 @@ return [
     ])->toArray(),
 
 
-    'tomtomApiKey' => env('TOMTOM_API_KEY'),
+    'tomtomapikey' => env('TOMTOM_KEY', null)
+
 ];
