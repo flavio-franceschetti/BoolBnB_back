@@ -164,7 +164,9 @@
 
                 <!-- Sezione di Guida e Invito alla Sponsorizzazione -->
                 <div class="text-center mt-4">
-                    <h5 class="learn-more-title">Seleziona una sponsorizzazione e procedi al pagamento oppure visita la
+                    <h5 class="learn-more-title">Seleziona una sponsorizzazione e procedi al pagamento <i
+                            class="fas fa-star pulsate-star"></i> <br> oppure visita
+                        la
                         nostra pagina dedicata per saperne di più!</h5>
 
                     <!-- Pulsante animato per saperne di più -->
@@ -292,7 +294,7 @@
                 .payment-btn i {
                     margin-right: 8px;
                     color: #ffe135;
-                    /* Giallo per la stellina */
+
                 }
 
                 /* Pulsazione animata per l'icona stellina */
