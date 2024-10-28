@@ -17,7 +17,7 @@ return [
             'name' => 'Standard',
             'price' => 5.99,
             'duration' => 48, // Durata in ore
-            'description' => 'Il pacchetto standard per una maggiore visibilità e attenzione.  Durata: 44 ore di evidenza.',
+            'description' => 'Il pacchetto standard per una maggiore visibilità e attenzione.  Durata: 48 ore di evidenza.',
             'slogans' => [
                 '🔥 Fai decollare il tuo appartamento!',
                 '🌟 Visibilità che fa la differenza!',
