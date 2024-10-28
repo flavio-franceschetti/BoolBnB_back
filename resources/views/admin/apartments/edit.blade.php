@@ -103,8 +103,7 @@
                 <br><span class="text-danger"> oppure eleziona
                     l'immagine per eliminarla</span>
                 <br></label>
-            <input class="form-control" type="file" id="images" name="images[]" multiple
-                accept="image/*">
+            <input class="form-control" type="file" id="images" name="images[]" multiple accept="image/*">
             @error('images')
                 <small class="text-danger">{{ $message }}</small>
             @enderror
@@ -133,7 +132,8 @@
 
         <!-- Sezione Sponsorizzazione -->
         <div class="container text-center mb-4 p-4 sponsorship-container">
-            <h3 class="sponsorship-title">🚀 Potenzia la Visibilità del Tuo Appartamento! 🚀</h3>
+            <h3 class="sponsorship-title"> Potenzia la Visibilità del Tuo Appartamento! <i
+                    class="fas fa-key text-success"></i></h3>
             <p class="sponsorship-subtitle">Scegli una sponsorizzazione e affitta più velocemente con la nostra
                 piattaforma!</p>
 
@@ -193,66 +193,65 @@
 
 
             <style>
-               .is-valid {
-            border-color: green;
-              }
+                .is-valid {
+                    border-color: green;
+                }
 
-              .is-invalid {
-                  border-color: red;
-             }
+                .is-invalid {
+                    border-color: red;
+                }
+
                 /* Stile generale */
                 .sponsorship-container {
-                    background-color: #1d1d1d;
+                    background-color: #f9f9f9;
+                    /* Lighter background */
                     border-radius: 10px;
                     padding: 20px;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                 }
 
                 .sponsorship-title,
                 .sponsorship-subtitle {
-                    color: #e0e0e0;
+                    color: #333;
                 }
 
                 /* Card stile */
                 .sponsorship-card {
-                    background-color: #333;
-                    color: #e0e0e0;
+                    background-color: #ffffff;
+                    color: #333;
                     border: 2px solid transparent;
                     border-radius: 10px;
                     padding: 20px;
                     margin: 15px;
                     width: 20rem;
                     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-
                 }
 
                 .sponsorship-card:hover {
                     transform: translateY(-5px);
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                    box-shadow: 0 4px 20px rgba(40, 167, 69, 0.2);
                 }
 
                 .selected {
-                    border: 2px solid green;
-                    background-color: #2e2e2e;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+                    border: 2px solid #28a745;
+                    background-color: #e9f7ef;
+                    box-shadow: 0 4px 20px rgba(40, 167, 69, 0.3);
                 }
 
                 /* sezione btn vai alla sponsorizzazione */
                 /* Guida alla Sponsorizzazione */
                 .learn-more-title {
-                    color: #377232;
+                    color: #28a745;
                     font-size: 1.5em;
                     margin-bottom: 10px;
-                    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3),
-                        0 0 25px rgba(255, 255, 255, 0.1);
+                    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
                     font-weight: bold;
-
                 }
 
                 /* Pulsante animato */
                 .animated-key-btn {
-                    background-color: #0a74da;
-                    color: #fff;
+                    background-color: #28a745;
+                    color: #ffffff;
                     font-weight: bold;
                     font-size: 1.2rem;
                     padding: 10px 20px;
@@ -263,7 +262,7 @@
                 }
 
                 .animated-key-btn:hover {
-                    background-color: #005bb5;
+                    background-color: #218838;
                 }
 
                 /* Animazione icona chiave */
@@ -272,8 +271,8 @@
                     margin-right: 8px;
                 }
 
-
                 @keyframes keyWave {
+
                     0%,
                     100% {
                         transform: translateY(0);
@@ -285,12 +284,10 @@
                 }
 
                 /* pagamento */
-
                 /* Stile per il pulsante */
                 .payment-btn {
                     display: none;
                     background-color: #28a745;
-                    /* Verde primario */
                     color: white;
                     font-size: 1.1rem;
                     padding: 10px 20px;
@@ -303,7 +300,6 @@
                 .payment-btn i {
                     margin-right: 8px;
                     color: #ffe135;
-
                 }
 
                 /* Pulsazione animata per l'icona stellina */
@@ -311,7 +307,6 @@
                     animation: pulsate 1.2s ease-in-out infinite;
                 }
 
-                /* Definizione animazione */
                 @keyframes pulsate {
 
                     0%,
