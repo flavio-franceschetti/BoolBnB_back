@@ -74,7 +74,7 @@ class PageController extends Controller
     public function apartmentsByAddress(Request $request)
     {
         // Recupero la chiave API e l'indirizzo dall'input della richiesta
-        $apiKey = env('TOMTOM_API_KEY');
+        $apiKey = config('app.tomtomapikey');
         $address = $request->query('address');
 
         // Ottengo latitudine e longitudine dall'API TomTom in base all'indirizzo
