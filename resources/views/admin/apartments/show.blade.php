@@ -134,7 +134,7 @@
     {{-- script per far funzionare la mappa di tom tom --}}
     <script>
         // creo una constante dove inserisco la apiKey che prendo dal file config
-        const apiKey = "{{ config('app.tomtomApiKey') }}";
+        const apiKey = "{{ config('app.tomtomapikey') }}";
         const latitude = "{{ $apartment->latitude }}"
         const longitude = "{{ $apartment->longitude }}"
         let center = [longitude, latitude];
