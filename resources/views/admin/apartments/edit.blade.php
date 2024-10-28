@@ -290,13 +290,12 @@
                     }
                 });
 
-
                 document.getElementById('rooms').addEventListener('input', function() {
                     if (this.value <= 0) {
                         showError('rooms', 'Devi inserire un numero valido di camere.');
                     } else {
                         hideError('rooms');
-
+                    }
                 });
 
                 document.getElementById('beds').addEventListener('input', function() {
