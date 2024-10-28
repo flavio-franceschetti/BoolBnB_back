@@ -99,11 +99,12 @@ class PaymentController extends Controller
                     ],
                 ]);
 
-                // Aggiorna l'appartamento con le informazioni della sponsorizzazione
+                // Qui assicurati che stai aggiornando il campo sponsorship_hours dell'appartamento correttamente
                 $apartment->update([
                     'last_sponsorship' => $sponsorship->name,
                     'sponsorship_price' => $sponsorship->price,
-                    'sponsorship_hours' => $apartment->sponsorship_hours + $sponsorship->duration,
+                    // Assicurati di sommare le ore dalla relazione pivot
+                    'sponsorship_hours' => $apartment->sponsorships()->sum('sponsorship_hours'), // Questo somma tutte le ore
                 ]);
 
                 // Reindirizza all'appartamento modificato con un messaggio di successo
