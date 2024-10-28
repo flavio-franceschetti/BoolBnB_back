@@ -145,8 +145,8 @@
                             style="cursor: pointer; width: 20rem;">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $sponsorship->name }}</h5>
-                                <p class="card-text">Prezzo: €{{ $sponsorship->price }}</p>
-                                <p class="card-description">{{ $sponsorship->description }}</p>
+                                <p class="card-text text-success">Prezzo: €{{ $sponsorship->price }}</p>
+                                <p class="card-description text-primary">{{ $sponsorship->description }}</p>
                                 <!-- Aggiunta della descrizione -->
                                 <div class="card-slogans">
                                     @if (isset($sponsorship->slogans))

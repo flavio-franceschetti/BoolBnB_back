@@ -5,7 +5,7 @@ return [
             'name' => 'Basic',
             'price' => 2.99,
             'duration' => 24, // Durata in ore
-            'description' => 'Il pacchetto base per dare visibilità al tuo appartamento.',
+            'description' => 'Il pacchetto base per dare visibilità al tuo appartamento. Durata: 24 ore di evidenza.',
             'slogans' => [
                 '✨ Fai brillare il tuo appartamento!',
                 '📅 Visibilità garantita!',
@@ -17,7 +17,7 @@ return [
             'name' => 'Standard',
             'price' => 5.99,
             'duration' => 48, // Durata in ore
-            'description' => 'Il pacchetto standard per una maggiore visibilità.',
+            'description' => 'Il pacchetto standard per una maggiore visibilità e attenzione.  Durata: 44 ore di evidenza.',
             'slogans' => [
                 '🔥 Fai decollare il tuo appartamento!',
                 '🌟 Visibilità che fa la differenza!',
@@ -29,7 +29,7 @@ return [
             'name' => 'Premium',
             'price' => 9.99,
             'duration' => 144, // Durata in ore
-            'description' => 'Il pacchetto premium per massima visibilità e attenzione.',
+            'description' => 'Il pacchetto premium per massima visibilità e attenzione. Durata: 144 ore di evidenza.',
             'slogans' => [
                 '🚀 Massima visibilità, massime prenotazioni!',
                 '💰 Investi nella tua proprietà e guarda i risultati!',
