@@ -23,6 +23,8 @@ class SponsorshipSeeder extends Seeder
             $new_sponsorship->slug = Helper::generateSlug($sponsorship['name'], Sponsorship::class);
             $new_sponsorship->price = $sponsorship['price'];
             $new_sponsorship->duration = $sponsorship['duration'];
+            $new_sponsorship->description = $sponsorship['description'];
+            $new_sponsorship->slogans = json_encode($sponsorship['slogans']);
 
             // Salva il nuovo pacchetto di sponsorizzazione nel database
             $new_sponsorship->save();

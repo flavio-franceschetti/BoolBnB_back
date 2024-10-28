@@ -146,10 +146,16 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ $sponsorship->name }}</h5>
                                 <p class="card-text">Prezzo: €{{ $sponsorship->price }}</p>
+                                <p class="card-description">{{ $sponsorship->description }}</p>
+                                <!-- Aggiunta della descrizione -->
                                 <div class="card-slogans">
-                                    <p class="card-slogan">✨ Fai brillare il tuo appartamento!</p>
-                                    <p class="card-slogan">🚀 Visibilità garantita: affitta più velocemente!</p>
-                                    <p class="card-slogan">🏡 Il tuo appartamento in prima fila!</p>
+                                    @if (isset($sponsorship->slogans))
+                                        @foreach (json_decode($sponsorship->slogans) as $slogan)
+                                            <p class="card-slogan">{{ $slogan }}</p>
+                                        @endforeach
+                                    @else
+                                        <p class="card-slogan">Nessuno slogan disponibile.</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
