@@ -22,6 +22,7 @@
     <link rel="icon" type="image/svg+xml" href="/logo_bnb.png" />
     <!-- Includi Font Awesome senza integrità -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <title>BoolBnb</title>
     <!-- Usando Vite -->
     @vite(['resources/js/app.js'])
