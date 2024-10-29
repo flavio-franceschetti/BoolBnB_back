@@ -1,18 +1,11 @@
-header {
-    div {
-        height: 80px;
-        #img-logo {
-            height: 175%;
-        }
-    }
-}
-header,
-aside {
+* {
+    font-family: "Roboto", serif;
     a {
-        color: white;
         text-decoration: none;
     }
 }
+
+header,
 ul {
     list-style: none;
 }

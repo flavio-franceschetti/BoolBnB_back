@@ -25,6 +25,12 @@
     <!-- Includi Font Awesome senza integrità -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    {{-- font --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
     <title>BoolBnb</title>
     <!-- Usando Vite -->
     @vite(['resources/js/app.js'])
@@ -32,14 +38,16 @@
 
 <body>
     @include('admin.partials.header')
-    <div class="wrapper d-flex">
-        @if (Auth::check())
+    @if (Auth::check())
+        <div class="wrapper d-flex">
             @include('admin.partials.aside')
-        @endif
-        <div class="main-content p-4">
-            @yield('content')
+            <div class="main-content p-4">
+                @yield('content')
+            </div>
         </div>
-    </div>
+    @else
+        @yield('content')
+    @endif
 </body>
 
 </html>
