@@ -10,6 +10,8 @@
         href="https://api.tomtom.com/maps-sdk-for-web/cdn/plugins/SearchBox/3.1.3-public-preview.0/SearchBox.css" />
     <!-- includes the Braintree JS client SDK -->
     <script src="https://js.braintreegateway.com/web/dropin/1.43.0/js/dropin.min.js"></script>
+    {{-- chart js per statistiche  --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- includes jQuery -->
     <script src="http://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>

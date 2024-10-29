@@ -11,6 +11,7 @@ use App\Models\ApartmentImage;
 use App\Models\ApartmentService;
 use App\Models\Service;
 use App\Models\Sponsorship;
+use App\Models\View;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -102,11 +103,29 @@ class ApartmentController extends Controller
         return redirect()->route('admin.apartments.show', $new_apartment);
     }
 
+
+    protected function recordView(Apartment $apartment)
+    {
+        $ipAddress = request()->ip();
+
+        Log::info("Registrazione visualizzazione per l'appartamento ID {$apartment->id} dall'IP {$ipAddress}");
+
+        if (!View::where('apartment_id', $apartment->id)->where('ip_address', $ipAddress)->exists()) {
+            View::create([
+                'apartment_id' => $apartment->id,
+                'ip_address' => $ipAddress,
+            ]);
+        }
+    }
+
     /**
      * Display the specified resource.
      */
     public function show(Apartment $apartment)
     {
+
+        $this->recordView($apartment);
+
         // Verifica che l'appartamento appartenga all'utente loggato
         if ($apartment->user_id !== Auth::id()) {
             return abort(404);
@@ -158,6 +177,8 @@ class ApartmentController extends Controller
             'remainingMinutes'
         ));
     }
+
+
     /**
      * Show the form for editing the specified resource.
      */

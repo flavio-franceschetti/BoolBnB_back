@@ -132,7 +132,8 @@
 
         <!-- Sezione Sponsorizzazione -->
         <div class="container text-center mb-4 p-4 sponsorship-container">
-            <h3 class="sponsorship-title">🚀 Potenzia la Visibilità del Tuo Appartamento! 🚀</h3>
+            <h3 class="sponsorship-title"> Potenzia la Visibilità del Tuo Appartamento! <i
+                    class="fas fa-key text-success"></i></h3>
             <p class="sponsorship-subtitle">Scegli una sponsorizzazione e affitta più velocemente con la nostra
                 piattaforma!</p>
 
