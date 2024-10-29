@@ -11,7 +11,7 @@
 
         <section class="how-it-works mb-5 p-4 text-center">
             <h3 class="section-title">Come Funziona</h3>
-            <p class="section-description"
+            <p class="section-description animate__animated animate__fadeInUp"
                 style="font-family: 'Roboto', sans-serif; font-size: 1.2em; color: #333; line-height: 1.6; text-align: center; background-color: #f9f9f9; padding: 20px; border-radius: 8px;">
                 <strong>Metti in luce il tuo appartamento!</strong><br>
                 Vai alla sezione “Modifica”, scegli la sponsorizzazione perfetta e raggiungi più utenti. <br>
@@ -57,6 +57,13 @@
                     <h4 class="benefit-title">🚀 Maggiori Prenotazioni</h4>
                     <p class="benefit-description">Più visualizzazioni significano più prenotazioni.</p>
                 </div>
+            </div>
+
+            <!-- Button to redirect to "My Apartments" page -->
+            <div class="text-center mt-4">
+                <a href="{{ route('admin.apartments.index') }}" class="btn futuristic-button">
+                    Vai alla sezione modifica!
+                </a>
             </div>
         </section>
     </div>
@@ -160,7 +167,7 @@
 
         .option-duration {
             font-size: 0.85rem;
-            color: #999;
+            color: #28a745;
             font-weight: 500;
         }
 
