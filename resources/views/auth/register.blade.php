@@ -12,7 +12,7 @@
                     <div class="form-floating mb-3">
                         {{-- input e label --}}
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="floatingInput"
-                            placeholder="Nome" name="email" value="{{ old('name') }}" autocomplete="name" autofocus>
+                            placeholder="Nome" name="name" value="{{ old('name') }}" autocomplete="name" autofocus>
                         <label for="floatingInput">Nome</label>
 
                         {{-- controlli ed errori --}}

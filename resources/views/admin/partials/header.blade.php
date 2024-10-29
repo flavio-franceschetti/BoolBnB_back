@@ -23,8 +23,13 @@
                     @else
                         <ul class="nav gap-2">
                             <li>
-                                <a class="access btn text-white"
-                                    href="{{ route('admin.home') }}">{{ Auth::user()->name }}</a>
+                                <a class="access btn text-white" href="{{ route('admin.home') }}">
+                                    @if (Auth::user()->name)
+                                        {{ Auth::user()->name }}
+                                    @else
+                                        {{ Auth::user()->email }}
+                                    @endif
+                                </a>
                             </li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
