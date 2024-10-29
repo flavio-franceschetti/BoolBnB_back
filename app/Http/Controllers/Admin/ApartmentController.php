@@ -104,19 +104,6 @@ class ApartmentController extends Controller
     }
 
 
-    protected function recordView(Apartment $apartment)
-    {
-        $ipAddress = request()->ip();
-
-        Log::info("Registrazione visualizzazione per l'appartamento ID {$apartment->id} dall'IP {$ipAddress}");
-
-        if (!View::where('apartment_id', $apartment->id)->where('ip_address', $ipAddress)->exists()) {
-            View::create([
-                'apartment_id' => $apartment->id,
-                'ip_address' => $ipAddress,
-            ]);
-        }
-    }
 
     /**
      * Display the specified resource.
@@ -124,11 +111,62 @@ class ApartmentController extends Controller
     public function show(Apartment $apartment)
     {
 
-        $this->recordView($apartment);
-
         // Verifica che l'appartamento appartenga all'utente loggato
         if ($apartment->user_id !== Auth::id()) {
             return abort(404);
+        }
+
+        // Statistiche di visualizzazione
+        $totalViews = $apartment->getTotalViews();
+        $dailyViews = $apartment->getDailyViews();
+
+        // Prepara i dati per il grafico delle visualizzazioni mensili
+        $viewsData = [];
+        $labels = [];
+
+        // Ottieni il mese corrente
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        // Riempi l'array per i 12 mesi dell'anno
+        for ($i = 0; $i < 12; $i++) {
+            // Calcola il mese corrente
+            $month = ($currentMonth - $i + 12) % 12; // Mese corretto (0-11)
+            $year = $currentYear - floor(($currentMonth - $i) / 12); // Anno corretto
+
+            // Ottieni il conteggio delle visualizzazioni per il mese corrente
+            $viewsCount = $apartment->views()->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month + 1) // Aggiungi 1 perché month in Carbon è 1-based
+                ->count();
+
+            // Prepara le etichette per i mesi
+            $labels[] = Carbon::create()->month($month + 1)->format('F'); // Nome del mese
+            $viewsData[] = $viewsCount;
+        }
+
+        // Rovescia i dati per mostrare dall'ultimo mese al primo
+        $viewsData = array_reverse($viewsData);
+        $labels = array_reverse($labels);
+
+        // Statistiche giornaliere per gli ultimi 7 giorni
+        $dailyViewsData = [];
+        $dailyLabels = [];
+        for ($i = 0; $i < 7; $i++) {
+            $date = now()->subDays($i);
+            $dailyLabels[] = $date->format('d-m'); // Formato giorno-mese
+            $dailyViewsData[] = $apartment->views()->whereDate('created_at', $date)->count();
+        }
+        $dailyLabels = array_reverse($dailyLabels);
+        $dailyViewsData = array_reverse($dailyViewsData);
+
+        // Statistiche annuali per l'anno corrente
+        $yearlyViewsData = [];
+        $yearlyLabels = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $yearlyLabels[] = Carbon::create()->month($i)->format('F'); // Nome del mese
+            $yearlyViewsData[] = $apartment->views()->whereYear('created_at', $currentYear)
+                ->whereMonth('created_at', $i)
+                ->count();
         }
 
         // Recupera tutte le sponsorizzazioni attive
@@ -174,7 +212,17 @@ class ApartmentController extends Controller
             'apartment',
             'primarySponsorshipName',
             'remainingHours',
-            'remainingMinutes'
+            'remainingMinutes',
+            'totalViews',
+            'dailyViews',
+            'labels',
+            'viewsData',
+            'dailyLabels',
+            'dailyViewsData',
+            'yearlyLabels',
+            'yearlyViewsData'
+
+
         ));
     }
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ApartmentController;
 use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\ApartmentStatisticsController;
 use App\Http\Controllers\Api\PageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,8 +25,8 @@ Route::get('/apartmentBySlug/{slug}', [PageController::class, 'apartmentBySlug']
 Route::get('/apartmentsByAddress', [PageController::class, 'apartmentsByAddress']);
 Route::get('/apartmentsWithSponsorship', [PageController::class, 'apartmentsWithSponsorship']);
 Route::post('/contatto', [MessageController::class, 'store']);
-Route::post('/apartments/{apartment}/views', [ApartmentController::class, 'registerView']);
-Route::post('/apartments/{apartment}/registerView', [ApartmentController::class, 'registerView']);
+Route::post('/views', [ApartmentStatisticsController::class, 'recordView']);
+
 
 // rotta per passare la key dell'api di tomtom al front
 Route::get('/tomtomKey', function () {

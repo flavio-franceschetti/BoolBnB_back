@@ -55,6 +55,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Rotta per mostrare le statistiche di un appartamento specifico
     Route::get('/apartments/{apartmentId}/statistics', [ApartmentStatisticsController::class, 'show'])->name('apartments.statistics.show');
+    Route::get('/api/apartments/{apartmentId}/statistics', [ApartmentStatisticsController::class, 'getStatistics']);
 });
 
 // Includi le rotte di autenticazione
