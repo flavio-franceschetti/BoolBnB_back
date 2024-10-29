@@ -9,6 +9,8 @@
         <tr>
             <th scope="col">ID</th>
             <th scope="col">Titolo</th>
+            <th scope="col">Visibilità</th>
+            <th scope="col">Durata sponsorizzazione</th>
             <th scope="col">Stanze</th>
             <th scope="col">Letti</th>
             <th scope="col">Bagni</th>
@@ -21,7 +23,10 @@
         @foreach ($apartments as $apartment)
         <tr>
             <td>{{$apartment->id}}</td>
-            <td>{{$apartment->title}}</td>
+            <td class="text-truncate" style="max-width: 150px;">{{$apartment->title}}</td>
+            <td>{{$apartment->is_visible ? 'Si' : 'No'}}</td>
+            <td>{{$apartment->sponsorship_hours ? $apartment->sponsorship_hours . 'h' : 'Nessuna sponsorizzazione
+                attiva'}}</td>
             <td>{{$apartment->rooms}}</td>
             <td>{{$apartment->beds}}</td>
             <td>{{$apartment->bathrooms}}</td>
