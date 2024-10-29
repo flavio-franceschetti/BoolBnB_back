@@ -6,7 +6,7 @@ header {
         background-color: #28a745;
     }
     div {
-        height: 80px;
+        min-height: 80px;
         #img-logo {
             width: 60px;
            
@@ -20,4 +20,16 @@ header {
         }
     }
 
+}
+
+.btn-offcanvas{
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    background-color: #28a745;
+    &:hover{
+        background-color: #24963e;
+    }
+}
+
+.offcanvas-title{
+    color: #28a745;
 }

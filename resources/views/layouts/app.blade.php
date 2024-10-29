@@ -39,15 +39,29 @@
 <body>
     @include('admin.partials.header')
     @if (Auth::check())
-        <div class="wrapper d-flex">
-            @include('admin.partials.aside')
-            <div class="main-content p-4">
-                @yield('content')
+        <div class="container-fluid h-100">
+            <!-- Header -->
+            <header class="header col-12">
+                @include('admin.partials.header')
+            </header>
+            <div class="row h-100">
+
+                <!-- Corpo principale -->
+                <div class="col-12 d-flex h-100">
+                    <!-- Aside -->
+                    <aside class="aside d-none d-md-block ">
+                        @include('admin.partials.aside')
+                    </aside>
+
+                    <!-- Content -->
+                    <main class="content">
+                        @yield('content')
+                    </main>
+                </div>
             </div>
         </div>
-    @else
-        @yield('content')
     @endif
+    @yield('content')
 </body>
 
 </html>
