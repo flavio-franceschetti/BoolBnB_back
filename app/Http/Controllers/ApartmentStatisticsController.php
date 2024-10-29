@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Apartment;
 use App\Models\User;
+use App\Models\View;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ApartmentStatisticsController extends Controller
 {
@@ -18,7 +21,7 @@ class ApartmentStatisticsController extends Controller
     {
         $user = Auth::user();
 
-        // Ottieni gli appartamenti dell'utente
+        // Ottieni gli appartamenti dell'utente\
         $apartments = $user->apartments;
 
         // Statistiche di visualizzazione per ogni appartamento
@@ -33,6 +36,7 @@ class ApartmentStatisticsController extends Controller
 
         return view('admin.apartments.statistics.index', compact('statistics'));
     }
+
 
     /**
      * Mostra le statistiche di visualizzazione per un appartamento specifico.
@@ -51,7 +55,7 @@ class ApartmentStatisticsController extends Controller
         $totalViews = $apartment->getTotalViews();
         $dailyViews = $apartment->getDailyViews();
 
-        // Prepara i dati per il grafico delle visualizzazioni
+        // Prepara i dati per il grafico delle visualizzazioni giornaliere
         $viewsData = [];
         $labels = [];
         for ($i = 6; $i >= 0; $i--) {
@@ -60,7 +64,37 @@ class ApartmentStatisticsController extends Controller
             $viewsData[] = $apartment->views()->whereDate('created_at', $date)->count(); // Conteggio delle visualizzazioni per la data
         }
 
-        return view('admin.apartments.statistics', compact('apartment', 'totalViews', 'dailyViews', 'labels', 'viewsData'));
+        // Prepara i dati per il grafico delle visualizzazioni mensili
+        $monthlyViewsData = [];
+        $monthlyLabels = [];
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        for ($i = 0; $i < 12; $i++) {
+            $month = ($currentMonth - $i + 12) % 12; // Mese corretto (0-11)
+            $year = $currentYear - floor(($currentMonth - $i) / 12); // Anno corretto
+
+            $viewsCount = $apartment->views()->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month + 1) // Aggiungi 1 perché month in Carbon è 1-based
+                ->count();
+
+            $monthlyLabels[] = Carbon::create()->month($month + 1)->format('F'); // Nome del mese
+            $monthlyViewsData[] = $viewsCount;
+        }
+
+        // Rovescia i dati per mostrare dall'ultimo mese al primo
+        $monthlyViewsData = array_reverse($monthlyViewsData);
+        $monthlyLabels = array_reverse($monthlyLabels);
+
+        return view('admin.apartments.statistics', compact(
+            'apartment',
+            'totalViews',
+            'dailyViews',
+            'labels',
+            'viewsData',
+            'monthlyLabels',
+            'monthlyViewsData'
+        ));
     }
 
     /**
@@ -84,5 +118,19 @@ class ApartmentStatisticsController extends Controller
             'total_views' => $totalViews,
             'daily_views' => $dailyViews,
         ]);
+    }
+
+    protected function recordView(Request $request)
+    {
+
+        $ViewsData = $request->all();
+
+        // Log::info("Registrazione visualizzazione per l'appartamento ID {$apartment->id} dall'IP {$ipAddress}");
+
+        if (!View::where('apartment_id', $ViewsData['apartment_id'])->where('ip_address', $ViewsData['ip_address'])->exists()) {
+            View::create($ViewsData);
+        } else {
+            log::info("appartamento già esistente");
+        }
     }
 }
