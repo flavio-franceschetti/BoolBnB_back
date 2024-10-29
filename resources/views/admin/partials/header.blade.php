@@ -14,7 +14,7 @@
                 <div class="d-none d-md-flex col-6  align-items-center justify-content-end">@guest
                         <ul class="nav gap-2">
                             <li>
-                                <a class="access text-white btn" href="{{ route('login') }}">Login</a>
+                                <a class="access text-white btn" href="{{ route('login') }}">Accedi</a>
                             </li>
                             <li>
                                 <a class=" access text-white btn" href="{{ route('register') }}">Registrati</a>
@@ -29,7 +29,7 @@
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button class="access btn" type="submit">Logout</button>
+                                    <button class="access btn text-white" type="submit">Esci</button>
                                 </form>
                             </li>
                         </ul>
@@ -43,7 +43,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         @guest
-                            <li><a class="dropdown-item " href="{{ route('login') }}">Login</a></li>
+                            <li><a class="dropdown-item " href="{{ route('login') }}">Accedi</a></li>
                             <li> <a class="dropdown-item " href="{{ route('register') }}">Registrati</a></li>
                         @else
                             <li><a class="dropdown-item  " href="{{ route('admin.home') }}">{{ Auth::user()->name }}</a>
@@ -51,7 +51,7 @@
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button class="dropdown-item  " type="submit">Logout</button>
+                                    <button class="dropdown-item " type="submit">Esci</button>
                                 </form>
                             </li>
                         @endguest
