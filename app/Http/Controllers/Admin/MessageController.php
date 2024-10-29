@@ -17,9 +17,9 @@ class MessageController extends Controller
         $userApartments = Auth::user()->apartments->pluck('id'); // Prendo gli ID degli appartamenti dell'utente
         // $messages = Message::whereIn('apartment_id', $userApartments)->orderBy('id')->get(); // Filtro i messaggi per appartamenti dell'utente
         $messages = Message::whereIn('apartment_id', $userApartments)
-                        ->with('apartment') // Includo la relazione apartment
-                        ->orderBy('id')
-                        ->get(); // Filtro i messaggi per appartamenti dell'utente
+            ->with('apartment') // Includo la relazione apartment
+            ->orderBy('id')
+            ->get(); // Filtro i messaggi per appartamenti dell'utente
         return view('admin.messages.index', compact('messages'));
     }
 
@@ -58,7 +58,7 @@ class MessageController extends Controller
         if (!$userApartments->contains($message->apartment_id)) {
             abort(404);
         }
-        
+
         return view('admin.messages.show', compact('message'));
     }
 
@@ -73,10 +73,5 @@ class MessageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Message $message)
-    {
-        $message->delete();
-
-        return redirect()->route('admin.messages.index');
-    }
+    public function destroy(Message $message) {}
 }
