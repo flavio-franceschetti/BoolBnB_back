@@ -1,6 +1,110 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="container login-container px-4 px-md-0">
+        <div class="row register-height justify-content-center">
+            <div class="login-title col-12 col-md-5  ">Registrati per inserire il tuo appartamento <i
+                    class="d-none d-md-inline fa-solid fa-arrow-right"></i><i
+                    class="d-inline d-md-none fa-solid fa-arrow-down"></i></div>
+            <div class="login-form-container d-flex align-items-center py-5 py-md-0 col-12 col-md-7 ">
+                <form class="login-form" method="POST" action="{{ route('register') }}" id="registrationForm">
+                    @csrf
+                    <div class="form-floating mb-3">
+                        {{-- input e label --}}
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="floatingInput"
+                            placeholder="Nome" name="email" value="{{ old('name') }}" autocomplete="name" autofocus>
+                        <label for="floatingInput">Nome</label>
+
+                        {{-- controlli ed errori --}}
+                        <div class="invalid-feedback" id="nameError">
+                            Il nome deve contenere almeno 2 caratteri e solo lettere.
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{-- input and label --}}
+                        <input type="text" class="form-control @error('surname') is-invalid @enderror"
+                            id="floatingPassword" placeholder="Cognome" name="surname" autocomplete="surname"
+                            value="{{ old('surname') }}" autofocus>
+                        <label for="floatingPassword">Cognome</label>
+                        {{-- errori --}}
+                        <div class="invalid-feedback" id="surnameError">
+                            Il cognome deve contenere almeno 2 caratteri e solo lettere.
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{-- input and label --}}
+                        <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror"
+                            id="floatingPassword" name="date_of_birth" autocomplete="surname"
+                            value="{{ old('date_of_birth', Carbon\Carbon::now()->subYears(18)->toDateString()) }}"
+                            autocomplete="date_of_birth" autofocus>
+
+                        <label for="floatingPassword">Data di nascita</label>
+
+                        {{-- errori --}}
+                        <div class="invalid-feedback" id="dobError">
+                            Devi avere almeno 18 anni.
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{-- input and label --}}
+                        <input type="email" class="form-control @error('email') is-invalid @enderror"
+                            id="floatingPassword" placeholder="Email" name="email" autocomplete="email"
+                            value="{{ old('email') }}" autofocus required>
+                        <label for="floatingPassword">Indirizzo email</label>
+
+                        {{-- errori --}}
+                        <div class="invalid-feedback" id="emailError">Inserisci un indirizzo email valido.</div>
+                        <div class="invalid-feedback" id="emailErrorMissingAt" style="display:none;">Manca il
+                            simbolo "@".</div>
+                        <div class="invalid-feedback" id="emailErrorMissingDomain" style="display:none;">
+                            L'indirizzo email deve includere un dominio (es. gmail.com).
+                        </div>
+                        <div class="invalid-feedback" id="emailErrorInvalidCharacters" style="display:none;">
+                            L'indirizzo email contiene caratteri non validi.
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{-- input and label --}}
+                        <input type="password" class="form-control @error('password') is-invalid @enderror"
+                            id="floatingPassword" name="password" autocomplete="new-password" placeholder="Password"
+                            autofocus required>
+                        <label for="floatingPassword">Password</label>
+
+                        {{-- errori --}}
+                        <div class="invalid-feedback" id="passwordError">
+                            La password deve contenere almeno 8 caratteri.
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        {{-- input and label --}}
+                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
+                            name="password_confirmation" autocomplete="new-password" autofocus required>
+                        <label for="floatingPassword">Conferma Password *</label>
+
+                        {{-- errori --}}
+                        <div class="invalid-feedback" id="passwordConfirmError">
+                            Le password non coincidono.
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <button type="submit" class="btn login-btn">{{ __('Registrati') }}</button>
+                    </div>
+
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+@endsection
+
+{{-- @section('content')
     <div class="container mt-4">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -309,4 +413,4 @@
             color: #28a745;
         }
     </style>
-@endsection
+@endsection --}}

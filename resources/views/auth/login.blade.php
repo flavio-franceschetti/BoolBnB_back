@@ -2,10 +2,14 @@
 
 @section('content')
     <div class="container login-container px-4 px-md-0">
-        <div class="row justify-content-center">
-            <div class="login-title col-12 col-md-5  ">ACCEDI AL TUO ACCOUNT <i
-                    class="d-none d-md-inline fa-solid fa-arrow-right"></i><i
-                    class="d-inline d-md-none fa-solid fa-arrow-down"></i></div>
+        <div class="row login-height justify-content-center">
+            <div class="login-title col-12 col-md-5">
+                <h1>ACCEDI AL TUO ACCOUNT</h1>
+                <span>
+                    <i class="d-none d-md-inline fa-solid fa-arrow-right"></i><i
+                        class="d-inline d-md-none fa-solid fa-arrow-down"></i>
+                </span>
+            </div>
             <div class="login-form-container d-flex align-items-center py-5 py-md-0 col-12 col-md-7 ">
                 <form id="loginForm" class='login-form' method="POST" action="{{ route('login') }}">
                     @csrf
