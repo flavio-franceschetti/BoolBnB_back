@@ -14,6 +14,7 @@
                             {{ session('success') }}
                         </div>
                     @endif
+
                     {{-- IMMAGINE APPARTAMENTO --}}
                     @if ($apartment->images)
                         <div class="card">
@@ -39,12 +40,8 @@
                         </div>
                     @endif
 
-
                     {{-- INIZIO CARD PER I DETTAGLI --}}
-
-
                     <div class="card-body">
-                        <h3 class="card-title"></h3>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <p><strong>
@@ -111,14 +108,32 @@
                             </div>
                         </div>
 
-
                         {{-- prova mappa --}}
                         <div class="map-container">
                             <div style="width: 700px; height: 500px" id="map"></div>
                         </div>
 
+                        {{-- STATISTICHE DELLE VISUALIZZAZIONI --}}
+                        <h1>Statistiche per {{ $apartment->title }}</h1>
+                        <p>Totale Visualizzazioni: {{ $totalViews }}</p>
+                        <p>Visualizzazioni Oggi: {{ $dailyViews }}</p>
 
+                        {{-- Card per il grafico --}}
+                        <div class="card mb-4">
+                            <div class="card-header bg-secondary text-white d-flex justify-content-between">
+                                <h4>Visualizzazioni negli ultimi 12 mesi</h4>
+                                <select id="timeframe" class="form-select" style="width: auto;">
+                                    <option value="daily">Giornaliero</option>
+                                    <option value="monthly" selected>Mensile</option>
+                                    <option value="yearly">Annuale</option>
+                                </select>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="viewsChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
 
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                         {{-- BTN PER TORNARE ALL' ELENCO APPARTAMENTI --}}
                         <div class="mt-4">
                             <a href="{{ route('admin.apartments.index') }}" class="btn btn-primary">Torna all'elenco</a>
@@ -129,15 +144,14 @@
         </div>
     </div>
 
-
-
     {{-- script per far funzionare la mappa di tom tom --}}
     <script>
         // creo una constante dove inserisco la apiKey che prendo dal file config
         const apiKey = "{{ config('app.tomtomapikey') }}";
-        const latitude = "{{ $apartment->latitude }}"
-        const longitude = "{{ $apartment->longitude }}"
+        const latitude = "{{ $apartment->latitude }}";
+        const longitude = "{{ $apartment->longitude }}";
         let center = [longitude, latitude];
+
         // Inizializza la mappa con tt.map che sono comandi della libreria tomtom
         var map = tt.map({
             key: apiKey, // Sostituisci con la tua chiave API
@@ -147,11 +161,77 @@
         });
 
         map.on('load', () => {
-            // Aggiungi un marker sulla mappa con tt.maker
+            // Aggiungi un marker sulla mappa con tt.marker
             new tt.Marker().setLngLat(center).addTo(map);
-        })
-    </script>
+        });
 
+        // Inizializza il grafico delle visualizzazioni
+        const ctx = document.getElementById('viewsChart').getContext('2d');
+        const data = {
+            labels: @json($labels),
+            datasets: [{
+                label: 'Visualizzazioni negli ultimi 12 mesi',
+                data: @json($viewsData),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+                fill: true
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Numero di Visualizzazioni'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Data'
+                        }
+                    }
+                }
+            }
+        };
+
+        const viewsChart = new Chart(ctx, config);
+
+        // Funzione per aggiornare il grafico in base alla selezione del periodo
+        document.getElementById('timeframe').addEventListener('change', function() {
+            const timeframe = this.value;
+            let newLabels, newData;
+
+            // Modifica i dati in base al periodo selezionato
+            switch (timeframe) {
+                case 'daily':
+                    // Carica i dati per il giornaliero
+                    newLabels = @json($dailyLabels); // Assicurati di avere questi dati nel controller
+                    newData = @json($dailyViewsData); // Assicurati di avere questi dati nel controller
+                    break;
+                case 'monthly':
+                    newLabels = @json($labels);
+                    newData = @json($viewsData);
+                    break;
+                case 'yearly':
+                    newLabels = @json($yearlyLabels); // Assicurati di avere questi dati nel controller
+                    newData = @json($yearlyViewsData); // Assicurati di avere questi dati nel controller
+                    break;
+            }
+
+            // Aggiorna il grafico
+            viewsChart.data.labels = newLabels;
+            viewsChart.data.datasets[0].data = newData;
+            viewsChart.update();
+        });
+    </script>
 
     <style>
         .card {
