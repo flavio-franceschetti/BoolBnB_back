@@ -121,7 +121,8 @@
                         {{-- Card per il grafico --}}
                         <div class="card mb-4">
                             <div class="card-header bg-secondary text-white d-flex justify-content-between">
-                                <h4>Visualizzazioni negli ultimi 12 mesi</h4>
+                                <h4 id="chartTitle">Visualizzazioni negli ultimi 12 mesi</h4>
+
                                 <select id="timeframe" class="form-select" style="width: auto;">
                                     <option value="daily">Giornaliero</option>
                                     <option value="monthly" selected>Mensile</option>
@@ -165,8 +166,10 @@
             new tt.Marker().setLngLat(center).addTo(map);
         });
 
-        // Inizializza il grafico delle visualizzazioni
         const ctx = document.getElementById('viewsChart').getContext('2d');
+        const titleElement = document.getElementById('chartTitle');
+
+        // Dati di visualizzazione di default (mensile)
         const data = {
             labels: @json($labels),
             datasets: [{
@@ -187,9 +190,13 @@
                 scales: {
                     y: {
                         beginAtZero: true,
+                        suggestedMax: 10, // Espande il range a 10 per maggiore chiarezza
                         title: {
                             display: true,
                             text: 'Numero di Visualizzazioni'
+                        },
+                        ticks: {
+                            stepSize: 1, // Utilizza incrementi di 1
                         }
                     },
                     x: {
@@ -204,29 +211,30 @@
 
         const viewsChart = new Chart(ctx, config);
 
-        // Funzione per aggiornare il grafico in base alla selezione del periodo
+        // Funzione per aggiornare il grafico e il titolo in base alla selezione del periodo
         document.getElementById('timeframe').addEventListener('change', function() {
             const timeframe = this.value;
             let newLabels, newData;
 
-            // Modifica i dati in base al periodo selezionato
             switch (timeframe) {
                 case 'daily':
-                    // Carica i dati per il giornaliero
-                    newLabels = @json($dailyLabels); // Assicurati di avere questi dati nel controller
-                    newData = @json($dailyViewsData); // Assicurati di avere questi dati nel controller
+                    newLabels = @json($dailyLabels);
+                    newData = @json($dailyViewsData);
+                    titleElement.textContent = 'Visualizzazioni negli ultimi 7 giorni';
                     break;
                 case 'monthly':
                     newLabels = @json($labels);
                     newData = @json($viewsData);
+                    titleElement.textContent = 'Visualizzazioni negli ultimi 12 mesi';
                     break;
                 case 'yearly':
-                    newLabels = @json($yearlyLabels); // Assicurati di avere questi dati nel controller
-                    newData = @json($yearlyViewsData); // Assicurati di avere questi dati nel controller
+                    newLabels = @json($pastYearsLabels); // Etichette con gli anni
+                    newData = @json($pastYearsData); // Dati per gli anni passati
+                    titleElement.textContent = 'Visualizzazioni per anno';
                     break;
             }
 
-            // Aggiorna il grafico
+            // Aggiorna i dati del grafico
             viewsChart.data.labels = newLabels;
             viewsChart.data.datasets[0].data = newData;
             viewsChart.update();
