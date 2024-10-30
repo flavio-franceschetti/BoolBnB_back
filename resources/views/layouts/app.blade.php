@@ -209,7 +209,7 @@
 
     document.getElementById('loader').style.display = 'flex';
 
-    // Nascondi il loader dopo 3 secondi (puoi cambiare il tempo come preferisci)
+
     setTimeout(function() {
         document.getElementById('loader').style.display = 'none';
     }, 300);
