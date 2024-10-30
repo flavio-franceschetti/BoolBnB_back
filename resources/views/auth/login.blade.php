@@ -15,7 +15,7 @@
                     @csrf
                     <div class="form-floating mb-3">
                         {{-- input e label --}}
-                        <input @error('email') is-invalid @enderror type="email" class="form-control" id="floatingInput"
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="floatingInput"
                             placeholder="nome@example.com" name="email" value="{{ old('email') }}" required
                             autocomplete="email" autofocus>
                         <label for="floatingInput">Email</label>
@@ -38,8 +38,8 @@
 
                     <div class="form-floating mb-3">
                         {{-- input and label --}}
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password"
-                            @error('password') is-invalid @enderror" name="password" required
+                        <input type="password" class="form-control @error('password') is-invalid @enderror"
+                            id="floatingPassword" placeholder="Password" name="password" required
                             autocomplete="current-password">
                         <label for="floatingPassword">Password</label>
                         {{-- errori --}}
@@ -72,8 +72,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const loginForm = document.getElementById('loginForm');
-            const emailField = document.getElementById('email');
-            const passwordField = document.getElementById('password');
+            const emailField = document.getElementById('floatingInput');
+            const passwordField = document.getElementById('floatingPassword');
 
             // Aggiungi la validazione in tempo reale
             emailField.addEventListener('input', validateEmail);
@@ -126,56 +126,58 @@
                 return true;
             }
 
-            // function validatePassword() {
-            //     const passwordErrorLength = document.getElementById('passwordErrorLength');
-            //     const passwordErrorUppercase = document.getElementById('passwordErrorUppercase');
-            //     const passwordErrorNumber = document.getElementById('passwordErrorNumber');
+            function validatePassword() {
+                const passwordErrorLength = document.getElementById('passwordErrorLength');
+                const passwordErrorUppercase = document.getElementById('passwordErrorUppercase');
+                const passwordErrorNumber = document.getElementById('passwordErrorNumber');
 
-            //     passwordErrorLength.style.display = 'none';
-            //     passwordErrorUppercase.style.display = 'none';
-            //     passwordErrorNumber.style.display = 'none';
-            //     passwordField.classList.remove('is-invalid');
-            //     passwordField.classList.remove('is-valid');
+                passwordErrorLength.style.display = 'none';
+                passwordErrorUppercase.style.display = 'none';
+                passwordErrorNumber.style.display = 'none';
+                passwordField.classList.remove('is-invalid');
+                passwordField.classList.remove('is-valid');
 
-            //     const passwordValue = passwordField.value.trim();
+                const passwordValue = passwordField.value.trim();
 
-            //     // Controllo di validità
-            //     let isValid = true;
-            //     if (passwordValue.length < 8) {
-            //         passwordErrorLength.style.display = 'block';
-            //         passwordField.classList.add('is-invalid');
-            //         isValid = false;
-            //     }
+                // Controllo di validità
+                let isValid = true;
+                if (passwordValue.length < 8) {
+                    passwordErrorLength.style.display = 'block';
+                    passwordField.classList.add('is-invalid');
+                    isValid = false;
+                }
 
-            //     if (!/[A-Z]/.test(passwordValue)) {
-            //         passwordErrorUppercase.style.display = 'block';
-            //         passwordField.classList.add('is-invalid');
-            //         isValid = false;
-            //     }
+                if (!/[A-Z]/.test(passwordValue)) {
+                    passwordErrorUppercase.style.display = 'block';
+                    passwordField.classList.add('is-invalid');
+                    isValid = false;
+                }
 
-            //     if (!/[0-9]/.test(passwordValue)) {
-            //         passwordErrorNumber.style.display = 'block';
-            //         passwordField.classList.add('is-invalid');
-            //         isValid = false;
-            //     }
+                if (!/[0-9]/.test(passwordValue)) {
+                    passwordErrorNumber.style.display = 'block';
+                    passwordField.classList.add('is-invalid');
+                    isValid = false;
+                }
 
-            //     if (isValid) {
-            //         passwordField.classList.add('is-valid');
-            //     }
+                if (isValid) {
+                    passwordField.classList.add('is-valid');
+                }
 
-            //     return isValid;
-            // }
+                return isValid;
+            }
         });
     </script>
 
     <style>
         .is-valid {
             border-color: #28a745;
+            background-color: #d4edda;
             color: #28a745;
         }
 
         .is-invalid {
             border-color: #dc3545;
+            background-color: #f8d7da;
         }
     </style>
 @endsection

@@ -11,9 +11,9 @@
                     @csrf
                     <div class="form-floating mb-3">
                         {{-- input e label --}}
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="floatingInput"
-                            placeholder="Nome" name="email" value="{{ old('name') }}" autocomplete="name" autofocus>
-                        <label for="floatingInput">Nome</label>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                            placeholder="Nome" name="name" value="{{ old('name') }}" autocomplete="name" autofocus>
+                        <label for="name">Nome</label>
 
                         {{-- controlli ed errori --}}
                         <div class="invalid-feedback" id="nameError">
@@ -23,10 +23,10 @@
 
                     <div class="form-floating mb-3">
                         {{-- input and label --}}
-                        <input type="text" class="form-control @error('surname') is-invalid @enderror"
-                            id="floatingPassword" placeholder="Cognome" name="surname" autocomplete="surname"
-                            value="{{ old('surname') }}" autofocus>
-                        <label for="floatingPassword">Cognome</label>
+                        <input type="text" class="form-control @error('surname') is-invalid @enderror" id="surname"
+                            placeholder="Cognome" name="surname" autocomplete="surname" value="{{ old('surname') }}"
+                            autofocus>
+                        <label for="surname">Cognome</label>
                         {{-- errori --}}
                         <div class="invalid-feedback" id="surnameError">
                             Il cognome deve contenere almeno 2 caratteri e solo lettere.
@@ -36,11 +36,11 @@
                     <div class="form-floating mb-3">
                         {{-- input and label --}}
                         <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror"
-                            id="floatingPassword" name="date_of_birth" autocomplete="surname"
+                            id="date_of_birth" name="date_of_birth" autocomplete="date_of_birth"
                             value="{{ old('date_of_birth', Carbon\Carbon::now()->subYears(18)->toDateString()) }}"
                             autocomplete="date_of_birth" autofocus>
 
-                        <label for="floatingPassword">Data di nascita</label>
+                        <label for="date_of_birth">Data di nascita</label>
 
                         {{-- errori --}}
                         <div class="invalid-feedback" id="dobError">
@@ -50,10 +50,10 @@
 
                     <div class="form-floating mb-3">
                         {{-- input and label --}}
-                        <input type="email" class="form-control @error('email') is-invalid @enderror"
-                            id="floatingPassword" placeholder="Email" name="email" autocomplete="email"
-                            value="{{ old('email') }}" autofocus required>
-                        <label for="floatingPassword">Indirizzo email</label>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                            placeholder="Email" name="email" autocomplete="email" value="{{ old('email') }}" autofocus
+                            required>
+                        <label for="email">Indirizzo email</label>
 
                         {{-- errori --}}
                         <div class="invalid-feedback" id="emailError">Inserisci un indirizzo email valido.</div>
@@ -68,10 +68,9 @@
                     </div>
                     <div class="form-floating mb-3">
                         {{-- input and label --}}
-                        <input type="password" class="form-control @error('password') is-invalid @enderror"
-                            id="floatingPassword" name="password" autocomplete="new-password" placeholder="Password"
-                            autofocus required>
-                        <label for="floatingPassword">Password</label>
+                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
+                            name="password" autocomplete="new-password" placeholder="Password" autofocus required>
+                        <label for="password">Password</label>
 
                         {{-- errori --}}
                         <div class="invalid-feedback" id="passwordError">
@@ -100,127 +99,6 @@
             </div>
 
 
-        </div>
-    </div>
-@endsection
-
-{{-- @section('content')
-    <div class="container mt-4">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Registrati') }}</div>
-
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}" id="registrationForm">
-                            @csrf
-
-                            <div class="mb-4 row">
-                                <label for="name"
-                                    class="col-md-4 col-form-label text-md-right">{{ __('Nome') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="name" type="text"
-                                        class="form-control @error('name') is-invalid @enderror" name="name"
-                                        value="{{ old('name') }}" autocomplete="name" autofocus>
-
-                                    <div class="invalid-feedback" id="nameError">
-                                        Il nome deve contenere almeno 2 caratteri e solo lettere.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-4 row">
-                                <label for="surname"
-                                    class="col-md-4 col-form-label text-md-right">{{ __('Cognome') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="surname" type="text"
-                                        class="form-control @error('surname') is-invalid @enderror" name="surname"
-                                        value="{{ old('surname') }}" autocomplete="surname" autofocus>
-
-                                    <div class="invalid-feedback" id="surnameError">
-                                        Il cognome deve contenere almeno 2 caratteri e solo lettere.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-4 row">
-                                <label for="date_of_birth"
-                                    class="col-md-4 col-form-label text-md-right">{{ __('Data di nascita') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="date_of_birth" type="date"
-                                        class="form-control @error('date_of_birth') is-invalid @enderror"
-                                        name="date_of_birth"
-                                        value="{{ old('date_of_birth', Carbon\Carbon::now()->subYears(18)->toDateString()) }}"
-                                        autocomplete="date_of_birth" autofocus required>
-
-                                    <div class="invalid-feedback" id="dobError">
-                                        Devi avere almeno 18 anni.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-4 row">
-                                <label for="email"
-                                    class="col-md-4 col-form-label text-md-right">{{ __('Indirizzo E-Mail *') }}</label>
-                                <div class="col-md-6">
-                                    <input id="email" type="email"
-                                        class="form-control @error('email') is-invalid @enderror" name="email"
-                                        value="{{ old('email') }}" required autocomplete="email">
-
-                                    <div class="invalid-feedback" id="emailError">Inserisci un indirizzo email valido.</div>
-                                    <div class="invalid-feedback" id="emailErrorMissingAt" style="display:none;">Manca il
-                                        simbolo "@".</div>
-                                    <div class="invalid-feedback" id="emailErrorMissingDomain" style="display:none;">
-                                        L'indirizzo email deve includere un dominio (es. gmail.com).
-                                    </div>
-                                    <div class="invalid-feedback" id="emailErrorInvalidCharacters" style="display:none;">
-                                        L'indirizzo email contiene caratteri non validi.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-4 row">
-                                <label for="password"
-                                    class="col-md-4 col-form-label text-md-right">{{ __('Password *') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password" type="password"
-                                        class="form-control @error('password') is-invalid @enderror" name="password"
-                                        required autocomplete="new-password">
-
-                                    <div class="invalid-feedback" id="passwordError">
-                                        La password deve contenere almeno 8 caratteri.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-4 row">
-                                <label for="password-confirm"
-                                    class="col-md-4 col-form-label text-md-right">{{ __('Conferma Password *') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control"
-                                        name="password_confirmation" required autocomplete="new-password">
-
-                                    <!-- Aggiungi un messaggio di errore per la conferma password -->
-                                    <div class="invalid-feedback" id="passwordConfirmError">
-                                        Le password non coincidono.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-4 row mb-0">
-                                <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Registrati') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -410,7 +288,13 @@
     <style>
         .is-valid {
             border-color: #28a745;
+            background-color: #d4edda;
             color: #28a745;
         }
+
+        .is-invalid {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+        }
     </style>
-@endsection --}}
+@endsection
