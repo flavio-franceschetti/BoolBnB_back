@@ -1,26 +1,38 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Statistiche per {{ $apartment->title }}</h1>
-
+    {{-- STATISTICHE DELLE VISUALIZZAZIONI --}}
+    <h1>Statistiche per l'appartamento: {{ $apartment->title }}</h1>
     <p>Totale Visualizzazioni: {{ $totalViews }}</p>
     <p>Visualizzazioni Oggi: {{ $dailyViews }}</p>
 
-    <h2>Visualizzazioni negli Ultimi 7 Giorni</h2>
-    <canvas id="dailyViewsChart" width="400" height="200"></canvas>
+    {{-- Card per il grafico --}}
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between">
+            <h4 id="chartTitle">Visualizzazioni negli ultimi 12 mesi</h4>
+            <select id="timeframe" class="form-select" style="width: auto;">
+                <option value="daily">Giornaliero</option>
+                <option value="monthly" selected>Mensile</option>
+                <option value="yearly">Annuale</option>
+            </select>
+        </div>
+        <div class="card-body">
+            <canvas id="viewsChart" width="300" height="100"></canvas>
+        </div>
+    </div>
 
-    <h2>Visualizzazioni negli Ultimi 12 Mesi</h2>
-    <canvas id="monthlyViewsChart" width="400" height="200"></canvas>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Grafico delle visualizzazioni giornaliere
-        const dailyCtx = document.getElementById('dailyViewsChart').getContext('2d');
-        const dailyData = {
-            labels: @json($labels),
+        // Dati di visualizzazione di default (mensile)
+        const ctx = document.getElementById('viewsChart').getContext('2d');
+        const titleElement = document.getElementById('chartTitle');
+
+        // Dati di visualizzazione di default (mensile)
+        const data = {
+            labels: @json($monthlyLabels),
             datasets: [{
-                label: 'Visualizzazioni negli ultimi 7 giorni',
-                data: @json($viewsData),
+                label: 'Visualizzazioni negli ultimi 12 mesi',
+                data: @json($monthlyViewsData),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
@@ -28,68 +40,62 @@
             }]
         };
 
-        const dailyConfig = {
+        const config = {
             type: 'line',
-            data: dailyData,
+            data: data,
             options: {
                 responsive: true,
                 scales: {
                     y: {
                         beginAtZero: true,
+                        suggestedMax: 10,
                         title: {
                             display: true,
                             text: 'Numero di Visualizzazioni'
+                        },
+                        ticks: {
+                            stepSize: 1,
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Giorni'
+                            text: 'Data'
                         }
                     }
                 }
             }
         };
 
-        const dailyViewsChart = new Chart(dailyCtx, dailyConfig);
+        const viewsChart = new Chart(ctx, config);
 
-        // Grafico delle visualizzazioni mensili
-        const monthlyCtx = document.getElementById('monthlyViewsChart').getContext('2d');
-        const monthlyData = {
-            labels: @json($monthlyLabels),
-            datasets: [{
-                label: 'Visualizzazioni negli ultimi 12 mesi',
-                data: @json($monthlyViewsData),
-                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 1,
-                fill: true
-            }]
-        };
+        // Funzione per aggiornare il grafico e il titolo in base alla selezione del periodo
+        document.getElementById('timeframe').addEventListener('change', function() {
+            const timeframe = this.value;
+            let newLabels, newData;
 
-        const monthlyConfig = {
-            type: 'line',
-            data: monthlyData,
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Numero di Visualizzazioni'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Mesi'
-                        }
-                    }
-                }
+            switch (timeframe) {
+                case 'daily':
+                    newLabels = @json($dailyLabels);
+                    newData = @json($dailyViewsData);
+                    titleElement.textContent = 'Visualizzazioni negli ultimi 7 giorni';
+                    break;
+                case 'monthly':
+                    newLabels = @json($monthlyLabels);
+                    newData = @json($monthlyViewsData);
+                    titleElement.textContent = 'Visualizzazioni negli ultimi 12 mesi';
+                    break;
+                case 'yearly':
+                    newLabels = @json($pastYearsLabels);
+                    newData = @json($pastYearsData);
+                    titleElement.textContent = 'Visualizzazioni per anno';
+                    break;
             }
-        };
 
-        const monthlyViewsChart = new Chart(monthlyCtx, monthlyConfig);
+            // Aggiorna i dati del grafico
+            viewsChart.data.labels = newLabels;
+            viewsChart.data.datasets[0].data = newData;
+            viewsChart.update();
+        });
     </script>
 @endsection
