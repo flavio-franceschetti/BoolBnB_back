@@ -2,9 +2,34 @@
 
 @section('content')
 @if (count($messages) > 0)
-<h1>Messaggi ricevuti</h1>
+<h1>Messaggi ricevuti: {{ count($messages) }}</h1>
 <div class="container-fluid">
-    <div class="row">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Titolo</th>
+            <th scope="col">Da:</th>
+            <th scope="col">Email</th>
+            <th scope="col">Messaggio</th>
+          </tr>
+        </thead>
+        <tbody>
+        @foreach ($messages as $message)
+          <tr>
+            <th class="card-title" scope="row">{{ $message->apartment->title }}</th>
+            <td class="card-subtitle">{{ $message->name }} {{ $message->surname }}</td>
+            <td class="card-text">{{ $message->email }}</td>
+            <td class="card-text">{{ $message->content }}</td>
+            <td>
+                <div class="d-flex gap-3">
+                    <a href="{{ route('admin.messages.show', $message) }}" class="btn btn-primary">Visualizza</a>
+                </div>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    {{-- <div class="row">
         @foreach ($messages as $message)
         <div class="card m-3 col-6" style="width: 18rem;">
             <div class="card-body">
@@ -20,7 +45,7 @@
             </div>
         </div>
         @endforeach
-    </div>
+    </div> --}}
 </div>
 @else
 <h3>Non hai ricevuto nessun messaggio per il momento</h3>
