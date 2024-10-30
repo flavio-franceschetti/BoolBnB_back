@@ -37,6 +37,12 @@
 </head>
 
 <body>
+
+    <div class="loader" id="loader">
+        <h1>BoolBnB</h1>
+        <div class="spinner"></div>
+        <i class="fas fa-key" style="color: #379c4e; font-size: 30px; margin-top: 15px; z-index: 1;"></i>
+    </div>
     @include('admin.partials.header')
     @if (Auth::check())
         <div class="wrapper d-flex">
@@ -51,3 +57,146 @@
 </body>
 
 </html>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .loader {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.8);
+        /* Sfondo scuro */
+    }
+
+    .loader h1 {
+        color: white;
+        font-size: 48px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .spinner {
+        border: 8px solid rgba(255, 255, 255, 0.3);
+        border-left-color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        z-index: 1;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .house {
+        position: absolute;
+        bottom: 0;
+        width: 80px;
+        height: 80px;
+        background-color: #fff;
+        border: 2px solid #000;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    /* Modificato per centrare le case */
+    .house:nth-child(1) {
+        left: 15%;
+        animation: moveHouse 8s linear infinite;
+    }
+
+    .house:nth-child(2) {
+        left: 35%;
+        animation: moveHouse 6s linear infinite;
+    }
+
+    .house:nth-child(3) {
+        left: 55%;
+        animation: moveHouse 10s linear infinite;
+    }
+
+    .house:nth-child(4) {
+        left: 75%;
+        animation: moveHouse 7s linear infinite;
+    }
+
+    .house:nth-child(5) {
+        left: 95%;
+        animation: moveHouse 9s linear infinite;
+    }
+
+    /* Case animate sopra */
+    .house-above {
+        position: absolute;
+        top: 0;
+        width: 80px;
+        height: 80px;
+        background-color: #fff;
+        border: 2px solid #000;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        animation: moveHouse 10s linear infinite;
+    }
+
+    .house-above:nth-child(1) {
+        left: 10%;
+        animation-duration: 8s;
+    }
+
+    .house-above:nth-child(2) {
+        left: 30%;
+        animation-duration: 6s;
+    }
+
+    .house-above:nth-child(3) {
+        left: 50%;
+        animation-duration: 10s;
+    }
+
+    .house-above:nth-child(4) {
+        left: 70%;
+        animation-duration: 7s;
+    }
+
+    .house-above:nth-child(5) {
+        left: 90%;
+        animation-duration: 9s;
+    }
+</style>
+<script>
+    function showLoader() {
+        $('#loader').fadeIn();
+    }
+
+    function hideLoader() {
+        $('#loader').fadeOut();
+    }
+
+
+    document.getElementById('loader').style.display = 'flex';
+
+    // Nascondi il loader dopo 3 secondi (puoi cambiare il tempo come preferisci)
+    setTimeout(function() {
+        document.getElementById('loader').style.display = 'none';
+    }, 3000);
+</script>

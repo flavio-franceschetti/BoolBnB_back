@@ -56,12 +56,12 @@ class ApartmentStatisticsController extends Controller
         $dailyViews = $apartment->getDailyViews();
 
         // Prepara i dati per il grafico delle visualizzazioni giornaliere
-        $viewsData = [];
-        $labels = [];
+        $dailyViewsData = [];
+        $dailyLabels = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
-            $labels[] = $date->format('d/m'); // Etichetta della data
-            $viewsData[] = $apartment->views()->whereDate('created_at', $date)->count(); // Conteggio delle visualizzazioni per la data
+            $dailyLabels[] = $date->format('d/m');
+            $dailyViewsData[] = $apartment->views()->whereDate('created_at', $date)->count();
         }
 
         // Prepara i dati per il grafico delle visualizzazioni mensili
@@ -71,14 +71,14 @@ class ApartmentStatisticsController extends Controller
         $currentYear = now()->year;
 
         for ($i = 0; $i < 12; $i++) {
-            $month = ($currentMonth - $i + 12) % 12; // Mese corretto (0-11)
-            $year = $currentYear - floor(($currentMonth - $i) / 12); // Anno corretto
+            $month = ($currentMonth - $i + 12) % 12;
+            $year = $currentYear - floor(($currentMonth - $i) / 12);
 
             $viewsCount = $apartment->views()->whereYear('created_at', $year)
-                ->whereMonth('created_at', $month + 1) // Aggiungi 1 perché month in Carbon è 1-based
+                ->whereMonth('created_at', $month + 1)
                 ->count();
 
-            $monthlyLabels[] = Carbon::create()->month($month + 1)->format('F'); // Nome del mese
+            $monthlyLabels[] = Carbon::create()->month($month + 1)->format('F');
             $monthlyViewsData[] = $viewsCount;
         }
 
@@ -86,14 +86,34 @@ class ApartmentStatisticsController extends Controller
         $monthlyViewsData = array_reverse($monthlyViewsData);
         $monthlyLabels = array_reverse($monthlyLabels);
 
+        // Prepara i dati per il grafico annuale
+        $pastYearsData = [];
+        $pastYearsLabels = [];
+        $numberOfYears = 5;
+
+        for ($i = 0; $i < $numberOfYears; $i++) {
+            $year = $currentYear - $i;
+            $viewsCount = $apartment->views()->whereYear('created_at', $year)->count();
+
+            $pastYearsLabels[] = $year;
+            $pastYearsData[] = $viewsCount;
+        }
+
+        // Rovescia i dati per mostrare dall'anno più recente al più vecchio
+        $pastYearsData = array_reverse($pastYearsData);
+        $pastYearsLabels = array_reverse($pastYearsLabels);
+
+        // Passa tutte le variabili necessarie alla vista
         return view('admin.apartments.statistics', compact(
             'apartment',
             'totalViews',
             'dailyViews',
-            'labels',
-            'viewsData',
+            'dailyLabels',
+            'dailyViewsData',
             'monthlyLabels',
-            'monthlyViewsData'
+            'monthlyViewsData',
+            'pastYearsLabels',
+            'pastYearsData'
         ));
     }
 

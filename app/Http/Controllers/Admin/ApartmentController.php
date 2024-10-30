@@ -169,6 +169,18 @@ class ApartmentController extends Controller
                 ->count();
         }
 
+        // Statistiche annuali per gli ultimi 5 anni
+        $pastYearsData = [];
+        $pastYearsLabels = [];
+        $yearsBack = 5; // Numero di anni passati da considerare
+        $currentYear = now()->year;
+
+        for ($i = 0; $i < $yearsBack; $i++) {
+            $year = $currentYear - $i;
+            $pastYearsLabels[] = (string)$year; // Aggiungi l'anno come etichetta
+            $pastYearsData[] = $apartment->views()->whereYear('created_at', $year)->count();
+        }
+
         // Recupera tutte le sponsorizzazioni attive
         $activeSponsorships = $apartment->sponsorships()
             ->where('end_date', '>', now())
@@ -187,8 +199,8 @@ class ApartmentController extends Controller
             }
 
             // Calcola il tempo rimanente per questa sponsorizzazione
-            $now = now(); // Prendi il tempo attuale
-            $endDate = Carbon::parse($activeSponsorship->pivot->end_date); // Assicurati che sia un'istanza di Carbon
+            $now = now();
+            $endDate = Carbon::parse($activeSponsorship->pivot->end_date);
 
             // Calcola la differenza in secondi
             $remainingSeconds = $now->diffInSeconds($endDate, false);
@@ -220,7 +232,9 @@ class ApartmentController extends Controller
             'dailyLabels',
             'dailyViewsData',
             'yearlyLabels',
-            'yearlyViewsData'
+            'yearlyViewsData',
+            'pastYearsLabels',
+            'pastYearsData'
 
 
         ));
