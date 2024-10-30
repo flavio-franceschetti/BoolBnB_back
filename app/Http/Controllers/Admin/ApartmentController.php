@@ -199,8 +199,8 @@ class ApartmentController extends Controller
             }
 
             // Calcola il tempo rimanente per questa sponsorizzazione
-            $now = now(); // Prendi il tempo attuale
-            $endDate = Carbon::parse($activeSponsorship->pivot->end_date); // Assicurati che sia un'istanza di Carbon
+            $now = now();
+            $endDate = Carbon::parse($activeSponsorship->pivot->end_date);
 
             // Calcola la differenza in secondi
             $remainingSeconds = $now->diffInSeconds($endDate, false);
