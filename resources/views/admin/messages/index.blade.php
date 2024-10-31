@@ -34,8 +34,14 @@
 
     <style>
         .show-msg-btn {
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
             background-color: #28a745;
             color: #fff
+        }
+
+        .show-msg-btn:hover {
+            color: #fff;
+            background-color: #24963e;
         }
     </style>
 @endsection
