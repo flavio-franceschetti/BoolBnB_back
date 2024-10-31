@@ -70,8 +70,7 @@ class SponsorshipController extends Controller
             return redirect()->back()->with('error', 'Sponsorizzazione non trovata.');
         }
 
-        // Logica per il pagamento (puoi utilizzare Braintree, Stripe, o qualsiasi metodo di pagamento tu stia utilizzando)
-        // Assicurati di avere la logica per gestire i pagamenti.
+
 
         // Se il pagamento ha successo, aggiungi la sponsorizzazione all'appartamento
         $apartment->sponsorships()->attach($sponsorship['name'], [
