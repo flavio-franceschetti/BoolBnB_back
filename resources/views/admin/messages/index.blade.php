@@ -21,7 +21,7 @@
                             <td>{{ $message->surname }}</td>
                             <td>{{ $message->email }}</td>
                             <td>{{ $message->created_at->format('d-m-Y | H:i') }}</td>
-                            <td><a href="{{ route('admin.messages.show', $message) }}" class="btn btn-primary">Visualizza</a>
+                            <td><a href="{{ route('admin.messages.show', $message) }}" class="btn show-msg-btn">Visualizza</a>
                             </td>
                         </tr>
                     @endforeach
@@ -33,14 +33,9 @@
     </div>
 
     <style>
-        .card-text {
-            white-space: nowrap;
-            /* Impedisce che il testo vada a capo */
-            overflow: hidden;
-            /* Nasconde il testo in eccesso */
-            text-overflow: ellipsis;
-            /* Aggiunge i puntini di sospensione (...) */
-            width: 200px;
+        .show-msg-btn {
+            background-color: #28a745;
+            color: #fff
         }
     </style>
 @endsection
