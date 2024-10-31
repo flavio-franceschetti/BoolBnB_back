@@ -1,0 +1,50 @@
+.login-title{
+    font-size: 50px;
+    color: #fff;
+    text-align: right;
+    padding: 30px 20px;
+    border-radius: 20px 0 0 20px;
+    background-color: #28a745;
+}
+
+.login-container{
+    margin: 100px auto;
+    border-radius: 20px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    overflow: hidden;
+}
+
+
+
+.login-form-container {
+    padding: 0 25px;
+}
+
+.login-form{
+    width: 100%;
+}
+.login-btn{
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    color: #fff;
+    background-color: #28a745;
+    &:hover{
+        color: #fff;
+        background-color: #24963e;
+    }
+}
+
+.register-height{
+  min-height: 600px;
+}
+
+.login-height{
+    min-height: 400px;
+}
+
+
+/* Modifica del font-size per schermi con larghezza inferiore a 503px */
+@media (max-width: 503px) {
+    .login-title {
+        font-size: 40px;
+    }
+}

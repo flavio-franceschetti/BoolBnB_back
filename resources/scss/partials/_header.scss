@@ -1,0 +1,35 @@
+header {
+    .header-container{
+        box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.1);
+    }
+    .dropdown-toggle{
+        background-color: #28a745;
+    }
+    div {
+        min-height: 80px;
+        #img-logo {
+            width: 60px;
+           
+        }
+        .access{
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+            background-color: #28a745;
+            &:hover{
+                background-color: #24963e;
+            }
+        }
+    }
+
+}
+
+.btn-offcanvas{
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    background-color: #28a745;
+    &:hover{
+        background-color: #24963e;
+    }
+}
+
+.offcanvas-title{
+    color: #28a745;
+}

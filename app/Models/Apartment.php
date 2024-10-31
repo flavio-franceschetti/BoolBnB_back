@@ -51,6 +51,16 @@ class Apartment extends Model
         return $this->hasMany(View::class);
     }
 
+    public function getTotalViews()
+    {
+        return $this->views()->count();
+    }
+
+    public function getDailyViews()
+    {
+        return $this->views()->whereDate('created_at', now()->format('Y-m-d'))->count();
+    }
+
     public function services()
     {
         return $this->belongsToMany(Service::class, 'apartment_service')
@@ -102,5 +112,10 @@ class Apartment extends Model
                 'sponsorship_hours' => $sponsorship->duration,
             ]);
         }
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
