@@ -1,6 +1,6 @@
 <header>
     <div class="header-container">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row justify-content-between align-items-center">
                 <div class="col-6 d-flex align-items-center ">
                     <a id="logo-bnb" href="http://localhost:5174/" target="_blank">
@@ -11,7 +11,7 @@
                     </a>
                 </div>
 
-                <div class="d-none d-md-flex col-6  align-items-center justify-content-end">@guest
+                <div class="d-none d-md-flex col-6 align-items-center px-5 justify-content-end">@guest
                         <ul class="nav gap-2">
                             <li>
                                 <a class="access text-white btn" href="{{ route('login') }}">Accedi</a>
