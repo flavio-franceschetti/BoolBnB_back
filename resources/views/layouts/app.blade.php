@@ -10,7 +10,7 @@
         href="https://api.tomtom.com/maps-sdk-for-web/cdn/plugins/SearchBox/3.1.3-public-preview.0/SearchBox.css" />
     <!-- includes the Braintree JS client SDK -->
     <script src="https://js.braintreegateway.com/web/dropin/1.43.0/js/dropin.min.js"></script>
-    {{-- chart js per statistiche  --}}
+    {{-- chart js per statistiche --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- includes jQuery -->
@@ -20,7 +20,8 @@
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/plugins/SearchBox/3.1.3-public-preview.0/SearchBox-web.js">
     </script>
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.12.0/maps/maps-web.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.12.0/maps/maps.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.12.0/maps/maps.css" />
     <link rel="icon" type="image/svg+xml" href="/logo_bnb.png" />
     <!-- Includi Font Awesome senza integrità -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -45,27 +46,27 @@
     </div>
     @include('admin.partials.header')
     @if (Auth::check())
-        <div class="container-fluid h-100">
-            <!-- Header -->
-            <header class="header col-12">
-                @include('admin.partials.header')
-            </header>
-            <div class="row h-100">
+    <div class="container-fluid h-100">
+        <!-- Header -->
+        <header class="header col-12">
+            @include('admin.partials.header')
+        </header>
+        <div class="row h-100">
 
-                <!-- Corpo principale -->
-                <div class="col-12 d-flex h-100">
-                    <!-- Aside -->
-                    <aside class="aside d-none d-md-block ">
-                        @include('admin.partials.aside')
-                    </aside>
+            <!-- Corpo principale -->
+            <div class="col-12 d-flex h-100 px-0">
+                <!-- Aside -->
+                <aside class="aside d-none d-md-block ">
+                    @include('admin.partials.aside')
+                </aside>
 
-                    <!-- Content -->
-                    <main class="content">
-                        @yield('content')
-                    </main>
-                </div>
+                <!-- Content -->
+                <main class="content">
+                    @yield('content')
+                </main>
             </div>
         </div>
+    </div>
     @endif
     @yield('content')
 </body>
