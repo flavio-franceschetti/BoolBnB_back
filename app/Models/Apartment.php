@@ -41,6 +41,13 @@ class Apartment extends Model
             ->withTimestamps();
     }
 
+    public function lastEndDate()
+    {
+        return $this->sponsorships()
+            ->orderBy('pivot_end_date', 'desc')
+            ->first()
+            ->pivot->end_date ?? null;
+    }
     public function messages()
     {
         return $this->hasMany(Message::class);
