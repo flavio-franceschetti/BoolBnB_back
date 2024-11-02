@@ -120,9 +120,13 @@ class PageController extends Controller
             // Filtro opzionale per servizi (se fornito)
             ->when($services, function ($query) use ($services) {
                 $serviceList = explode(',', $services);  // Divido la lista di servizi separati da virgole
-                return $query->whereHas('services', function ($query) use ($serviceList) {
-                    $query->whereIn('name', $serviceList);  // Cerco tra i servizi forniti
-                });
+                foreach ($serviceList as $service) {
+                    $query->whereHas('services', function ($query) use ($service) {
+                        $query->where('name', $service);  // Check for each service individually
+                    });
+                }
+
+                return $query;
             })
             // ->orderByDesc('sponsorship_price')
             ->orderBy('distance') // Ordina per distanza calcolata
