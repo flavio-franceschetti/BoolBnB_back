@@ -108,7 +108,7 @@
 
                     {{-- prova mappa --}}
                     <div class="map-container mb-4">
-                        <div style="width: 100%; height: 500px" id="map"></div>
+                        <div style="width: 1000px; height: 500px" id="map"></div>
                     </div>
 
                     {{-- STATISTICHE DELLE VISUALIZZAZIONI --}}
