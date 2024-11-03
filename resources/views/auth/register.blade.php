@@ -110,7 +110,7 @@
             document.getElementById('date_of_birth').addEventListener('input', validateDOB);
             document.getElementById('email').addEventListener('input', validateEmail);
             document.getElementById('password').addEventListener('input', validatePassword);
-            document.getElementById('password-confirm').addEventListener('input', validatePasswordConfirm);
+            document.getElementById('floatingPassword').addEventListener('input', validatePasswordConfirm);
         });
 
         // validazione campo Name
@@ -257,7 +257,7 @@
 
         function validatePasswordConfirm() {
             const password = document.getElementById('password');
-            const passwordConfirm = document.getElementById('password-confirm');
+            const passwordConfirm = document.getElementById('floatingPassword');
             const passwordConfirmError = document.getElementById('passwordConfirmError');
 
             if (password.value !== passwordConfirm.value) {
