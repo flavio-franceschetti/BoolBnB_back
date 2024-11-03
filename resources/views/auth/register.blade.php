@@ -53,7 +53,7 @@
                     <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                         placeholder="Email" name="email" autocomplete="email" value="{{ old('email') }}" autofocus
                         required>
-                    <label for="email">Indirizzo email</label>
+                    <label for="email">Indirizzo email *</label>
 
                     {{-- errori --}}
                     <div class="invalid-feedback" id="emailError">Inserisci un indirizzo email valido.</div>
@@ -70,7 +70,7 @@
                     {{-- input and label --}}
                     <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
                         name="password" autocomplete="new-password" placeholder="Password" autofocus required>
-                    <label for="password">Password</label>
+                    <label for="password">Password *</label>
 
                     {{-- errori --}}
                     <div class="invalid-feedback" id="passwordError">
