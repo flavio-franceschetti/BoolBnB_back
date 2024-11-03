@@ -34,7 +34,7 @@
                     <a href="{{ route('admin.apartments.show', $apartment) }}" class="btn btn-warning">Dettagli</a>
                     <a href="{{ route('admin.apartments.edit', $apartment) }}" class="btn btn-success">Modifica</a>
                     <form class="d-inline" action="{{ route('admin.apartments.destroy', $apartment) }}" method="POST"
-                        onsubmit="return confirm('vuoi eliminare questo appartamneto?')">
+                        onsubmit="return confirm('vuoi eliminare questo appartamento?')">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-danger" type="submit">Elimina</button>

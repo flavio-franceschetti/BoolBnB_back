@@ -27,7 +27,7 @@
                     <div class="row px-3">
                         @foreach ($apartment->images as $image)
                         <div class="col-md-4 mb-3">
-                            <img src="{{ asset('storage/' . $image->img_path) }}" class="img-fluid rounded"
+                            <img src="{{ asset('storage/' . $image->img_path) }}" class="images"
                                 alt="Immagine appartamento">
                         </div>
                         @endforeach
@@ -36,7 +36,7 @@
                 @else
                 <div>
                     <div class="text-center">
-                        <img src="/img/no-image.jpg" class="img-fluid" alt="Immagine non disponibile">
+                        <img src="/img/no-image.jpg" class="images" alt="Immagine non disponibile">
                     </div>
                 </div>
                 @endif
@@ -138,7 +138,7 @@
                         <a href="{{ route('admin.apartments.index') }}" class="btn btn-primary">Torna all'elenco</a>
                         <a href="{{ route('admin.apartments.edit', $apartment) }}" class="btn btn-success">Modifica</a>
                         <form class="d-inline" action="{{ route('admin.apartments.destroy', $apartment) }}"
-                            method="POST" onsubmit="return confirm('vuoi eliminare questo appartamneto?')">
+                            method="POST" onsubmit="return confirm('vuoi eliminare questo appartamento?')">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger" type="submit">Elimina</button>
@@ -271,6 +271,13 @@
     .card-text {
         font-size: 1.1rem;
         /* Dimensione del testo */
+    }
+
+    .images {
+        width: 350px;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 0.7em;
     }
 </style>
 
