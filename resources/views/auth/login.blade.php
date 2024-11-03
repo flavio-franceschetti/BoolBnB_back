@@ -27,7 +27,7 @@
                     </span>
                     @enderror
 
-                    <div class="invalid-feedback" id="emailError">Inserisci un indirizzo email valido.</div>
+
                     <div class="invalid-feedback" id="emailErrorMissingAt" style="display:none;">Manca il
                         simbolo "@".</div>
                     <div class="invalid-feedback" id="emailErrorMissingDomain" style="display:none;">
